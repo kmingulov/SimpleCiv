@@ -1,14 +1,6 @@
 #ifndef MAP
 #define MAP
 
-/*
-    Module of circular linked list. We use it to create our map.
-
-    TODO:
-          add some data in struct
-          rewrite createMap function
-*/
-
 typedef struct Cell
 {
     // Neighboors of this cell.
@@ -19,6 +11,16 @@ typedef struct Cell
     //       city and buildings
     //       units
 } Cell;
+
+/*
+    Create double circular row list.
+*/
+Cell * createRow(int l);
+
+/*
+    Merge tho rows.
+*/
+void mergeRows(Cell * c1, Cell * c2);
 
 /*
     Create list with width w and height h.

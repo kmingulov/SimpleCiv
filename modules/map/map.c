@@ -1,71 +1,56 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "map.h"
 
-// TODO GOVNOCOD
-// Optimise!
+Cell * createRow(int l)
+{
+    Cell * head = malloc(sizeof(Cell));
+    Cell * previous = head;
+
+    for(int i = 0; i < l - 1; i++)
+    {
+        Cell * temp = malloc(sizeof(Cell));
+        temp -> territory = 0;
+        previous -> right = temp;
+        temp -> left = previous;
+        previous = temp;
+    }
+
+    previous -> right = head;
+    head -> left = previous;
+
+    return head;
+}
+
+void mergeRows(Cell * c1, Cell * c2)
+{
+    Cell * x1 = c1;
+    Cell * x2 = c2;
+
+    do
+    {
+        x1 -> bottom = x2;
+        x2 -> top = x1;
+        x1 = x1 -> right;
+        x2 = x2 -> right;
+    } while (x1 != c1 || x2 != c2);
+}
+
 Cell * createMap(int w, int h)
 {
-    Cell * map_head = NULL;
-    // Previous line.
-    Cell * previous = NULL;
+    Cell * head = createRow(h);
+    Cell * row = head;
 
     for(int i = 0; i < w; i++)
     {
-        Cell * head = malloc(sizeof(Cell));
-        if(map_head == NULL)
-        {
-            map_head = head;
-        }
-        if(previous != NULL)
-        {
-            head -> top = previous;
-            previous -> bottom = head;
-        }
-        // Creating new doubly circular linked list.
-        Cell * current = head;
-        for(int j = 0; j < h - 1; j++)
-        {
-            // Allocate memory for new cell.
-            Cell * temp = malloc(sizeof(Cell));
-            // Connect left and right.
-            current -> right = temp;
-            temp -> left = current;
-            // Connect two lines.
-            if(i != 0)
-            {
-                previous -> bottom = current;
-                current -> top = previous;
-                previous = previous -> right;
-            }
-            // Go on!
-            current = temp;
-        }
-        // Connect two lines.
-        if(i != 0)
-        {
-            previous -> bottom = current;
-            current -> top = previous;
-            previous = previous -> right;
-        }
-        // Connect the head and end.
-        current -> right = head;
-        head -> left = current;
-        // New line.
-        previous = head;
+        Cell * new_row = createRow(h);
+        mergeRows(row, new_row);
+        row = new_row;
     }
 
-    // Connect the first line and the last.
-    Cell * temp1 = map_head, * temp2 = previous;
-    
-    for(int i = 0; i < w; i++)
-    {
-        temp2 -> bottom = temp1;
-        temp1 -> top = temp2;
-        temp1 = temp1 -> right;
-        temp2 = temp2 -> right;
-    }
+    mergeRows(row, head);
 
-    return map_head;
+    return head;
 }
 
 void destroyMap(Cell * head, int w, int h)
