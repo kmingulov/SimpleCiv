@@ -12,4 +12,11 @@
 */
 void generateLandscape(Cell * c, int k, char required, char fill);
 
+/*
+    Function generate random landscape and put it in fourly circular list "map".
+    Ints w and h are map width and height respectively.
+    Uses generateLandscape function.
+*/
+void generateMap(Cell * map, int w, int h);
+
 #endif

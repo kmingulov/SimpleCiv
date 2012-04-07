@@ -7,7 +7,6 @@ typedef struct Cell
     struct Cell * left, * right, * top, * bottom;
     char territory;
     // TODO: resources 00000000
-    //       type of territory
     //       city and buildings
     //       units
 } Cell;
@@ -54,6 +53,6 @@ Cell * getCellByNumber(Cell * c, int i);
     Returns 1, if one of neighboors have territory == t.
     Returns zero, if no one found.
 */
-char isWhereCell(Cell * c, int t);
+char isWhereCell(Cell * c, char t);
 
 #endif

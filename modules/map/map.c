@@ -151,7 +151,7 @@ Cell * getCellByNumber(Cell * c, int i)
     return NULL;
 }
 
-char isWhereCell(Cell * c, int t)
+char isWhereCell(Cell * c, char t)
 {
     for(int i = 0; i < 4; i++)
     {
