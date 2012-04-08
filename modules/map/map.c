@@ -7,6 +7,8 @@ Cell * createRow(int l)
     Cell * head = malloc(sizeof(Cell));
     Cell * previous = head;
 
+    head -> territory = 0;
+
     for(int i = 0; i < l - 1; i++)
     {
         Cell * temp = malloc(sizeof(Cell));
@@ -53,20 +55,28 @@ Cell * createMap(int w, int h)
     return head;
 }
 
-void destroyMap(Cell * head, int w, int h)
+void destroyRow(Cell * row)
+{
+    Cell * current = row;
+
+    do
+    {
+        Cell * temp = current -> right;
+        free(current);
+        current = temp;
+    } while(current != row);
+}
+
+void destroyMap(Cell * head)
 {
     Cell * current = head;
-    for(int i = 0; i < w; i++)
+
+    do
     {
-        Cell * next_line = current -> bottom;
-        for(int j = 0; j < h; j++)
-        {
-            Cell * temp = current -> right;
-            free(current);
-            current = temp;
-        }
-        current = next_line;
-    }
+        Cell * temp = current -> bottom;
+        destroyRow(current);
+        current = temp;
+    } while(current != head);
 }
 
 Cell * getCell(Cell * cell, int offset_x, int offset_y)
