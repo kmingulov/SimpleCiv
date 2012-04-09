@@ -57,6 +57,44 @@ void putInRight(int start_r, int start_c, int length, char * string)
     mvprintw(start_r, start_c + length - strlen(string), "%s", string);
 }
 
+void moveCursor(int key, int w, int d, Cell ** map, int * cur_x, int * cur_y)
+{
+    // TODO Rewrite it more compactly?
+    if(key == KEY_UP)
+    {
+        if(* cur_x > 5) (* cur_x)--;
+        else
+        {
+            * map = (* map) -> top;
+            drawMap(* map, 1, 1, w - 2, d - 1);
+        }
+    } else if(key == KEY_DOWN)
+    {
+        if(* cur_x < w - 6) (* cur_x)++;
+        else
+        {
+            * map = (* map) -> bottom;
+            drawMap(* map, 1, 1, w - 2, d - 1);
+        }
+    } else if(key == KEY_LEFT)
+    {
+        if(* cur_y > 5) (* cur_y)--;
+        else
+        {
+            * map = (* map) -> left;
+            drawMap(* map, 1, 1, w - 2, d - 1);
+        }
+    } else if(key == KEY_RIGHT)
+    {
+        if(* cur_y < d - 5) (* cur_y)++;
+        else
+        {
+            * map = (* map) -> right;
+            drawMap(* map, 1, 1, w - 2, d - 1);
+        }
+    }
+}
+
 void drawInterface(int rows, int columns, int d)
 {
 	attron(COLOR_PAIR(0));
@@ -117,6 +155,22 @@ void drawInterface(int rows, int columns, int d)
     mvprintw(rows - 2, d + 1, "ENTER End turn");
 
 	attroff(COLOR_PAIR(0));
+}
+
+void identifyCell(Cell * c, int h, int d)
+{
+    // Auxiliary array.
+    char territories[5][9] = {"   Water", "   Grass", "    Hill", "  Forest", "Mountain"};
+    if(c -> territory <= 4 && c -> territory >= 0)
+    {
+        // TODO Damn. Rewrite!
+        mvprintw(12, (d + 1) + (h - d - 2) - 8, "%s", territories[c -> territory]);
+        //putInRight(12, d + 1, h - d - 2, territories[c -> territory]);
+    }
+    else
+    {
+        // Something goes wrong…
+    }
 }
 
 void drawMap(Cell * map, int start_row, int start_column, int end_row, int end_column)

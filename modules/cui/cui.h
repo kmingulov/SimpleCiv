@@ -3,11 +3,11 @@
     It's important to remember difference in sequence (and their orientation)
     of axis between ncurses library and our map module.
 
-          y                 c--------> columns
+          y                 0--------> columns
           ^                 |
           |                 |
           |                 |
-    ------c------> x        |
+    ------0------> x        |
           |                 |
           |                 | rows
 
@@ -18,6 +18,17 @@
 
     Ncurses has "memory leaks". Read more at:
     http://invisible-island.net/ncurses/ncurses.faq.html#config_leaks
+
+    TODO
+        I need to carry w, h and d into each function of this module (almost).
+        It isn't cool. It will be good, if I write screen properties struct.
+
+        Line 62: maybe rewrite it more compactly? Or not?
+
+        Where're many magic numbers. Need to do something with it! (Screen
+        properties struct will be helpful there, I think.)
+
+        Line 166: awful code.
 */
 
 #ifndef CUI
@@ -49,9 +60,19 @@ void putInMiddle(int start_r, int start_c, int length, char * string);
 void putInRight(int start_r, int start_c, int length, char * string);
 
 /*
-    Draws basic interface.
+    Moves cursor.
+*/
+void moveCursor(int key, int w, int d, Cell ** map, int * cur_x, int * cur_y);
+
+/*
+    Draws basic interface. d is width of side bar.
 */
 void drawInterface(int rows, int columns, int d);
+
+/*
+    Prints type of territory into side bar.
+*/
+void identifyCell(Cell * c, int h, int d);
 
 /*
     Draws map. Cell map will be in (start_row, start_column). Map we will draw
