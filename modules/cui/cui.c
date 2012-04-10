@@ -93,8 +93,8 @@ void drawInterface(Interface * iface)
         maddch(r - 1, i, ACS_HLINE);
         if(i > s && i < c - 1)
         {
-            maddch(2, i, ACS_HLINE);
-            maddch(10, i, ACS_HLINE);
+            maddch(PLAYER_START, i, ACS_HLINE);
+            maddch(INFO_START, i, ACS_HLINE);
             maddch(r - 4, i, ACS_HLINE);
         }
     }
@@ -116,7 +116,14 @@ void drawInterface(Interface * iface)
 
     // Project name.
     putInMiddle(1, s + 1, c - s - 2, "%%projectname%%");
-    maddch(2, s, ACS_LTEE); maddch(2, c - 1, ACS_RTEE);
+
+    // Player info.
+    maddch(PLAYER_START, s, ACS_LTEE); maddch(PLAYER_START, c - 1, ACS_RTEE);
+    putInMiddle(PLAYER_START + 1, s + 1, c - s - 2, "Player");
+
+    // Territory info
+    maddch(INFO_START, s, ACS_LTEE); maddch(INFO_START, c - 1, ACS_RTEE);
+    putInMiddle(INFO_START + 1, s + 1, c - s - 2, "Information");
 
     // Hints.
     maddch(r - 4, s, ACS_LTEE); maddch(r - 4, c - 1, ACS_RTEE);
@@ -126,26 +133,25 @@ void drawInterface(Interface * iface)
     attroff(COLOR_PAIR(0));
 }
 
-void identifyCell(Cell * cell, Interface * iface)
-{
-    // Copying columns and sidebar.
-    int c = iface -> columns;
+void drawCellInfo(Cell * cell, Interface * iface)
+{    
     int s = iface -> sidebar;
 
+    // TODO Check: player knows this territory or no, knows resources on this
+    //      territory.
+    //      Add resources and cities.
+
     // Auxiliary array.
-    char territories[5][9] = {"   Water", "   Grass", "    Hill", "  Forest", "Mountain"};
+    char territories[5][9] = {"Water   ", "Grass   ", "Hill    ", "Forest  ", "Mountain"};
+
+    // Territory type.
     if(cell -> territory <= 4 && cell -> territory >= 0)
     {
-        // TODO Damn. Rewrite!
-        char * type = malloc(sizeof(char) * 9);
-        memcpy(type, &territories[cell -> territory], 9);
-        //mvprintw(12, (s + 1) + (c - s - 2) - 8, "%s", territories[cell -> territory]);
-        putInRight(12, s + 1, c - s - 2, type);
-        free(type);
+        mvprintw(INFO_START + 2, s + 1, "%s", territories[cell -> territory]);
     }
     else
     {
-        // Something goes wrong…
+        mvprintw(INFO_START + 2, s + 1, "Unknown ");
     }
 }
 

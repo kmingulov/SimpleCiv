@@ -21,8 +21,6 @@
 
     TODO
         Line 62: maybe rewrite it more compactly? Or not?
-
-        Line 166: awful code.
 */
 
 #ifndef CUI
@@ -35,6 +33,12 @@
     Key definitions.
 */
 #define KEY_ESCAPE 27
+
+/*
+    Constants.
+*/
+#define PLAYER_START 2
+#define INFO_START 10
 
 /*
     Interface struct, which contains general settings of interface.
@@ -81,9 +85,9 @@ void moveCursor(int key, Interface * iface, Cell ** map);
 void drawInterface(Interface * iface);
 
 /*
-    Prints type of territory into side bar.
+    Prints territory info into side bar.
 */
-void identifyCell(Cell * cell, Interface * iface);
+void drawCellInfo(Cell * cell, Interface * iface);
 
 /*
     Draws map.

@@ -6,10 +6,12 @@ typedef struct Cell
     // Neighboors of this cell.
     struct Cell * left, * right, * top, * bottom;
     // Type of territory.
-    char territory;
-    // TODO: resources
-    //       city and buildings
-    //       units
+    unsigned char territory;
+    // Resources.
+    unsigned char resources;
+    // TODO
+    //      city
+    //      units
 } Cell;
 
 /*
