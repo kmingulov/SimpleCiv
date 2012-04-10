@@ -1,3 +1,4 @@
+#include <mcheck.h>
 #include <stdlib.h>
 #include <time.h>
 #include "modules/landscape/landscape.h"
@@ -6,36 +7,31 @@
 
 int main()
 {
-    // Gt random!
+    mtrace();
+
+    // Initialize random.
     srand(time(NULL));
 
-    initCUI();
-
-    // Screen sizes.
-    int w, h, d;
-    getmaxyx(stdscr, w, h);
-    d = 0.85 * h;
-
-    // Map sizes.
-    int map_w = 250, map_h = 250;
-
     // Creating map.
+    int map_w = 250, map_h = 250;
     Cell * map = createMap(map_w, map_h);
     generateMap(map, map_w, map_h);
 
-    // Draw interface and map.
-    drawInterface(w, h, d);
-    drawMap(map, 1, 1, w - 2, d - 1);
+    // Initialize CUI and create interface settings' variable.
+    initCUI();
+    Interface iface = createInterface();
 
-    // Coordinates of our cursor.
-    int cur_x = 10, cur_y = 10;
-    move(cur_x, cur_y);
+    // Draw interface and map.
+    drawInterface(&iface);
+    drawMap(map, &iface);
 
     // Key code.    
     int key = 0;
 
     while(true)
     {
+        move(iface.cur_r, iface.cur_c);
+
         key = getch();
 
         if(key == KEY_ESCAPE)
@@ -45,20 +41,20 @@ int main()
 
         if(key >= KEY_DOWN && key <= KEY_RIGHT)
         {
-            moveCursor(key, w, d, &map, &cur_x, &cur_y);
+            moveCursor(key, &iface, &map);
         }
 
-        // See modules/cui/cui.h for some comments, why we change cur_y and
-        // cur_x places and why we write (1 - cur_x), not cur_x - 1.
-        Cell * c = getCell(map, cur_y - 1, 1 - cur_x);
-        identifyCell(c, h, d);
-
-        move(cur_x, cur_y);
+        // See modules/cui/cui.h for some comments, why we change cur_c and
+        // cur_r places and why we write (1 - cur_r), not cur_r - 1.
+        Cell * c = getCell(map, iface.cur_c - 1, 1 - iface.cur_r);
+        identifyCell(c, &iface);
     }
 
     // All done.
     destroyMap(map);
     deinitCUI();
+
+    muntrace();
 
     return 0;
 }

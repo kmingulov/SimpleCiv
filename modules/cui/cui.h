@@ -20,13 +20,7 @@
     http://invisible-island.net/ncurses/ncurses.faq.html#config_leaks
 
     TODO
-        I need to carry w, h and d into each function of this module (almost).
-        It isn't cool. It will be good, if I write screen properties struct.
-
         Line 62: maybe rewrite it more compactly? Or not?
-
-        Where're many magic numbers. Need to do something with it! (Screen
-        properties struct will be helpful there, I think.)
 
         Line 166: awful code.
 */
@@ -41,6 +35,23 @@
     Key definitions.
 */
 #define KEY_ESCAPE 27
+
+/*
+    Interface struct, which contains general settings of interface.
+*/
+typedef struct Interface
+{
+    // Number of rows and columns and distance between left edge of screen and 
+    // sidebar (in columns).
+    int rows, columns, sidebar;
+    // Cursor coordinates.
+    int cur_r, cur_c;
+} Interface;
+
+/*
+    Creates interface struct variable.
+*/
+Interface createInterface();
 
 /*
     Functions of initialization and deinitialization of CUI.
@@ -62,22 +73,21 @@ void putInRight(int start_r, int start_c, int length, char * string);
 /*
     Moves cursor.
 */
-void moveCursor(int key, int w, int d, Cell ** map, int * cur_x, int * cur_y);
+void moveCursor(int key, Interface * iface, Cell ** map);
 
 /*
     Draws basic interface. d is width of side bar.
 */
-void drawInterface(int rows, int columns, int d);
+void drawInterface(Interface * iface);
 
 /*
     Prints type of territory into side bar.
 */
-void identifyCell(Cell * c, int h, int d);
+void identifyCell(Cell * cell, Interface * iface);
 
 /*
-    Draws map. Cell map will be in (start_row, start_column). Map we will draw
-    until (end_row, end_column) point.
+    Draws map.
 */
-void drawMap(Cell * map, int start_row, int start_column, int end_row, int end_column);
+void drawMap(Cell * map, Interface * iface);
 
 #endif
