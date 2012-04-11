@@ -9,7 +9,7 @@ int main()
 {
     // Initialize random.
     srand(time(NULL));
-
+///gfsdgs
     // Creating map.
     int map_w = 250, map_h = 250;
     Cell * map = createMap(map_w, map_h);
