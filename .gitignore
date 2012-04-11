@@ -3,7 +3,6 @@
 
 # Testing files.
 tests/*
-cui-backup.c
 
 # Backups.
 *~
