@@ -1,14 +1,12 @@
-#include <mcheck.h>
 #include <stdlib.h>
 #include <time.h>
 #include "modules/landscape/landscape.h"
 #include "modules/map/map.h"
+#include "modules/players/players.h"
 #include "modules/cui/cui.h"
 
 int main()
 {
-    mtrace();
-
     // Initialize random.
     srand(time(NULL));
 
@@ -42,19 +40,16 @@ int main()
         if(key >= KEY_DOWN && key <= KEY_RIGHT)
         {
             moveCursor(key, &iface, &map);
+            // See modules/cui/cui.h for some comments, why we change cur_c and
+            // cur_r places and why we write (1 - cur_r), not cur_r - 1.
+            Cell * c = getCell(map, iface.cur_c - 1, 1 - iface.cur_r);
+            drawCellInfo(c, &iface);
         }
-
-        // See modules/cui/cui.h for some comments, why we change cur_c and
-        // cur_r places and why we write (1 - cur_r), not cur_r - 1.
-        Cell * c = getCell(map, iface.cur_c - 1, 1 - iface.cur_r);
-        identifyCell(c, &iface);
     }
 
     // All done.
-    destroyMap(map);
     deinitCUI();
-
-    muntrace();
+    destroyMap(map);
 
     return 0;
 }
