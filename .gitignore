@@ -1,0 +1,9 @@
+# Object files.
+*.o
+
+# Testing files.
+tests/*
+cui-backup.c
+
+# Backups.
+*~
