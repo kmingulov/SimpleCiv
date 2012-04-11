@@ -1,5 +1,5 @@
 # object files to compile whole project
-OBJ = map.o landscape.o players.o cui.o cui-print.o main.o
+OBJ = map.o landscape.o cui.o cui-print.o main.o
 
 # all libs' flags
 LIBS = -lm -lncurses
@@ -27,9 +27,6 @@ map.o: modules/map/map.c
 
 landscape.o: modules/landscape/landscape.c
 	gcc $(CFLAGS) -lm modules/landscape/landscape.c
-
-players.o: modules/players/players.c
-	gcc $(CFLAGS) modules/players/players.c
 
 cui.o: modules/cui/cui.c
 	gcc $(CFLAGS) -lncurses modules/cui/cui.c
