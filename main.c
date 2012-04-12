@@ -2,7 +2,6 @@
 #include <time.h>
 #include "modules/landscape/landscape.h"
 #include "modules/map/map.h"
-#include "modules/players/players.h"
 #include "modules/cui/cui.h"
 
 int main()
