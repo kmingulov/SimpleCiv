@@ -1,5 +1,5 @@
 # object files to compile whole project
-OBJ = map.o landscape.o cui.o cui-print.o main.o
+OBJ = map.o landscape.o cui.o main.o
 
 # all libs' flags
 LIBS = -lm -lncurses
@@ -30,9 +30,6 @@ landscape.o: modules/landscape/landscape.c
 
 cui.o: modules/cui/cui.c
 	gcc $(CFLAGS) -lncurses modules/cui/cui.c
-
-cui-print.o: modules/cui/cui-print.c
-	gcc $(CFLAGS) -lncurses modules/cui/cui-print.c
 
 clean:
 	rm -f *.o project
