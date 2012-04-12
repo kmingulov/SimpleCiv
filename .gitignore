@@ -1,9 +1,6 @@
 # Object files.
 *.o
 
-# Testing files.
-tests/*
-
 # Backups.
 *~
 .backup/*
