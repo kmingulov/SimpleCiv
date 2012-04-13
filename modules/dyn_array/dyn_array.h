@@ -7,27 +7,34 @@ typedef struct DynArray
 {
     int length;    // Length of dynamic array.
     int available; // How much elements we can add.
-    void * data;   // Pointer to array.
+    void ** data;  // Array of pointers.
 } DynArray;
 
 /*
     Returns created dynamic array.
 */
-DynArray * createDynArray();
+DynArray * daCreate();
 
 /*
-    Destroy dynamic array.
+    Destroy dynamic array. deleteFunc is deletion (for data) function.
 */
-void destroyDynArray(DynArray * array, void (* function)(void * data));
+void daDestroy(DynArray * array, void (* deleteFunc)(void * data));
 
 /*
     Puts element in the end of array.
 */
-void prependDynArray(DynArray * array, void * data);
+void daPrepend(DynArray * array, void * data);
 
 /*
     Gets element by index.
 */
-void * getDynArray(DynArray * array, int index);
+void * daGetByIndex(DynArray * array, int index);
+
+/*
+    Removes _first_ element pointer data. Will return 0, if nothing found, 
+    and 1, if element succefully removed. deleteFunc is deletion (for data)
+    function.
+*/
+int daRemoveByPointer(DynArray * array, void * data, void (* deleteFunc)(void * data));
 
 #endif

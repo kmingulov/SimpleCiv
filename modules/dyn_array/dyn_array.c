@@ -2,10 +2,10 @@
 #include <string.h>
 #include <stdio.h>
 
-#define ARRAY_INCREMENT 10
+#define ARRAY_INCREMENT 5
 #define SIZE            sizeof(int)
 
-DynArray * createDynArray()
+DynArray * daCreate()
 {
     DynArray * array = malloc(sizeof(DynArray));
 
@@ -16,43 +16,75 @@ DynArray * createDynArray()
     return array;
 }
 
-void destroyDynArray(DynArray * array, void (* function)(void * data))
+void daDestroy(DynArray * array, void (* deleteFunc)(void * data))
 {
     for(int i = 0; i < array -> length; i++)
     {
-        int * destination = (int *)((int) array -> data + SIZE * i);
-        function((void *)(* destination));
+        deleteFunc(array -> data[i]);
     }
 
     free(array -> data);
     free(array);
 }
 
-void incrementDynArray(DynArray * array)
+void daIncrement(DynArray * array)
 {
     if(array -> available == 0)
     {
         array -> available += ARRAY_INCREMENT;
-        void * new_data = malloc(SIZE * (array -> length + array -> available));
+        void ** new_data = malloc(SIZE * (array -> length + array -> available));
         memcpy(new_data, array -> data, SIZE * array -> length);
         free(array -> data);
         array -> data = new_data;
     }
 }
 
-void prependDynArray(DynArray * array, void * data)
+void daPrepend(DynArray * array, void * data)
 {
-    incrementDynArray(array);
+    daIncrement(array);
 
-    int * destination = (int *)((int) array -> data + SIZE * array -> length);
-    * destination = (int) data;
+    array -> data[array -> length] = data;
 
     array -> available--;
     array -> length++;
 }
 
-void * getDynArray(DynArray * array, int index)
+void * daGetByIndex(DynArray * array, int index)
 {
-    int * destination = (int *)((int) array -> data + SIZE * index);
-    return (void *) * destination;
+    if(index > array -> length || index < 0)
+    {
+        return NULL;
+    }
+
+    return array -> data[index];
+}
+
+int daRemoveByPointer(DynArray * array, void * data, void (* deleteFunc)(void * data))
+{
+    int index = 0;
+
+    // Searching for data.
+    while(array -> data[index] != data && index < array -> length)
+    {
+        index++;
+    }
+
+    // Nothing found.
+    if(index == array -> length)
+    {
+        return 0;
+    }
+
+    // Deleting data.
+    deleteFunc(array -> data[index]);
+
+    // Moving all elements.
+    for(int i = index; i < array -> length - 1; i++)
+    {
+        array -> data[i] = array -> data[i + 1];
+    }
+    array -> length--;
+
+    // All done.
+    return 1;
 }
