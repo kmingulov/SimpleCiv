@@ -1,59 +1,51 @@
 #include <stdio.h>
-#include <time.h>
-#include <stdlib.h>
 #include <assert.h>
 #include "../../modules/dyn_array/dyn_array.h"
 
-void function(void * data)
+void functionChars(void * data)
 {
-    printf("%s\n", (char *) data);
-    free(data);
-}
-
-void functionInts(void * data)
-{
-    printf("%d\n", * ((int *) data));
     free(data);
 }
 
 int main()
 {
-    // Initialize random.
-    srand(time(NULL));
+    DynArray * array = daCreate(); 
+    char * data, * new_data;
 
-    // Creates dynamical array.
-    DynArray * array = createDynArray();
-
-    // Work with array.
-    for(int i = 0; i < 15; i++)
+    // Creating array of strings: A, AB, ABC, ABCD, ABCDE…
+    for(int i = 0; i < 26; i++)
     {
-        char * data = malloc(sizeof(char) * (i + 2));
+        data = malloc(sizeof(char) * (i + 2));
+
+        if(i == 2)
+        {
+            new_data = data;
+        }
+
         for(int j = 0; j < i + 1; j++)
         {
-            data[j] = rand() % 26 + 65;
+            data[j] = j + 65;
         }
         data[i + 1] = '\0';
-        prependDynArray(array, data);
+        daPrepend(array, data);
     }
 
-    // Destroy it. Also it will print line of strings generated in the for loop.
-    destroyDynArray(array, &function);
+    // Basic tests.
+    assert(array -> length == 26);
+    assert(array -> available == 4);
 
-    // Create new array. But with ints now.
-    array = createDynArray();
+    // Tests for get.
+    assert((char *) daGetByIndex(array, 25) == data);
+    assert((char *) daGetByIndex(array, -1) == NULL);
+    assert((char *) daGetByIndex(array, 26) == NULL);
 
-    for(int i = 0; i < 15; i++)
-    {
-        int * data = malloc(sizeof(int));
-        * data = i;
-        prependDynArray(array, data);
-    }
+    // Tests for remove.
+    assert(daRemoveByPointer(array, NULL, &functionChars) == 0);
+    assert(daRemoveByPointer(array, new_data, &functionChars) == 1);
+    assert(daRemoveByPointer(array, data, &functionChars) == 1);
 
-    // Testing get.
-    int * data = (int *) getDynArray(array, 5);
-    assert(* data == 5);
-
-    destroyDynArray(array, &functionInts);
+    // All done.
+    daDestroy(array, &functionChars);
 
     return 0;
 }
