@@ -51,7 +51,8 @@ void daPrepend(DynArray * array, void * data)
 
 void * daGetByIndex(DynArray * array, int index)
 {
-    if(index > array -> length || index < 0)
+    // Max index = array -> length - 1. Index cannot be over max index.
+    if(index > array -> length - 1 || index < 0)
     {
         return NULL;
     }
@@ -64,7 +65,8 @@ int daRemoveByPointer(DynArray * array, void * data, void (* deleteFunc)(void * 
     int index = 0;
 
     // Searching for data.
-    while(array -> data[index] != data && index < array -> length)
+    // Max index = array -> length - 1, so index had to be less than max index.
+    while(index <= array -> length - 1 && array -> data[index] != data)
     {
         index++;
     }
@@ -84,6 +86,9 @@ int daRemoveByPointer(DynArray * array, void * data, void (* deleteFunc)(void * 
         array -> data[i] = array -> data[i + 1];
     }
     array -> length--;
+    array -> available++;
+
+    // TODO: check, if array -> available > 5. daDecriment?
 
     // All done.
     return 1;

@@ -43,6 +43,7 @@ int main()
     assert(daRemoveByPointer(array, NULL, &functionChars) == 0);
     assert(daRemoveByPointer(array, new_data, &functionChars) == 1);
     assert(daRemoveByPointer(array, data, &functionChars) == 1);
+    assert(array -> length + array -> available == 30);
 
     // All done.
     daDestroy(array, &functionChars);
