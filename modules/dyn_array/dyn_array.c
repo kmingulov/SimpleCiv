@@ -60,6 +60,14 @@ void * daGetByIndex(DynArray * array, int index)
     return array -> data[index];
 }
 
+void daForEach(DynArray * array, void (* function)(int index, void * data))
+{
+    for(int i = 0; i < array -> length; i++)
+    {
+        function(i, array -> data[i]);
+    }
+}
+
 int daRemoveByPointer(DynArray * array, void * data, void (* deleteFunc)(void * data))
 {
     int index = 0;

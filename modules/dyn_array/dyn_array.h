@@ -31,6 +31,11 @@ void daPrepend(DynArray * array, void * data);
 void * daGetByIndex(DynArray * array, int index);
 
 /*
+    Executes function for each element in array.
+*/
+void daForEach(DynArray * array, void (* function)(int index, void * data));
+
+/*
     Removes _first_ element pointer data. Will return 0, if nothing found, 
     and 1, if element succefully removed. deleteFunc is deletion (for data)
     function.
