@@ -4,3 +4,7 @@
 # Backups.
 *~
 .backup/*
+
+# Executable files.
+project
+tests/*/test
