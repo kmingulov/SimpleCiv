@@ -6,35 +6,40 @@ void foreachFunc(Node * parent, Node * child, Edge * link)
     printf("%d\t%d\t%d\n", (int) parent, (int) child, link -> type);
 }
 
+void deleteFunc(void * data)
+{
+    free(data);
+}
+
 int main()
 {
     int * data = malloc(sizeof(int));
 
     * data = 0;
 
-    Node * head = createGraph(data), * child;
+    Node * head = createGraph(data);
 
-    for(int i = 1; i < 3; i++)
-    {
-        data = malloc(sizeof(int));
-        * data = i;
-        child = addNeighbour(head, i, data);
-    }
-
-    addEdge(child, head, 0);
-
-    for(int i = 1; i < 3; i++)
-    {
-        data = malloc(sizeof(int));
-        * data = i;
-        addNeighbour(child, i, data);
-    }
-
-    // Test for "foreach".
+    // Create and print simple graph.
     printf("Parent\t\tThis\t\tEdge type\n");
+    for(int i = 1; i < 5; i++)
+    {
+        data = malloc(sizeof(int));
+        * data = i;
+        Node * child = addNode(head, i, data);
+        addEdge(child, head, 0);
+        for(int j = 11; j < 35; j++)
+        {
+            data = malloc(sizeof(int));
+            * data = j;
+            addNode(child, j, data);
+        }
+        foreachNeighbour(child, &foreachFunc);
+        printf("\n");
+    }
     foreachNeighbour(head, &foreachFunc);
-    printf("\n");
-    foreachNeighbour(child, &foreachFunc);
+
+    // And destroy it.
+    destroyGraph(head, &free);
 
     return 0;
 }

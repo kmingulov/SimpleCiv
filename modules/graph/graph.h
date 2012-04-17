@@ -5,7 +5,11 @@
 
 typedef struct Node
 {
+    // Color of this node. Used for graph traversal. 0 is white, 1 is black.
+    char color;
+    // Data of this node.
     void * data;
+    // Edges to neighbours.
     DynArray * neighbours;
 } Node;
 
@@ -21,7 +25,7 @@ typedef struct Edge
     instead.
     Returns pointer to new node. If parent == NULL creates new graph.
 */
-Node * addNeighbour(Node * parent, int edge_type, void * data);
+Node * addNode(Node * parent, int edge_type, void * data);
 
 /*
     Adds Edge from node1 to node2, edge_type is type of the edge.
@@ -34,7 +38,9 @@ void addEdge(Node * node1, Node * node2, int edge_type);
 Node * createGraph(void * data);
 
 /*
-    Destroys graph.
+    Destroys graph. deleteFunc is deletion function for data.
+    All our structs (DynArray in struct Node and target in struct Edge) will be
+    destroyed by free() function.
 */
 void destroyGraph(Node * head, void (* deleteFunc)(void * data));
 

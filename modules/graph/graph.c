@@ -1,8 +1,9 @@
 #include "graph.h"
 
-Node * addNeighbour(Node * parent, int edge_type, void * data)
+Node * addNode(Node * parent, int edge_type, void * data)
 {
     Node * child = malloc(sizeof(Node));
+    child -> color = 0;
     child -> data = data;
     child -> neighbours = daCreate();
     
@@ -26,16 +27,36 @@ void addEdge(Node * node1, Node * node2, int edge_type)
 
 Node * createGraph(void * data)
 {
-    return addNeighbour(NULL, 0, data);
+    return addNode(NULL, 0, data);
 }
 
 void destroyGraph(Node * head, void (* deleteFunc)(void * data))
 {
-    // TODO Here I want to write DFS algorithm (Depth-first search).
-    // I really don't know how write it more better. There is only one idea I
-    // have: use two arrays (DynArray * pointers, * status). One will contains
-    // pointers of nodes, other — information, visited this node or no.
-    // Or use one array but with another struct (pointer to Node  and status).
+    // TODO Okay I found, that I can put a char in struct and use it. So let it
+    // be so (maybe for a time, I don't know).
+
+    // "Paint" this node.
+    head -> color = 1;
+    // Delete data.
+    deleteFunc(head -> data);
+
+    // Pass array of neighbours.
+    DynArray * array = head -> neighbours;
+    for(int i = 0; i < array -> length; i++)
+    {
+        Node * target = ((Edge *) array -> data[i]) -> target;
+        // Run this function for non-deleted node.
+        if(target -> color == 0)
+        {
+            destroyGraph(target, deleteFunc);
+        }
+    }
+
+    // Destroy array of neighbours.
+    daDestroy(array, &free);
+
+    // Destroy this element.
+    free(head);
 }
 
 void foreachNeighbour(Node * parent, void (* function)(Node * parent, Node * child, Edge * link))
