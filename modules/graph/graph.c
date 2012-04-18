@@ -69,3 +69,20 @@ void foreachNeighbour(Node * parent, void (* function)(Node * parent, Node * chi
         function(parent, ((Edge *) array -> data[i]) -> target, array -> data[i]);
     }
 }
+
+Node * getNeighbour(Node * parent, int edge_type)
+{
+    DynArray * array = parent -> neighbours;
+    int i = 0;
+    while( i < array -> length && ((Edge *) array -> data[i]) -> type != edge_type )
+    {
+        i++;
+    }
+
+    if(i == array -> length)
+    {
+        return NULL;
+    }
+
+    return ((Edge *) array -> data[i]) -> target;
+}

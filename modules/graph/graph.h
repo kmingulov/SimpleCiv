@@ -49,4 +49,9 @@ void destroyGraph(Node * head, void (* deleteFunc)(void * data));
 */
 void foreachNeighbour(Node * parent, void (* function)(Node * parent, Node * child, Edge * link));
 
+/*
+    Returns _first_ node with edge_type. Returns NULL, if nothing found.
+*/
+Node * getNeighbour(Node * parent, int edge_type);
+
 #endif
