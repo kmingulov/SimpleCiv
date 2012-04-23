@@ -36,4 +36,4 @@ Tests
 -----
 You can find tests for modules in tests directory. Compile them by simple `make`.
 
-Tests use some of the modules and tests *all* their functions (if possible with asserts).
+Tests use some of the modules and test *all* their functions (if possible with asserts).
