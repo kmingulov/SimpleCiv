@@ -20,10 +20,10 @@ void destroyPlayer(void * data)
 
 int main()
 {
-    // Create graph.
     Node * head = NULL;
     Node * temp = NULL;
 
+    // Initialize random.
     srand(time(NULL));
 
     // Create list of players.
@@ -41,6 +41,8 @@ int main()
         // Add name to player.
         data -> name = name;
         // Add him to graph.
+        // If temp == NULL (i.e. i == 0), it will just create graph. See graph.h
+        // for some notes.
         temp = addNode(temp, PLAYER_NEXT, data);
         // Remember head.
         if(head == NULL)
