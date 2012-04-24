@@ -21,7 +21,11 @@ void generateMap(Cell * map, int w, int h)
 {
     // Magic numbers. Found by logarithmical approximation k = f( sqrt(w * h) ).
     // sqrt(w * h) is the characteristic size of map.
-    int k = round( (float) 22.0124760711f * log(sqrt(w * h)) - 50.311757282f );
+
+    // TODO 24.04.12. I've played with coefs and make them acceptable for maps
+    // with sqrt(w * h) < 1000. Maybe it will be good to implement a Perlin 
+    // noise instead?
+    int k = round( (float) 102.4540490757f * log(sqrt(w * h)) - 409.3374246835f );
     int dk = 2;
     // 3kn = 0,8WH, 20% is water.
     int n = round( (float) 0.8f * w * h / k / 3 );
