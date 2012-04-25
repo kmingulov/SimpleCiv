@@ -1,5 +1,5 @@
 # object files to compile whole project
-OBJ = map.o landscape.o cui.o main.o
+OBJ = map.o landscape.o cui.o xmlparser.o main.o
 
 # all libs' flags
 LIBS = -lm -lncurses
@@ -30,6 +30,9 @@ landscape.o: modules/landscape/landscape.c
 
 cui.o: modules/cui/cui.c
 	gcc $(CFLAGS) -lncurses modules/cui/cui.c
+xmlparser.o: modules/xmlparser/xmlparser.c
+	gcc $(CFLAGS) -lm modules/xmlparser/xmlparser.c
+
 
 clean:
 	rm -f *.o project

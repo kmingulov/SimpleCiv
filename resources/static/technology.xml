@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<technology>
+    <id>1</id>
+    <name>Обработка железа</name>
+
+    <provides>
+        // id юнитов, которых позволяет нанимать технология. 2 и 3 —
+        // например, мечник и копьеносец.
+        <units>2,3</units>
+        // id технологий, которые позволяет изучать эта технология
+        <technologies>2</techonologies>
+    </provides>
+
+    <requires>
+        // id технологий, которые необходимо изучить для изучения
+        // этой технологии
+        <technologies>0</techonologies>
+        // Ресурсы, которые необходимы для изучения технологии.
+        // Как можно изучать обработку железа, если игрок не нашёл
+        // железо? 1 — это (пусть) железо.
+        <resources>1</resources>
+    </requires>
+</technology>
+
+<technology>
+    <id>0</id>
+    <name>Каменное оружие</name>
+
+    <provides>
+        // Например, 0 и 1 — это рабочий и воин с дубинкой :)
+        <units>0,1</units>
+        <technologies>1</techonologies>
+    </provides>
+
+    <requires>
+        // Ничего.
+        <technologies></techonologies>
+        // 0 — это камень.
+        <resources>0</resources>
+    </requires>
+</technology>

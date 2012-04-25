@@ -1,0 +1,25 @@
+/*
+	SETTINGS
+*/
+
+/*
+
+
+settings_game_save = 1         // 1 - on  0 -off   включить выключить сейв
+settings_game_cnt_player = 1   // m-player количество игроков
+settigns_game_сложность = 1    // 0- noob 1 - norm - 2 hard - 3 - super hard (влияет на коэф мощности врагов (например мощность варваров)
+
+
+
+
+
+settings_files_technology = resources/static/technology.xml // путь до файла с технологиями 
+settings_files_units = resources/static/unit.xml            // путь до файла с описанием юнитов
+
+settings_map_коэффициент_water = 0.2 // коэф воды 
+...
+settings_map_коэффициент_grass = 0.3 // коэф земли
+
+
+
+*/
