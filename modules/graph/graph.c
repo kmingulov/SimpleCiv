@@ -1,12 +1,13 @@
 #include "graph.h"
 
-Node * addNode(Node * parent, int edge_type, void * data)
+Node * addNode(Node * parent, int edge_type, int node_type, void * data)
 {
     Node * child = malloc(sizeof(Node));
+    child -> type = node_type;
     child -> color = 0;
     child -> data = data;
     child -> neighbours = daCreate();
-    
+
     if(parent != NULL)
     {
         addEdge(parent, child, edge_type);
@@ -25,20 +26,20 @@ void addEdge(Node * node1, Node * node2, int edge_type)
     daPrepend(node1 -> neighbours, edge);
 }
 
-Node * createGraph(void * data)
+Node * createGraph(int node_type, void * data)
 {
-    return addNode(NULL, 0, data);
+    return addNode(NULL, node_type, 0, data);
 }
 
-void destroyGraph(Node * head, void (* deleteFunc)(void * data))
+void destroyGraph(Node * head, void (* deleteFunc)(int type, void * data))
 {
-    // TODO Okay I found, that I can put a char in struct and use it. So let it
+    // TODO Okay, I found that I can put a char in struct and use it. So let it
     // be so (maybe for a time, I don't know).
 
     // "Paint" this node.
     head -> color = 1;
     // Delete data.
-    deleteFunc(head -> data);
+    deleteFunc(head -> type, head -> data);
 
     // Pass array of neighbours.
     DynArray * array = head -> neighbours;

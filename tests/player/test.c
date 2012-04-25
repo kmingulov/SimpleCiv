@@ -4,7 +4,8 @@
 #include "../../modules/graph/graph.h"
 #include "../../modules/player/player.h"
 
-#define PLAYER_NEXT 1
+#define TYPE_PLAYER 1
+#define PLAYER_NEXT 11
 
 void foreachFunc(Node * parent, Node * child, Edge * link)
 {
@@ -12,10 +13,10 @@ void foreachFunc(Node * parent, Node * child, Edge * link)
     printf("%d ---%d--> %d %s\n", (int) parent, link -> type, (int) child, ((Player *) child -> data) -> name);
 }
 
-void destroyPlayer(void * data)
+void destroyPlayer(int type, void * data)
 {
     free( ((Player *) data) -> name );
-    free( (Player *) data);
+    free( (Player *) data );
 }
 
 int main()
@@ -43,7 +44,7 @@ int main()
         // Add him to graph.
         // If temp == NULL (i.e. i == 0), it will just create graph. See graph.h
         // for some notes.
-        temp = addNode(temp, PLAYER_NEXT, data);
+        temp = addNode(temp, TYPE_PLAYER, PLAYER_NEXT, data);
         // Remember head.
         if(head == NULL)
         {

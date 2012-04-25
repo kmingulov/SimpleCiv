@@ -5,6 +5,11 @@
 
 typedef struct Node
 {
+    // Type of this node.
+    // TODO Maybe do something more good? Or char type, where types are 0..99,
+    // and +100, if there is color. I.e. type == 1 means that type is 1 and
+    // color is 0, type == 101 means that type is 1 and color is 1.
+    int type;
     // Color of this node. Used for graph traversal. 0 is white, 1 is black.
     char color;
     // Data of this node.
@@ -25,7 +30,7 @@ typedef struct Edge
     instead.
     Returns pointer to new node. If parent == NULL creates new graph.
 */
-Node * addNode(Node * parent, int edge_type, void * data);
+Node * addNode(Node * parent, int edge_type, int node_type, void * data);
 
 /*
     Adds Edge from node1 to node2, edge_type is type of the edge.
@@ -35,14 +40,14 @@ void addEdge(Node * node1, Node * node2, int edge_type);
 /*
     Creates new graph.
 */
-Node * createGraph(void * data);
+Node * createGraph(int node_type, void * data);
 
 /*
     Destroys graph. deleteFunc is deletion function for data.
     All our structs (DynArray in struct Node and target in struct Edge) will be
     destroyed by free() function.
 */
-void destroyGraph(Node * head, void (* deleteFunc)(void * data));
+void destroyGraph(Node * head, void (* deleteFunc)(int type, void * data));
 
 /*
     Runs function for each neighbour of Node parent.
