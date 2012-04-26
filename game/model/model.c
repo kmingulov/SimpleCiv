@@ -19,25 +19,25 @@ Model * createModel(ModelProperties * properties)
         // Add name to player.
         data -> name = (char *) daGetByIndex(properties -> player_names, i);
         // Add him to graph.
-        temp = addNode(temp, PLAYER_NEXT, TYPE_PLAYER, data);
+        temp = addNode(temp, EDGE_NEXT_PLAYER, NODE_PLAYER, data);
         // Remember head.
         if(head == NULL)
         {
             head = temp;
         }
     }
-    addEdge(temp, head, PLAYER_NEXT);
+    addEdge(temp, head, EDGE_NEXT_PLAYER);
     model -> graph_head = head;
 
     // Returns model.
     return model;
 }
 
-void destroyNode(int type, void * data)
+void destroyNode(unsigned char type, void * data)
 {
     switch(type)
     {
-        case TYPE_PLAYER:
+        case NODE_PLAYER:
             free( ((Player *) data) -> name );
         break;
     }

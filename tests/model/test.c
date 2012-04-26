@@ -5,8 +5,8 @@ int main()
 {
     // We will parse it all from config file.
     ModelProperties * properties = malloc(sizeof(ModelProperties));
-    properties -> map_w = 1000;
-    properties -> map_h = 1000;
+    properties -> map_w = 100;
+    properties -> map_h = 100;
     properties -> players_count = 5;
     properties -> player_names = daCreate();
 
