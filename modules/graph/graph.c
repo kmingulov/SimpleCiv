@@ -1,6 +1,6 @@
 #include "graph.h"
 
-Node * addNode(Node * parent, int edge_type, int node_type, void * data)
+Node * addNode(Node * parent, unsigned char edge_type, unsigned char node_type, void * data)
 {
     Node * child = malloc(sizeof(Node));
     child -> type = node_type;
@@ -16,7 +16,7 @@ Node * addNode(Node * parent, int edge_type, int node_type, void * data)
     return child;
 }
 
-void addEdge(Node * node1, Node * node2, int edge_type)
+void addEdge(Node * node1, Node * node2, unsigned char edge_type)
 {
     // Creating edge.
     Edge * edge = malloc(sizeof(Edge));
@@ -26,12 +26,12 @@ void addEdge(Node * node1, Node * node2, int edge_type)
     daPrepend(node1 -> neighbours, edge);
 }
 
-Node * createGraph(int node_type, void * data)
+Node * createGraph(unsigned char node_type, void * data)
 {
-    return addNode(NULL, node_type, 0, data);
+    return addNode(NULL, 0, node_type, data);
 }
 
-void destroyGraph(Node * head, void (* deleteFunc)(int type, void * data))
+void destroyGraph(Node * head, void (* deleteFunc)(unsigned char type, void * data))
 {
     // TODO Okay, I found that I can put a char in struct and use it. So let it
     // be so (maybe for a time, I don't know).
@@ -71,7 +71,7 @@ void foreachNeighbour(Node * parent, void (* function)(Node * parent, Node * chi
     }
 }
 
-Node * getNeighbour(Node * parent, int edge_type)
+Node * getNeighbour(Node * parent, unsigned char edge_type)
 {
     DynArray * array = parent -> neighbours;
     int i = 0;

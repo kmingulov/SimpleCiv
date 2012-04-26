@@ -2,12 +2,14 @@
 #include <assert.h>
 #include "../../modules/graph/graph.h"
 
+#define NODE_TYPE 126
+
 void foreachFunc(Node * parent, Node * child, Edge * link)
 {
     printf("%d\t%d\t%d\t\t%d\n", (int) parent, (int) child, child -> type, link -> type);
 }
 
-void deleteFunc(int type, void * data)
+void deleteFunc(unsigned char type, void * data)
 {
     free(data);
 }
@@ -18,7 +20,7 @@ int main()
 
     * data = 0;
 
-    Node * head = createGraph(0, data);
+    Node * head = createGraph(NODE_TYPE, data);
 
     // Create and print simple graph.
     printf("Parent\t\tThis\t\tData type\tEdge type\n");
@@ -26,13 +28,13 @@ int main()
     {
         data = malloc(sizeof(int));
         * data = i;
-        Node * child = addNode(head, i, 0, data);
+        Node * child = addNode(head, i, NODE_TYPE, data);
         addEdge(child, head, 0);
         for(int j = 11; j < 15; j++)
         {
             data = malloc(sizeof(int));
             * data = j;
-            addNode(child, j, 0, data);
+            addNode(child, j, NODE_TYPE, data);
         }
         foreachNeighbour(child, &foreachFunc);
         printf("\n");
