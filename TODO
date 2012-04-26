@@ -1,0 +1,9 @@
+Файлы, надлежащие доработке, обработке, обдумке или же полному переписыванию:
+
+    resources/
+    modules/cui/
+    modules/map/
+    modules/xmlparser/
+    modules/landscape/
+    config
+    main.с
