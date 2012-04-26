@@ -1,6 +1,9 @@
 #ifndef MODEL
 #define MODEL
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "../../modules/dyn_array/dyn_array.h"
 #include "../../modules/graph/graph.h"
 #include "../../modules/map/map.h"
@@ -68,5 +71,7 @@ Model * createModel(ModelProperties * properties);
     Destroy model.
 */
 void destroyModel(Model * model, ModelProperties * properties);
+
+void saveModel(Model * model, ModelProperties * properties, FILE * map_file);
 
 #endif

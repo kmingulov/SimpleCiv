@@ -61,3 +61,23 @@ void destroyModel(Model * model, ModelProperties * properties)
     daDestroy(properties -> player_names, &destroyNull);
     free(properties);
 }
+
+void saveModel(Model * model, ModelProperties * properties, FILE * map_file)
+{
+    
+    fprintf(map_file, "<?xml version=\"1.0\" encoding=\"UTF-8\">\n<map>\n\t<width>%d</width>\n\t<height>%d</height>\n", properties -> map_w, properties -> map_h);
+
+    Cell * current = model -> map_head;
+
+    for(int i = 0; i < properties -> map_w; i++)
+    {
+        for(int j = 0; j < properties -> map_h; j++)
+        {
+            fprintf(map_file, "\t<cell x=\"%d\" y=\"%d\" territory=\"%d\">\n", i, j, current -> territory);
+            current = current -> right;
+        }
+        current = current -> bottom;
+    }
+
+    fprintf(map_file, "</map>");
+}

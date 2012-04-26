@@ -1,12 +1,16 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "../../game/model/model.h"
 
 int main()
 {
+    FILE * map;
+    map = fopen("map.xml", "w");
+
     // We will parse it all from config file.
     ModelProperties * properties = malloc(sizeof(ModelProperties));
-    properties -> map_w = 100;
-    properties -> map_h = 100;
+    properties -> map_w = 1000;
+    properties -> map_h = 1000;
     properties -> players_count = 5;
     properties -> player_names = daCreate();
 
@@ -20,7 +24,10 @@ int main()
 
     Model * model = createModel(properties);
 
+    saveModel(model, properties, map);
+
     destroyModel(model, properties);
+    fclose(map);
 
     return 0;
 }
