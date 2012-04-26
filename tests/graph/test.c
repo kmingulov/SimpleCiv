@@ -4,7 +4,7 @@
 
 void foreachFunc(Node * parent, Node * child, Edge * link)
 {
-    printf("%d\t%d\t%d\n", (int) parent, (int) child, link -> type);
+    printf("%d\t%d\t%d\t\t%d\n", (int) parent, (int) child, child -> type, link -> type);
 }
 
 void deleteFunc(int type, void * data)
@@ -21,18 +21,18 @@ int main()
     Node * head = createGraph(0, data);
 
     // Create and print simple graph.
-    printf("Parent\t\tThis\t\tEdge type\n");
+    printf("Parent\t\tThis\t\tData type\tEdge type\n");
     for(int i = 1; i < 5; i++)
     {
         data = malloc(sizeof(int));
         * data = i;
-        Node * child = addNode(head, 0, i, data);
+        Node * child = addNode(head, i, 0, data);
         addEdge(child, head, 0);
         for(int j = 11; j < 15; j++)
         {
             data = malloc(sizeof(int));
             * data = j;
-            addNode(child, 0, j, data);
+            addNode(child, j, 0, data);
         }
         foreachNeighbour(child, &foreachFunc);
         printf("\n");
