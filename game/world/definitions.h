@@ -1,5 +1,5 @@
-#ifndef GRAPH_DEFINITIONS
-#define GRAPH_DEFINITIONS
+#ifndef DEFINITIONS
+#define DEFINITIONS
 
 /*
     Defines for nodes' types.
@@ -35,5 +35,18 @@
 // For technologies.
 #define EDGE_TECH_PROVIDES 8
 #define EDGE_TECH_REQUIRES 9
+
+/*
+    Defines for technologies' array.
+*/
+#define TECH_NOT_AVAILABLE 0
+#define TECH_AVAILABLE     1
+#define TECH_RESEARCHED    2
+
+/*
+    Defines for units' array.
+*/
+#define UNIT_NOT_AVAILABLE 0
+#define UNIT_AVAILABLE     1
 
 #endif

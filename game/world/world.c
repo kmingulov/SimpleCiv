@@ -29,6 +29,11 @@ World * createWorld(WorldProperties * properties)
     addEdge(temp, head, EDGE_NEXT_PLAYER);
     world -> graph_head = head;
 
+    // TODO:
+    // Loading from xml technologies' tree and units' tree.
+    // Initialize table of technologies and units for each player.
+    // Create several units for each player.
+
     // Returns model.
     return world;
 }
