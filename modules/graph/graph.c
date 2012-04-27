@@ -33,10 +33,7 @@ Node * createGraph(unsigned char node_type, void * data)
 
 void destroyGraph(Node * head, void (* deleteFunc)(unsigned char type, void * data))
 {
-    // TODO Okay, I found that I can put a char in struct and use it. So let it
-    // be so (maybe for a time, I don't know).
-
-    // "Paint" this node.
+    // «Paint» this node.
     head -> color = 1;
     // Delete data.
     deleteFunc(head -> type, head -> data);
@@ -55,7 +52,6 @@ void destroyGraph(Node * head, void (* deleteFunc)(unsigned char type, void * da
 
     // Destroy array of neighbours.
     daDestroy(array, &free);
-
     // Destroy this element.
     free(head);
 }

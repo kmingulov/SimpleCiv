@@ -4,10 +4,7 @@
 
 int main()
 {
-    FILE * map;
-    map = fopen("map.xml", "w");
-
-    // We will parse it all from config file.
+    // In future we will parse it all from config file.
     WorldProperties * properties = malloc(sizeof(WorldProperties));
     properties -> map_w = 10;
     properties -> map_h = 10;
@@ -22,12 +19,17 @@ int main()
         daPrepend(properties -> player_names, name);
     }
 
+    // Creating world.
     World * world = createWorld(properties);
 
-    //saveWorld(world, properties, map);
-
-    destroyWorld(world, properties);
+    // Saving world.
+    FILE * map;
+    map = fopen("map.xml", "w");
+    saveWorld(world, properties, map);
     fclose(map);
+
+    // Destroing world.
+    destroyWorld(world, properties);
 
     return 0;
 }

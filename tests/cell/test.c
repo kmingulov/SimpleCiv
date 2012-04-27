@@ -29,7 +29,7 @@ int main()
                 at 0x402540C: free (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
                 by 0x8048B7B: destroyGraph (graph.c:64)
 
-        I don't know what to do this it :(
+        I don't know what to do with it :(
     */
     destroyMap(n);
 
