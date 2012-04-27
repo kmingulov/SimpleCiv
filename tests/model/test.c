@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../../game/model/model.h"
+#include "../../game/world/world.h"
 
 int main()
 {
@@ -8,9 +8,9 @@ int main()
     map = fopen("map.xml", "w");
 
     // We will parse it all from config file.
-    ModelProperties * properties = malloc(sizeof(ModelProperties));
-    properties -> map_w = 1000;
-    properties -> map_h = 1000;
+    WorldProperties * properties = malloc(sizeof(WorldProperties));
+    properties -> map_w = 10;
+    properties -> map_h = 10;
     properties -> players_count = 5;
     properties -> player_names = daCreate();
 
@@ -22,11 +22,11 @@ int main()
         daPrepend(properties -> player_names, name);
     }
 
-    Model * model = createModel(properties);
+    World * world = createWorld(properties);
 
-    saveModel(model, properties, map);
+    //saveWorld(world, properties, map);
 
-    destroyModel(model, properties);
+    destroyWorld(world, properties);
     fclose(map);
 
     return 0;
