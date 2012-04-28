@@ -31,6 +31,13 @@ typedef struct World
     // Game graph.
     Node * graph_head; // Players.
     Node * map_head;   // Map.
+
+    // Technology tree. Type of each node is struct Technology.
+    Node * tech_head;
+
+    // Common info about technologies and units.
+    DynArray * units_info; // Type — UnitCommonInfo.
+    DynArray * techs_info; // Type — now char * (name of technology).
 } World;
 
 /*
