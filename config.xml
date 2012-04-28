@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <map>
+        <width>100</width>
+        <height>100</height>
+    </map>
+
+    <players>
+        <count>5</count>
+        <names>Player1 Player2 Player3 Player4</names>
+    </players>
+</config>
