@@ -48,21 +48,20 @@ void configContentElement(void * data, const char * s, int len)
     // If it is non-null string, check for parser state.
     if(strlen(temp) != 0)
     {
-        int state = ((XMLConfigParserData *) data) -> state;
-        WorldProperties * properties = ((XMLConfigParserData *) data) -> properties;
+        XMLConfigParserData * p_data = (XMLConfigParserData *) data;
 
-        switch(state)
+        switch(p_data -> state)
         {
             case XML_CONFIG_STATE_WIDTH:
-                properties -> map_w = atoi(temp);
+                p_data -> properties -> map_w = atoi(temp);
             break;
 
             case XML_CONFIG_STATE_HEIGHT:
-                properties -> map_h = atoi(temp);
+                p_data -> properties -> map_h = atoi(temp);
             break;
 
             case XML_CONFIG_STATE_COUNT:
-                properties -> players_count = atoi(temp);
+                p_data -> properties -> players_count = atoi(temp);
             break;
 
             // TODO players_names
