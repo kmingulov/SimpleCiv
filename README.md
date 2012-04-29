@@ -1,11 +1,10 @@
-Weird clone of Civilization game
-================================
-
-This is a clone of Civilization game. There is no name now. But it will be. Soon.
+SimpleCiv
+=========
+**SimpleCiv** is *really* simple clone of Civilization game.
 
 Concept
 -------
-You can find concept of this project in concept directory.
+You can find concept of this project in "docs" directory.
 
 Requirements
 ------------
