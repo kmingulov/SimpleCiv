@@ -48,7 +48,7 @@ Node * createGraph(unsigned char node_type, void * data);
     All module structs (DynArray in struct Node and target in struct Edge) will
     be destroyed by free() function.
 */
-void destroyGraph(Node * head, void (* deleteFunc)(unsigned char type, void * data));
+void destroyGraph(Node * head, DynArray * deleted, void (* deleteFunc)(unsigned char type, void * data));
 
 /*
     Runs function for each neighbour of Node parent.

@@ -19,7 +19,10 @@ int main()
     fclose(map);
 
     // Destroing world.
-    destroyWorld(world, properties);
+    DynArray * deleted = daCreate();
+    destroyWorld(world, deleted, properties);
+    free(deleted -> data);
+    free(deleted);
 
     return 0;
 }

@@ -64,11 +64,11 @@ void destroyNull(void * data)
     // nothing
 }
 
-void destroyWorld(World * world, WorldProperties * properties)
+void destroyWorld(World * world, DynArray * deleted, WorldProperties * properties)
 {
     // Destroy model.
-    destroyGraph(world -> map_head, &destroyNode);
-    destroyGraph(world -> graph_head, &destroyNode);
+    destroyGraph(world -> map_head, deleted, &destroyNode);
+    destroyGraph(world -> graph_head, deleted, &destroyNode);
     free(world);
 
     // And properties.

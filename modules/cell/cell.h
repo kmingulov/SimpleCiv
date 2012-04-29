@@ -30,9 +30,4 @@ void mergeRows(Node * n1, Node * n2);
 */
 Node * createMap(int w, int h);
 
-/*
-    Destroys map.
-*/
-void destroyMap(Node * head);
-
 #endif

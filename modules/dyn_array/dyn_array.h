@@ -31,6 +31,11 @@ void daPrepend(DynArray * array, void * data);
 void * daGetByIndex(DynArray * array, int index);
 
 /*
+    Searches for data in array. Returns index if found and -1 if not.
+*/
+int daSearchForData(DynArray * array, void * data);
+
+/*
     Executes function for each element in array.
 */
 void daForEach(DynArray * array, void (* function)(int index, void * data));

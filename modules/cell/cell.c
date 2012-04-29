@@ -68,8 +68,3 @@ void destroyCell(unsigned char type, void * data)
 {
     free(data);
 }
-
-void destroyMap(Node * head)
-{
-    destroyGraph(head, &destroyCell);
-}

@@ -60,6 +60,26 @@ void * daGetByIndex(DynArray * array, int index)
     return array -> data[index];
 }
 
+int daSearchForData(DynArray * array, void * data)
+{
+    int i;
+
+    for(i = 0; i < array -> length; i++)
+    {
+        if(array -> data[i] == data)
+        {
+            break;
+        }
+    }
+
+    if(i != array -> length)
+    {
+        return i;
+    }
+
+    return -1;
+}
+
 void daForEach(DynArray * array, void (* function)(int index, void * data))
 {
     for(int i = 0; i < array -> length; i++)

@@ -31,22 +31,24 @@ Node * createGraph(unsigned char node_type, void * data)
     return addNode(NULL, 0, node_type, data);
 }
 
-void destroyGraph(Node * head, void (* deleteFunc)(unsigned char type, void * data))
+void destroyGraph(Node * head, DynArray * deleted, void (* deleteFunc)(unsigned char type, void * data))
 {
     // «Paint» this node.
     head -> color = 1;
     // Delete data.
     deleteFunc(head -> type, head -> data);
+    daPrepend(deleted, head);
 
     // Pass array of neighbours.
     DynArray * array = head -> neighbours;
     for(int i = 0; i < array -> length; i++)
     {
+        // Target.
         Node * target = ((Edge *) array -> data[i]) -> target;
-        // Run this function for non-deleted node.
-        if(target -> color == 0)
+        // Search is this node deleted or not yet.
+        if(daSearchForData(deleted, target) == -1)
         {
-            destroyGraph(target, deleteFunc);
+            destroyGraph(target, deleted, deleteFunc);
         }
     }
 
