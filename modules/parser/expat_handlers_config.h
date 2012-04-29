@@ -1,8 +1,6 @@
 #ifndef EXPAT_HANDLERS_CONFIG
 #define EXPAT_HANDLERS_CONFIG
 
-#include <expat.h>
-
 #include "../../game/world/world.h"
 
 /*
@@ -17,11 +15,11 @@
 /*
     Struct for config parser.
 */
-typedef struct XMLConfigParser
+typedef struct XMLConfigParserData
 {
     WorldProperties * properties;
     int state;
-} XMLConfigParser;
+} XMLConfigParserData;
 
 /*
     Handlers for config parse.
