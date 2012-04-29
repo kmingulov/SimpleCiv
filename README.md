@@ -9,11 +9,10 @@ You can find concept of this project in concept directory.
 
 Requirements
 ------------
-At all:
-* ncurses
-
-For compiling only:
+For compiling:
 * gcc
+* ncurses-dev
+* expat-dev
 * make
 
 Installation
