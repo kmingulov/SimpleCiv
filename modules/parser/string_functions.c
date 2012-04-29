@@ -25,3 +25,35 @@ void strTrimSpaces(char * str)
 
     str[finish - start + 1] = '\0';
 }
+
+DynArray * strSplit(char delimiter, char * str, int max_length)
+{
+    // Create array
+    DynArray * array = daCreate();
+
+    char * new_name = malloc(sizeof(char) * max_length);
+    int index = 0;
+    for(int i = 0; i < strlen(str); i++)
+    {
+        if(str[i] != delimiter)
+        {
+            if(index < max_length - 1)
+            {
+                new_name[index++] = str[i];
+            }
+        }
+        else
+        {
+            new_name[index] = '\0';
+            // Copy name.
+            char * name = malloc(sizeof(char) * max_length);
+            memcpy(name, new_name, sizeof(char) * max_length);
+            daPrepend(array, name);
+            index = 0;
+        }
+    }
+    new_name[index] = '\0';
+    daPrepend(array, new_name);
+
+    return array;
+}

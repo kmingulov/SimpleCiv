@@ -2,6 +2,7 @@
 #include <string.h>
 #include <expat.h>
 
+#include "../dyn_array/dyn_array.h"
 #include "xml.h"
 #include "expat_handlers_config.h"
 

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../dyn_array/dyn_array.h"
 #include "string_functions.h"
 #include "expat_handlers_config.h"
 
@@ -48,6 +49,7 @@ void configContentElement(void * data, const char * s, int len)
     // If it is non-null string, check for parser state.
     if(strlen(temp) != 0)
     {
+        // Parser data.
         XMLConfigParserData * p_data = (XMLConfigParserData *) data;
 
         switch(p_data -> state)
@@ -64,7 +66,9 @@ void configContentElement(void * data, const char * s, int len)
                 p_data -> properties -> players_count = atoi(temp);
             break;
 
-            // TODO players_names
+            case XML_CONFIG_STATE_NAMES:
+                p_data -> properties -> player_names = strSplit(' ', temp, 16);
+            break;
         }
     }
 
