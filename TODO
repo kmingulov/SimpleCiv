@@ -2,8 +2,10 @@
 
     resources/
     modules/cui/
-    modules/map/
-    modules/xmlparser/
     modules/landscape/
-    config
     main.с
+
+Также:
+
+    добавить текст лицензии (GNU GPL v2)
+    добавить префиксы для modules/*, а то уже каша

@@ -8,7 +8,7 @@ typedef struct Player
     // Name of player, used only for gamer's convenience.
     char * name;
     // Array of player's units (type: Unit, not UnitCommonInfo!).
-    DynArray * units.
+    DynArray * units;
     // Arrays of available units and technologies.
     DynArray * available_units;
     DynArray * available_techs;
