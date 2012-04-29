@@ -1,5 +1,5 @@
 # object files to compile
-OBJ = graph.o dyn_array.o cell.o world.o test.o
+OBJ = graph.o dyn_array.o string_functions.o expat_handlers_config.o xml.o cell.o world.o test.o
 
 # debug flag
 DEBUG = -g
@@ -11,7 +11,7 @@ FLAGS = -std=c99 -Wall -pedantic
 CFLAGS = $(FLAGS) -c $(DEBUG)
 
 # flags for linking
-LFLAGS = $(FLAGS) -lm $(DEBUG)
+LFLAGS = $(FLAGS) -lexpat $(DEBUG)
 
 test: $(OBJ)
 	gcc $(LFLAGS) -o test $(OBJ)
@@ -24,6 +24,15 @@ graph.o: ../../modules/graph/graph.c
 
 dyn_array.o: ../../modules/dyn_array/dyn_array.c
 	gcc $(CFLAGS) ../../modules/dyn_array/dyn_array.c
+
+string_functions.o: ../../modules/parser/string_functions.c
+	gcc $(CFLAGS) ../../modules/parser/string_functions.c
+
+expat_handlers_config.o: ../../modules/parser/expat_handlers_config.c
+	gcc $(CFLAGS) ../../modules/parser/expat_handlers_config.c
+
+xml.o: ../../modules/parser/xml.c
+	gcc $(CFLAGS) -lexpat ../../modules/parser/xml.c
 
 world.o: ../../game/world/world.c
 	gcc $(CFLAGS) ../../game/world/world.c
