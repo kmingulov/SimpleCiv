@@ -48,7 +48,7 @@ World * createWorld(WorldProperties * properties);
 /*
     Destroy model.
 */
-void destroyWorld(World * world, DynArray * deleted, WorldProperties * properties);
+void destroyWorld(World * world, WorldProperties * properties);
 
 /*
     Save world to xml files.

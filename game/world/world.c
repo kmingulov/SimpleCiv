@@ -57,23 +57,32 @@ void destroyNode(unsigned char type, void * data)
 }
 
 /*
-    Doesn't free anything.
+    Doesn't free anything (because data was free'd already).
 */
 void destroyNull(void * data)
 {
     // nothing
 }
 
-void destroyWorld(World * world, DynArray * deleted, WorldProperties * properties)
+void destroyWorld(World * world, WorldProperties * properties)
 {
-    // Destroy model.
-    destroyGraph(world -> map_head, deleted, &destroyNode);
+    // Auxiliary array for destroyGraph();
+    DynArray * deleted = daCreate();
+
+    // Destroy map.
+    destroyMap(world -> map_head, properties -> map_w, properties -> map_h);
+
+    // Destroy world.
     destroyGraph(world -> graph_head, deleted, &destroyNode);
     free(world);
 
     // And properties.
     daDestroy(properties -> player_names, &destroyNull);
     free(properties);
+
+    // Destroy auxiliary array.
+    free(deleted -> data);
+    free(deleted);
 }
 
 void saveWorld(World * world, WorldProperties * properties, FILE * map_file)
