@@ -46,13 +46,13 @@ void mergeRows(Node * n1, Node * n2)
 
 Node * createMap(int w, int h)
 {
-    Node * head = createRow(h);
+    Node * head = createRow(w);
     Node * row = head;
 
-    for(int i = 0; i < w - 1; i++)
+    for(int i = 0; i < h - 1; i++)
     {
         // Create new row.
-        Node * new_row = createRow(h);
+        Node * new_row = createRow(w);
         // Merge two rows.
         mergeRows(row, new_row);
         // Go on.
@@ -64,7 +64,28 @@ Node * createMap(int w, int h)
     return head;
 }
 
-void destroyCell(unsigned char type, void * data)
+void destroyMap(Node * map_head, int w, int h)
 {
-    free(data);
+    Node * current = map_head;
+    Node * next_row = current;
+
+    for(int i = 0; i < h; i++)
+    {
+        next_row = getNeighbour(next_row, EDGE_CELL_BOTTOM);
+        for(int j = 0; j < w; j++)
+        {
+            // Get next.
+            Node * next = getNeighbour(current, EDGE_CELL_RIGHT);
+            // Remove this node and all it's edges.
+            daDestroy(current -> neighbours, &free);
+            free(current -> data);
+            free(current);
+            // Go on.
+            current = next;
+        }
+        current = next_row;
+        // At first next_row = getNeighbour(next_row, EDGE_CELL_BOTTOM); was
+        // here, but it was moved because at final step we deleted all map and
+        // have no cell to getNeighbour().
+    }
 }

@@ -30,4 +30,11 @@ void mergeRows(Node * n1, Node * n2);
 */
 Node * createMap(int w, int h);
 
+/*
+    Destroys map. This functions doesn't use destroyGraph() function.
+    It's _highly_ recommended to use this function instead of destroyGraph().
+    Reason is simple — map is symmetric.
+*/
+void destroyMap(Node * map_head, int w, int h);
+
 #endif
