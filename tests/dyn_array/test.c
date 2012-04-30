@@ -45,9 +45,9 @@ int main()
     assert((char *) daGetByIndex(array, 26) == NULL);
 
     // Tests for remove.
-    assert(daRemoveByPointer(array, NULL, &removeFunc) == 0);
-    assert(daRemoveByPointer(array, new_data, &removeFunc) == 1);
-    assert(daRemoveByPointer(array, data, &removeFunc) == 1);
+    assert(daRemoveByPointer(array, NULL, &free) == 0);
+    assert(daRemoveByPointer(array, new_data, &free) == 1);
+    assert(daRemoveByPointer(array, data, &free) == 1);
     assert(array -> length + array -> available == 30);
 
     // All done.
