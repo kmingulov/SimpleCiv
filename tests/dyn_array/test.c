@@ -2,11 +2,6 @@
 #include <assert.h>
 #include "../../modules/dyn_array/dyn_array.h"
 
-void removeFunc(void * data)
-{
-    free(data);
-}
-
 void foreachFunc(int index, void * data)
 {
     printf("%d\t%s\n", index, (char *) data);
@@ -14,7 +9,8 @@ void foreachFunc(int index, void * data)
 
 int main()
 {
-    DynArray * array = daCreate(); 
+    DynArray * array = daCreate();
+
     char * data, * new_data;
 
     // Creating array of strings: A, AB, ABC, ABCD, ABCDE…
@@ -55,7 +51,7 @@ int main()
     assert(array -> length + array -> available == 30);
 
     // All done.
-    daDestroy(array, &removeFunc);
+    daDestroy(array, &free);
 
     return 0;
 }

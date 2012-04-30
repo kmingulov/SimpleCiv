@@ -1,6 +1,6 @@
 #include "dyn_array.h"
 #include <string.h>
-#include <stdio.h>
+#include <stdlib.h>
 
 #define ARRAY_INCREMENT 5
 #define SIZE            sizeof(int)
