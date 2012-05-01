@@ -24,6 +24,11 @@ void * parseXML(int type)
             file = fopen("../../resources/units.xml", "r");
         break;
 
+        case XML_TECHNOLOGIES:
+            data = daCreate();
+            file = fopen("../../resources/technologies.xml", "r");
+        break;
+
         default:
             return NULL;
         break;
@@ -39,7 +44,7 @@ void * parseXML(int type)
         free(p_data);
         return NULL;
     }
-    char * xml = malloc(XML_MAX_CHARS * sizeof(char));
+    char * xml = calloc(XML_MAX_CHARS + 1, sizeof(char));
     fread(xml, sizeof(char), XML_MAX_CHARS, file);
     fclose(file);
 
@@ -50,7 +55,14 @@ void * parseXML(int type)
     XML_SetCharacterDataHandler(parser, &elementContent);
 
     // Parse xml file.
-    XML_Parse(parser, xml, strlen(xml), 0);
+    if(!XML_Parse(parser, xml, strlen(xml), 0))
+    {
+        free(data);
+        free(p_data);
+        free(xml);
+        XML_ParserFree(parser);
+        return NULL;
+    }
 
     // Free auxiliary data.
     free(p_data);
