@@ -60,6 +60,11 @@ void * daGetByIndex(DynArray * array, int index)
     return array -> data[index];
 }
 
+void * daGetLast(DynArray * array)
+{
+    return array -> data[array -> length - 1];
+}
+
 int daSearchForData(DynArray * array, void * data)
 {
     int i;

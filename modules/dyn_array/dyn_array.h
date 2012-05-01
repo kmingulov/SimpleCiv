@@ -31,6 +31,11 @@ void daPrepend(DynArray * array, void * data);
 void * daGetByIndex(DynArray * array, int index);
 
 /*
+    Gets last element in array.
+*/
+void * daGetLast(DynArray * array);
+
+/*
     Searches for data in array. Returns index if found and -1 if not.
 */
 int daSearchForData(DynArray * array, void * data);
