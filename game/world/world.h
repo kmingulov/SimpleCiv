@@ -28,9 +28,12 @@ typedef struct WorldProperties
 */
 typedef struct World
 {
+    // Properties.
+    WorldProperties * properties;
+
     // Game graph.
-    Node * graph_head; // Players.
-    Node * map_head;   // Map.
+    Node * graph_players; // Players.
+    Node * graph_map;     // Map.
 
     // Technology tree. Type of each node is struct Technology.
     Node * tech_head;
@@ -41,14 +44,14 @@ typedef struct World
 } World;
 
 /*
-    Creates model of the game with specified properties.
+    Creates world.
 */
-World * createWorld(WorldProperties * properties);
+World * createWorld();
 
 /*
-    Destroy model.
+    Destroys world.
 */
-void destroyWorld(World * world, WorldProperties * properties);
+void destroyWorld(World * world);
 
 /*
     Save world to xml files.
