@@ -12,4 +12,9 @@ typedef struct Techology
 	int id;
 } Technology;
 
+typedef struct TechnologyCommonInfo
+{
+    char * name;
+} TechnologyCommonInfo;
+
 #endif
