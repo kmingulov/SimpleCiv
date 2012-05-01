@@ -1,5 +1,5 @@
 # object files to compile
-OBJ = graph.o dyn_array.o string_functions.o expat_handlers_config.o xml.o cell.o world.o test.o
+OBJ = graph.o dyn_array.o string_functions.o expat_handlers.o xml.o cell.o world.o test.o
 
 # debug flag
 DEBUG = -g
@@ -28,8 +28,8 @@ dyn_array.o: ../../modules/dyn_array/dyn_array.c
 string_functions.o: ../../modules/parser/string_functions.c
 	gcc $(CFLAGS) ../../modules/parser/string_functions.c
 
-expat_handlers_config.o: ../../modules/parser/expat_handlers_config.c
-	gcc $(CFLAGS) ../../modules/parser/expat_handlers_config.c
+expat_handlers.o: ../../modules/parser/expat_handlers.c
+	gcc $(CFLAGS) ../../modules/parser/expat_handlers.c
 
 xml.o: ../../modules/parser/xml.c
 	gcc $(CFLAGS) -lexpat ../../modules/parser/xml.c
