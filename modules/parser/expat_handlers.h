@@ -1,31 +1,51 @@
-#ifndef EXPAT_HANDLERS_CONFIG
-#define EXPAT_HANDLERS_CONFIG
+#ifndef EXPAT_HANDLERS
+#define EXPAT_HANDLERS
 
 #include "../../game/world/world.h"
 
 /*
-    Definitions for config parser.
+    Definitions for parser.
 */
-#define XML_CONFIG_STATE_NONE   0
-#define XML_CONFIG_STATE_WIDTH  1
-#define XML_CONFIG_STATE_HEIGHT 2
-#define XML_CONFIG_STATE_COUNT  3
-#define XML_CONFIG_STATE_NAMES  4
+#define XML_NONE                   0
+
+#define XML_MAP                    1
+#define XML_MAP_WIDTH              2
+#define XML_MAP_HEIGHT             3
+
+#define XML_PLAYERS                4
+#define XML_PLAYERS_COUNT          5
+#define XML_PLAYERS_NAMES          6
+
+#define XML_UNIT                   7
+#define XML_UNIT_ID                8
+#define XML_UNIT_NAME              9
+#define XML_UNIT_HEALTH            10
+#define XML_UNIT_DAMAGE            11
+
+#define XML_TECH                   12
+#define XML_TECH_ID                13
+#define XML_TECH_NAME              14
+#define XML_TECH_PROVIDE           15
+#define XML_TECH_PROVIDE_UNITS     16
+#define XML_TECH_PROVIDE_TECHS     17
+#define XML_TECH_REQUIRE           18
+#define XML_TECH_REQUIRE_RESOURCES 19
+
 
 /*
-    Struct for config parser.
+    Struct for parser data.
 */
-typedef struct XMLConfigParserData
+typedef struct XMLParserData
 {
-    WorldProperties * properties;
+    void * data;
     int state;
-} XMLConfigParserData;
+} XMLParserData;
 
 /*
-    Handlers for config parse.
+    Handlers for parse.
 */
-void configStartElement(void * data, const char * name, const char ** attr);
-void configEndElement(void * data, const char * name);
-void configContentElement(void * data, const char * s, int len);
+void elementStart(void * data, const char * name, const char ** attr);
+void elementEnd(void * data, const char * name);
+void elementContent(void * data, const char * s, int len);
 
 #endif

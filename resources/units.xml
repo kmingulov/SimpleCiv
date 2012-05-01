@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<unit>
-    <id>0</id>
-    <name>Рабочий</name>
-    <health>5</health>
-    <damage>0</damage>
-</unit>
+<units>
+    <unit>
+        <id>0</id>
+        <name>Worker</name>
+        <health>5</health>
+        <damage>0</damage>
+    </unit>
 
-<unit>
-    <id>1</id>
-    <name>Воин</name>
-    <health>10</health>
-    <damage>1</damage>
-    // Это количество «единиц» в одном юните.
-    // Возможно надо добавить это поле. Макеев же предложил сделать по
-    // типу Heroes of Might and Magic.
-    // Тогда расчёт нанесённого урона будет завязан на этом значении
-    // (ну и damage тоже).
-    // В общем, тоже надо подумать.
-    <count>5</count>
-</unit>
+    <unit>
+        <id>1</id>
+        <name>Warrior</name>
+        <health>10</health>
+        <damage>1</damage>
+    </unit>
+
+    <unit>
+        <id>2</id>
+        <name>Archer</name>
+        <health>7</health>
+        <damage>1</damage>
+    </unit>
+</units>

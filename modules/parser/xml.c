@@ -2,44 +2,61 @@
 #include <string.h>
 #include <expat.h>
 
+#include "../../game/world/world.h"
 #include "../dyn_array/dyn_array.h"
 #include "xml.h"
-#include "expat_handlers_config.h"
+#include "expat_handlers.h"
 
-WorldProperties * parseConfig(char * filename)
+void * parseXML(int type)
 {
     // Create variables for parse.
-    WorldProperties * properties = malloc(sizeof(WorldProperties));
-    XMLConfigParserData * data = malloc(sizeof(XMLConfigParserData));
-    data -> properties = properties;
-    data -> state = XML_CONFIG_STATE_NONE;
-
-    // Open config and read data.
-    FILE * config = fopen(filename, "r");
-    if(config == NULL)
+    void * data = NULL;
+    FILE * file = NULL;
+    switch(type)
     {
-        free(properties);
+        case XML_CONFIG:
+            data = malloc(sizeof(WorldProperties));
+            file = fopen("../../config.xml", "r");
+        break;
+
+        case XML_UNITS:
+            data = daCreate();
+            file = fopen("../../resources/units.xml", "r");
+        break;
+
+        default:
+            return NULL;
+        break;
+    }
+    XMLParserData * p_data = malloc(sizeof(XMLParserData));
+    p_data -> data = data;
+    p_data -> state = XML_NONE;
+
+    // Open file and read data.
+    if(file == NULL)
+    {
         free(data);
+        free(p_data);
         return NULL;
     }
     char * xml = malloc(XML_MAX_CHARS * sizeof(char));
-    fread(xml, sizeof(char), XML_MAX_CHARS, config);
-    fclose(config);
+    fread(xml, sizeof(char), XML_MAX_CHARS, file);
+    fclose(file);
 
     // Create and set up parser.
     XML_Parser parser = XML_ParserCreate(NULL);
-    XML_SetUserData(parser, data);
-    XML_SetElementHandler(parser, &configStartElement, &configEndElement);
-    XML_SetCharacterDataHandler(parser, &configContentElement);
+    XML_SetUserData(parser, p_data);
+    XML_SetElementHandler(parser, &elementStart, &elementEnd);
+    XML_SetCharacterDataHandler(parser, &elementContent);
 
-    // Parse config file.
+    // Parse xml file.
     XML_Parse(parser, xml, strlen(xml), 0);
 
     // Free auxiliary data.
-    free(data);
+    free(p_data);
     free(xml);
     XML_ParserFree(parser);
 
     // Return properties.
-    return properties;
+    return data;
 }
