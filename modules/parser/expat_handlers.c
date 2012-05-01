@@ -3,11 +3,12 @@
 
 #include "../dyn_array/dyn_array.h"
 #include "../unit/unit.h"
+#include "../technology/technology.h"
 #include "string_functions.h"
 #include "expat_handlers.h"
 
 // This is a lenght of arrays (see below).
-#define XML_STATES 12
+#define XML_STATES 19
 
 /*
     Auxiliary arrays for comfortable view of elementStart() function.
@@ -18,12 +19,18 @@
     TODO Looks awful. How make it more beautiful?
 */
 const char xml_tags[][13] = {"map", "width", "height", "players", "count",
-    "names", "unit", "id", "name", "health", "damage", "technology"};
+    "names", "unit", "id", "name", "health", "damage", "technology", "id",
+    "name", "provides", "units", "technologies", "requires", "resources"};
+
 const int xml_states[] = {XML_MAP, XML_MAP_WIDTH, XML_MAP_HEIGHT, XML_PLAYERS,
     XML_PLAYERS_COUNT, XML_PLAYERS_NAMES, XML_UNIT, XML_UNIT_ID, XML_UNIT_NAME,
-    XML_UNIT_HEALTH, XML_UNIT_DAMAGE, XML_TECH};
+    XML_UNIT_HEALTH, XML_UNIT_DAMAGE, XML_TECH, XML_TECH_ID, XML_TECH_NAME,
+    XML_TECH_PROVIDES, XML_TECH_PROVIDES_UNITS, XML_TECH_PROVIDES_TECHS,
+    XML_TECH_REQUIRES, XML_TECH_REQUIRES_RESOURCES};
+
 const int xml_parents[] = {0, XML_MAP, XML_MAP, 0, XML_PLAYERS, XML_PLAYERS, 0, 
-    XML_UNIT, XML_UNIT, XML_UNIT, XML_UNIT, 0};
+    XML_UNIT, XML_UNIT, XML_UNIT, XML_UNIT, 0, XML_TECH, XML_TECH, XML_TECH,
+    XML_TECH_PROVIDES, XML_TECH_PROVIDES, XML_TECH, XML_TECH_REQUIRES};
 
 void elementStart(void * data, const char * name, const char ** attr)
 {
@@ -58,7 +65,7 @@ void elementEnd(void * data, const char * name)
 void elementContent(void * data, const char * s, int len)
 {
     // Copy string.
-    char * temp = malloc(sizeof(char) * len + 1);
+    char * temp = malloc(sizeof(char) * (len + 1));
     memcpy(temp, s, sizeof(char) * len);
     temp[len] = '\0';
 
@@ -96,7 +103,7 @@ void elementContent(void * data, const char * s, int len)
             break;
 
             case XML_UNIT_NAME:
-                temp_data = malloc(sizeof(char) * 16);
+                temp_data = malloc(sizeof(char) * (strlen(temp) + 1));
                 ((UnitCommonInfo *) daGetLast(p_data -> data)) -> name = strcpy(temp_data, temp);
             break;
 
@@ -106,6 +113,28 @@ void elementContent(void * data, const char * s, int len)
 
             case XML_UNIT_DAMAGE:
                 ((UnitCommonInfo *) daGetLast(p_data -> data)) -> max_damage = atoi(temp);
+            break;
+
+            case XML_TECH_ID:
+                temp_data = malloc(sizeof(TechnologyParseInfo));
+                daPrepend(p_data -> data, temp_data);
+            break;
+
+            case XML_TECH_NAME:
+                temp_data = malloc(sizeof(char) * (strlen(temp) + 1));
+                ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> name = strcpy(temp_data, temp);
+            break;
+
+            case XML_TECH_PROVIDES_UNITS:
+                ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> provides_units = strSplitAndAtoi(',', temp, 4);
+            break;
+
+            case XML_TECH_PROVIDES_TECHS:
+                ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> provides_technologies = strSplitAndAtoi(',', temp, 4);
+            break;
+
+            case XML_TECH_REQUIRES_RESOURCES:
+                ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> requires_resources = strSplitAndAtoi(',', temp, 4);
             break;
         }
     }

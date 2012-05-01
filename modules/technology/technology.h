@@ -1,6 +1,8 @@
 #ifndef TECHNOLOGY
 #define TECHNOLOGY
 
+#include "../graph/graph.h"
+
 /*
     This is struct of technology. It only for technology tree (common for _all_
     players).
@@ -15,17 +17,17 @@ typedef struct Techology
 typedef struct TechnologyCommonInfo
 {
     char * name;
-    DynArray * require_resources;
+    DynArray * requires_resources;
     Node * tech_in_tree;
 } TechnologyCommonInfo;
 
 typedef struct TechnologyParseInfo
 {
     char * name;
-    DynArray * provide_units;
-    DynArray * provide_technologies;
-    DynArray * require_resources;
+    DynArray * provides_units;
+    DynArray * provides_technologies;
+    DynArray * requires_resources;
     Node * tech_in_tree;
-}
+} TechnologyParseInfo;
 
 #endif
