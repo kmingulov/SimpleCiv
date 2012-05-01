@@ -15,4 +15,10 @@ void strTrimSpaces(char * str);
 */
 DynArray * strSplit(char delimiter, char * str, int max_length);
 
+/*
+    Split string to DynArray by delimiter and converts each element to integer
+    by atoi() function.
+*/
+DynArray * strSplitAndAtoi(char delimiter, char * str, int max_length);
+
 #endif

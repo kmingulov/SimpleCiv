@@ -57,3 +57,36 @@ DynArray * strSplit(char delimiter, char * str, int max_length)
 
     return array;
 }
+
+DynArray * strSplitAndAtoi(char delimiter, char * str, int max_length)
+{
+    // Create array
+    DynArray * array = daCreate();
+
+    char * new_name = malloc(sizeof(char) * max_length);
+    int index = 0;
+    for(int i = 0; i < strlen(str); i++)
+    {
+        if(str[i] != delimiter)
+        {
+            if(index < max_length - 1)
+            {
+                new_name[index++] = str[i];
+            }
+        }
+        else
+        {
+            new_name[index] = '\0';
+            // Convert to int and add to array.
+            // Dirty hack for memory economy. It's silly to create pointer to
+            // int!
+            daPrepend(array, (int *) atoi(new_name));
+            index = 0;
+        }
+    }
+    new_name[index] = '\0';
+    daPrepend(array, (int *) atoi(new_name));
+    free(new_name);
+
+    return array;
+}
