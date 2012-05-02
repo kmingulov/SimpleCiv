@@ -98,6 +98,10 @@ void elementContent(void * data, const char * s, int len)
             break;
 
             case XML_UNIT_ID:
+                // Here We do one _bad_ thing. We ignore unit id, what we read.
+                // It won't matter, if all id's of units in units.xml file go
+                // in ascending from 0 to (some number) without any missing
+                // numbers between.
                 temp_data = malloc(sizeof(UnitCommonInfo));
                 daPrepend(p_data -> data, temp_data);
             break;
@@ -116,6 +120,7 @@ void elementContent(void * data, const char * s, int len)
             break;
 
             case XML_TECH_ID:
+                // Same note as for XML_UNIT_ID.
                 temp_data = malloc(sizeof(TechnologyParseInfo));
                 daPrepend(p_data -> data, temp_data);
             break;
