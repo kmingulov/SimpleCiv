@@ -4,6 +4,7 @@
 #include "../../game/world/definitions.h"
 #include "../graph/graph.h"
 #include "../dyn_array/dyn_array.h"
+#include "../int_array/int_array.h"
 #include "../unit/unit.h"
 #include "../technology/technology.h"
 #include "string_functions.h"
@@ -131,15 +132,15 @@ void elementContent(void * data, const char * s, int len)
             break;
 
             case XML_TECH_PROVIDES_UNITS:
-                ((Technology *) ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> tech_in_tree -> data) -> provides_units = strSplitAndAtoi(',', temp, 4);
+                ((Technology *) ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> tech_in_tree -> data) -> provides_units = strSplitToInts(',', temp);
             break;
 
             case XML_TECH_PROVIDES_TECHS:
-                ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> provides_technologies = strSplitAndAtoi(',', temp, 4);
+                ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> provides_technologies = strSplitToInts(',', temp);
             break;
 
             case XML_TECH_REQUIRES_RESOURCES:
-                ((Technology *) ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> tech_in_tree -> data) -> requires_resources = strSplitAndAtoi(',', temp, 4);
+                ((Technology *) ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> tech_in_tree -> data) -> requires_resources = strSplitToInts(',', temp);
             break;
         }
     }

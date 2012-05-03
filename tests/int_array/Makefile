@@ -1,5 +1,5 @@
 # object files to compile
-OBJ = int_array.o test.o
+OBJ = int_array.o dyn_array.o string_functions.o test.o
 
 # debug flag
 DEBUG = -g
@@ -18,6 +18,12 @@ test: $(OBJ)
 
 int_array.o: ../../modules/int_array/int_array.c
 	gcc $(CFLAGS) ../../modules/int_array/int_array.c
+
+dyn_array.o: ../../modules/dyn_array/dyn_array.c
+	gcc $(CFLAGS) ../../modules/dyn_array/dyn_array.c
+
+string_functions.o: ../../modules/parser/string_functions.c
+	gcc $(CFLAGS) ../../modules/parser/string_functions.c
 
 test.o: test.c
 	gcc $(CFLAGS) test.c

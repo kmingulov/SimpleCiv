@@ -2,6 +2,7 @@
 #define STRING_FUNCTIONS
 
 #include "../dyn_array/dyn_array.h"
+#include "../int_array/int_array.h"
 
 /*
     Trim all spaces (checked by isspace() function) at the begin and at the end
@@ -16,9 +17,9 @@ void strTrimSpaces(char * str);
 DynArray * strSplit(char delimiter, char * str, int max_length);
 
 /*
-    Split string to DynArray by delimiter and converts each element to integer
-    by atoi() function.
+    Split string to IntArray by delimiter (convertint each element to integer
+    by atoi() function).
 */
-DynArray * strSplitAndAtoi(char delimiter, char * str, int max_length);
+IntArray * strSplitToInts(char delimiter, char * str);
 
 #endif

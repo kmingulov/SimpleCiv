@@ -10,8 +10,10 @@ TechnologyParseInfo * createTechnologyParseInfo()
     // Creating new data.
     TechnologyParseInfo * data = malloc(sizeof(TechnologyParseInfo));
     Technology * tech = malloc(sizeof(Technology));
+
     // Creating new node.
     data -> tech_in_tree = addNode(NULL, 0, NODE_TECHNOLOGY, tech);
+
     // NULLing all pointers (if something isn't defined in xml-file).
     data -> provides_technologies = NULL;
     tech -> name = NULL;
@@ -27,7 +29,7 @@ void destroyTechnologyParseInfo(void * data)
     TechnologyParseInfo * t = (TechnologyParseInfo *) data;
     if(t -> provides_technologies != NULL)
     {
-        daDestroy(t -> provides_technologies, NULL);
+        iaDestroy(t -> provides_technologies);
     }
     free(t);
 }
@@ -52,12 +54,12 @@ void destroyTechnology(unsigned char type, void * data)
 
     if(t -> requires_resources != NULL)
     {
-        daDestroy(t -> requires_resources, NULL);
+        iaDestroy(t -> requires_resources);
     }
 
     if(t -> requires_resources != NULL)
     {
-        daDestroy(t -> provides_units, NULL);
+        iaDestroy(t -> provides_units);
     }
 
     free(t);

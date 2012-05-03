@@ -1,6 +1,8 @@
 #ifndef TECHNOLOGY
 #define TECHNOLOGY
 
+#include "../dyn_array/dyn_array.h"
+#include "../int_array/int_array.h"
 #include "../graph/graph.h"
 
 /*
@@ -13,8 +15,8 @@ typedef struct Technology
 {
 	int id;
     char * name;
-    DynArray * requires_resources;
-    DynArray * provides_units;
+    IntArray * requires_resources;
+    IntArray * provides_units;
 } Technology;
 
 typedef struct TechnologyCommonInfo
@@ -24,7 +26,7 @@ typedef struct TechnologyCommonInfo
 
 typedef struct TechnologyParseInfo
 {
-    DynArray * provides_technologies;
+    IntArray * provides_technologies;
     Node * tech_in_tree;
 } TechnologyParseInfo;
 

@@ -46,7 +46,7 @@ World * createWorld()
     for(int i = 0; i < techs_data -> length; i++)
     {
         TechnologyParseInfo * current = (TechnologyParseInfo *) techs_data -> data[i];
-        DynArray * provides = current -> provides_technologies;
+        IntArray * provides = current -> provides_technologies;
         // For each neighbour creating two edges (TECH_PROVIDES and
         // TECH_REQUIRES).
         if(provides != NULL)
@@ -54,7 +54,7 @@ World * createWorld()
             for(int j = 0; j < provides -> length; j++)
             {
                 // Getting neighbour.
-                int id = (int) provides -> data[j];
+                int id = iaGetByIndex(provides, j);
                 TechnologyParseInfo * neighbour = (TechnologyParseInfo *) techs_data -> data[id];
                 // Creating two edges.
                 addEdge(current -> tech_in_tree, neighbour -> tech_in_tree, EDGE_TECH_PROVIDES);

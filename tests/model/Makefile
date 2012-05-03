@@ -1,5 +1,5 @@
 # object files to compile
-OBJ = dyn_array.o graph.o cell.o string_functions.o expat_handlers.o xml.o technology.o unit.o world.o test.o
+OBJ = dyn_array.o int_array.o graph.o cell.o string_functions.o expat_handlers.o xml.o technology.o unit.o world.o test.o
 
 # debug flag
 DEBUG = -g
@@ -30,6 +30,9 @@ graph.o: ../../modules/graph/graph.c
 
 dyn_array.o: ../../modules/dyn_array/dyn_array.c
 	gcc $(CFLAGS) ../../modules/dyn_array/dyn_array.c
+
+int_array.o: ../../modules/int_array/int_array.c
+	gcc $(CFLAGS) ../../modules/int_array/int_array.c
 
 string_functions.o: ../../modules/parser/string_functions.c
 	gcc $(CFLAGS) ../../modules/parser/string_functions.c

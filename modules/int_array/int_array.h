@@ -34,4 +34,9 @@ void iaExpand(IntArray * array);
 */
 void iaPrepend(IntArray * array, int n);
 
+/*
+    Returns element #index.
+*/
+int iaGetByIndex(IntArray * array, int index);
+
 #endif

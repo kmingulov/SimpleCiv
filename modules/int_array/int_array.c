@@ -45,3 +45,14 @@ void iaPrepend(IntArray * array, int n)
     array -> available--;
     array -> length++;
 }
+
+int iaGetByIndex(IntArray * array, int index)
+{
+    // Max index = array -> length - 1. Index cannot be over max index.
+    if(index > array -> length - 1 || index < 0)
+    {
+        return NULL;
+    }
+
+    return array -> data[index];
+}
