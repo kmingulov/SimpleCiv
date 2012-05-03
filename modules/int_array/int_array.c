@@ -48,11 +48,6 @@ void iaPrepend(IntArray * array, int n)
 
 int iaGetByIndex(IntArray * array, int index)
 {
-    // Max index = array -> length - 1. Index cannot be over max index.
-    if(index > array -> length - 1 || index < 0)
-    {
-        return NULL;
-    }
-
+    // TODO If index > array -> length - 1 || index < 0? What I shall return?
     return array -> data[index];
 }

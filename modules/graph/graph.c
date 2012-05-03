@@ -56,7 +56,7 @@ void destroyGraph(Node * head, DynArray * deleted, void (* deleteFunc)(unsigned 
     for(int i = 0; i < array -> length; i++)
     {
         // Target.
-        Node * target = ((Edge *) array -> data[i]) -> target;
+        Node * target = ((Edge *) daGetByIndex(array, i)) -> target;
         // Searching is this node deleted or not yet.
         if(daSearchForData(deleted, target) == -1)
         {
@@ -76,7 +76,7 @@ void foreachNeighbour(Node * parent, void (* function)(Node * parent, Node * chi
     DynArray * array = parent -> edges;
     for(int i = 0; i < array -> length; i++)
     {
-        function(parent, ((Edge *) array -> data[i]) -> target, array -> data[i]);
+        function(parent, ((Edge *) daGetByIndex(array, i)) -> target, daGetByIndex(array, i));
     }
 }
 
@@ -90,7 +90,7 @@ Node * getNeighbour(Node * parent, unsigned char edge_type)
     // Searching node.
     DynArray * array = parent -> edges;
     int i = 0;
-    while( i < array -> length && ((Edge *) array -> data[i]) -> type != edge_type )
+    while( i < array -> length && ((Edge *) daGetByIndex(array, i)) -> type != edge_type )
     {
         i++;
     }
@@ -102,5 +102,5 @@ Node * getNeighbour(Node * parent, unsigned char edge_type)
     }
 
     // Returning result.
-    return ((Edge *) array -> data[i]) -> target;
+    return ((Edge *) daGetByIndex(array, i)) -> target;
 }

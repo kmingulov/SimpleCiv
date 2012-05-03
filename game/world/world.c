@@ -41,11 +41,11 @@ World * createWorld()
 
     // Going through techs_data and creating tech tree.
     printf("Creating technology tree… ");
-    world -> tech_tree = ((TechnologyParseInfo *) techs_data -> data[0]) -> tech_in_tree;
+    world -> tech_tree = ((TechnologyParseInfo *) daGetByIndex(techs_data, 0)) -> tech_in_tree;
     // Passing each technology.
     for(int i = 0; i < techs_data -> length; i++)
     {
-        TechnologyParseInfo * current = (TechnologyParseInfo *) techs_data -> data[i];
+        TechnologyParseInfo * current = (TechnologyParseInfo *) daGetByIndex(techs_data, i);
         IntArray * provides = current -> provides_technologies;
         // For each neighbour creating two edges (TECH_PROVIDES and
         // TECH_REQUIRES).
@@ -55,7 +55,7 @@ World * createWorld()
             {
                 // Getting neighbour.
                 int id = iaGetByIndex(provides, j);
-                TechnologyParseInfo * neighbour = (TechnologyParseInfo *) techs_data -> data[id];
+                TechnologyParseInfo * neighbour = (TechnologyParseInfo *) daGetByIndex(techs_data, id);
                 // Creating two edges.
                 addEdge(current -> tech_in_tree, neighbour -> tech_in_tree, EDGE_TECH_PROVIDES);
                 addEdge(neighbour -> tech_in_tree, current -> tech_in_tree, EDGE_TECH_REQUIRES);
@@ -68,7 +68,7 @@ World * createWorld()
     world -> techs_info = daCreate();
     for(int i = 0; i < techs_data -> length; i++)
     {
-        TechnologyParseInfo * t = (TechnologyParseInfo *) techs_data -> data[i];
+        TechnologyParseInfo * t = (TechnologyParseInfo *) daGetByIndex(techs_data, i);
         daPrepend(world -> techs_info, createTechnologyCommonInfo(t));
     }
 
@@ -153,8 +153,7 @@ void destroyWorld(World * world)
     free(world);
 
     // Destroy auxiliary array.
-    free(deleted -> data);
-    free(deleted);
+    daDestroy(deleted, NULL);
 }
 
 void saveWorld(World * world, WorldProperties * properties, FILE * map_file)
