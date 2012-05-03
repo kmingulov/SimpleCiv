@@ -9,9 +9,11 @@
 
 void * parseXML(int type)
 {
-    // Create variables for parse.
+    // Creating variables for parse.
     void * data = NULL;
     FILE * file = NULL;
+
+    // What about type?
     switch(type)
     {
         case XML_CONFIG:
@@ -33,11 +35,13 @@ void * parseXML(int type)
             return NULL;
         break;
     }
+
+    // Initializing parser data.
     XMLParserData * p_data = malloc(sizeof(XMLParserData));
     p_data -> data = data;
     p_data -> state = XML_NONE;
 
-    // Open file and read data.
+    // Opening file and reading data.
     if(file == NULL)
     {
         free(data);
@@ -48,13 +52,13 @@ void * parseXML(int type)
     fread(xml, sizeof(char), XML_MAX_CHARS, file);
     fclose(file);
 
-    // Create and set up parser.
+    // Creating and setting up parser.
     XML_Parser parser = XML_ParserCreate(NULL);
     XML_SetUserData(parser, p_data);
     XML_SetElementHandler(parser, &elementStart, &elementEnd);
     XML_SetCharacterDataHandler(parser, &elementContent);
 
-    // Parse xml file.
+    // Parsing xml file.
     if(!XML_Parse(parser, xml, strlen(xml), 0))
     {
         free(data);
@@ -64,11 +68,11 @@ void * parseXML(int type)
         return NULL;
     }
 
-    // Free auxiliary data.
+    // Freeing auxiliary data.
     free(p_data);
     free(xml);
     XML_ParserFree(parser);
 
-    // Return properties.
+    // Returning data.
     return data;
 }

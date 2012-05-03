@@ -1,5 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
+
 #include "../../modules/dyn_array/dyn_array.h"
 
 void foreachFunc(int index, void * data)

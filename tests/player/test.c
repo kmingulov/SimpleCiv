@@ -1,6 +1,8 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 #include <assert.h>
+
 #include "../../modules/graph/graph.h"
 #include "../../modules/player/player.h"
 
@@ -13,7 +15,7 @@ void foreachFunc(Node * parent, Node * child, Edge * link)
     printf("%d ---%d--> %d %s\n", (int) parent, link -> type, (int) child, ((Player *) child -> data) -> name);
 }
 
-void destroyPlayer(int type, void * data)
+void destroyPlayer(unsigned char type, void * data)
 {
     free( ((Player *) data) -> name );
     free( (Player *) data );
@@ -44,7 +46,7 @@ int main()
         // Add him to graph.
         // If temp == NULL (i.e. i == 0), it will just create graph. See graph.h
         // for some notes.
-        temp = addNode(temp, TYPE_PLAYER, PLAYER_NEXT, data);
+        temp = addNode(temp, PLAYER_NEXT, TYPE_PLAYER, data);
         // Remember head.
         if(head == NULL)
         {
@@ -62,7 +64,9 @@ int main()
         temp = getNeighbour(temp, PLAYER_NEXT);
     }
 
-    destroyGraph(head, &destroyPlayer);
+    DynArray * deleted = daCreate();
+    destroyGraph(head, deleted, &destroyPlayer);
+    daDestroy(deleted, NULL);
 
     return 0;
 }

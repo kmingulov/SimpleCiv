@@ -8,8 +8,8 @@ DynArray * daCreate()
     DynArray * array = malloc(sizeof(DynArray));
 
     array -> length = 0;
-    array -> available = ARRAY_INCREMENT;
-    array -> data = malloc(SIZE * array -> available);
+    array -> available = DYN_ARRAY_INCREMENT;
+    array -> data = malloc(DYN_ARRAY_ELEM_SIZE * array -> available);
 
     return array;
 }
@@ -32,11 +32,11 @@ void daDestroy(DynArray * array, void (* deleteFunc)(void * data))
 void daExpand(DynArray * array)
 {
     // Expanding array.
-    array -> available += ARRAY_INCREMENT;
+    array -> available += DYN_ARRAY_INCREMENT;
     // Allocating new memory.
-    void ** new_data = malloc(SIZE * (array -> length + array -> available));
+    void ** new_data = malloc(DYN_ARRAY_ELEM_SIZE * (array -> length + array -> available));
     // Coping old data.
-    memcpy(new_data, array -> data, SIZE * array -> length);
+    memcpy(new_data, array -> data, DYN_ARRAY_ELEM_SIZE * array -> length);
     // Deleting all data and remembering pointer.
     free(array -> data);
     array -> data = new_data;

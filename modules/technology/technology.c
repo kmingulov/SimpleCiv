@@ -1,5 +1,6 @@
-#include "technology.h"
+#include <stdlib.h>
 
+#include "technology.h"
 #include "../../game/world/definitions.h"
 #include "../dyn_array/dyn_array.h"
 #include "../graph/graph.h"

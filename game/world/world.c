@@ -4,21 +4,6 @@
 #include "../../modules/unit/unit.h"
 #include "../../modules/technology/technology.h"
 
-/*
-    Additional destroy functions.
-*/
-void destroyNode(unsigned char type, void * data)
-{
-    switch(type)
-    {
-        case NODE_PLAYER:
-            free( ((Player *) data) -> name );
-        break;
-    }
-
-    free(data);
-}
-
 World * createWorld()
 {
     // Creating world.
@@ -56,7 +41,7 @@ World * createWorld()
 
     // Going through techs_data and creating tech tree.
     printf("Creating technology tree… ");
-    world -> techs_tree = ((TechnologyParseInfo *) techs_data -> data[0]) -> tech_in_tree;
+    world -> tech_tree = ((TechnologyParseInfo *) techs_data -> data[0]) -> tech_in_tree;
     // Passing each technology.
     for(int i = 0; i < techs_data -> length; i++)
     {
@@ -92,8 +77,6 @@ World * createWorld()
     daDestroy(techs_data, &destroyTechnologyParseInfo);
     printf("Done\n");
 
-    // TODO Create arrays of technologies and units for each players.
-
     // Creating map.
     printf("Creating map %dx%d… ", world -> properties -> map_w, world -> properties -> map_h);
     world -> graph_map = createMap(world -> properties -> map_w, world -> properties -> map_h);
@@ -106,13 +89,14 @@ World * createWorld()
     Node * temp = NULL; // Temporary variable.
     for(int i = 0; i < world -> properties -> players_count; i++)
     {
-        // Create new player.
+        // Creating new player.
         Player * data = malloc(sizeof(Player));
-        // Add name to player.
+        // Adding name to players list.
         data -> name = (char *) daGetByIndex(world -> properties -> player_names, i);
-        // Add him to graph.
+        // Adding him to graph.
         temp = addNode(temp, EDGE_NEXT_PLAYER, NODE_PLAYER, data);
-        // Remember head.
+        // TODO Create arrays of technologies and units for each player.
+        // Remembering head.
         if(head == NULL)
         {
             head = temp;
@@ -129,13 +113,18 @@ World * createWorld()
 }
 
 /*
-    Destroys array of UnitCommonInfo.
+    Deletes graph's node.
 */
-void destroyUnitCommonInfo(void * data)
+void destroyGraphNode(unsigned char type, void * data)
 {
-    UnitCommonInfo * unit = (UnitCommonInfo *) data;
-    free(unit -> name);
-    free(unit);
+    switch(type)
+    {
+        case NODE_PLAYER:
+            free( ((Player *) data) -> name );
+        break;
+    }
+
+    free(data);
 }
 
 void destroyWorld(World * world)
@@ -157,10 +146,10 @@ void destroyWorld(World * world)
     daDestroy(world -> techs_info, &free);
 
     // Destroy tech tree.
-    destroyGraph(world -> techs_tree, deleted, &destroyTechnology);
+    destroyGraph(world -> tech_tree, deleted, &destroyTechnology);
 
     // Destroy world.
-    destroyGraph(world -> graph_players, deleted, &destroyNode);
+    destroyGraph(world -> graph_players, deleted, &destroyGraphNode);
     free(world);
 
     // Destroy auxiliary array.

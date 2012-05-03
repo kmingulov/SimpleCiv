@@ -15,7 +15,7 @@
 */
 typedef struct WorldProperties
 {
-    // World width and height.
+    // Map width and height.
     int map_w, map_h;
     // Players' count.
     int players_count;
@@ -24,7 +24,7 @@ typedef struct WorldProperties
 } WorldProperties;
 
 /*
-    Struct of model.
+    Struct of world.
 */
 typedef struct World
 {
@@ -36,11 +36,11 @@ typedef struct World
     Node * graph_map;     // Map.
 
     // Technology tree. Type of each node is struct Technology.
-    Node * techs_tree;
+    Node * tech_tree;
 
     // Common info about technologies and units.
     DynArray * units_info; // Type — UnitCommonInfo.
-    DynArray * techs_info; // Type — now char * (name of technology).
+    DynArray * techs_info; // Type — TechnologyCommonInfo.
 } World;
 
 /*

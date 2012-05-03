@@ -14,6 +14,7 @@ typedef struct UnitCommonInfo
     char * name;
     int max_health;
     int max_damage;
+    int max_moves;
 } UnitCommonInfo;
 
 /*
@@ -25,6 +26,12 @@ typedef struct Unit
     int owner_id; // Id of owner of this unit.
     int x, y;     // X and Y coordinates.
     int health;   // Current health.
+    int moves;    // Available moves.
 } Unit;
+
+/*
+    Destroys UnitCommonInfo variable.
+*/
+void destroyUnitCommonInfo(void * data);
 
 #endif

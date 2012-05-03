@@ -1,8 +1,8 @@
 #ifndef DYN_ARRAY
 #define DYN_ARRAY
 
-#define ARRAY_INCREMENT 5
-#define SIZE            sizeof(int)
+#define DYN_ARRAY_INCREMENT 5
+#define DYN_ARRAY_ELEM_SIZE sizeof(int)
 
 typedef struct DynArray
 {

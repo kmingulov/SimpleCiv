@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
@@ -28,7 +29,12 @@ void strTrimSpaces(char * str)
 
 DynArray * strSplit(char delimiter, char * str, int max_length)
 {
-    // Create array
+    if(str == NULL)
+    {
+        return NULL;
+    }
+
+    // Creating array
     DynArray * array = daCreate();
 
     char * new_name = malloc(sizeof(char) * max_length);
@@ -45,7 +51,7 @@ DynArray * strSplit(char delimiter, char * str, int max_length)
         else
         {
             new_name[index] = '\0';
-            // Copy name.
+            // Copying name.
             char * name = malloc(sizeof(char) * max_length);
             memcpy(name, new_name, sizeof(char) * max_length);
             daPrepend(array, name);

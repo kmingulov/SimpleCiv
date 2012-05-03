@@ -17,8 +17,6 @@
     xml_tags[] — array of xml tags of our xml files.
     xml_states[] — array of XMLParserData's states.
     xml_parents[i] — state, which required for state xml_states[i].
-
-    TODO Looks awful. How make it more beautiful?
 */
 const char xml_tags[][13] = {"map", "width", "height", "players", "count",
     "names", "unit", "id", "name", "health", "damage", "technology", "id",
@@ -100,8 +98,8 @@ void elementContent(void * data, const char * s, int len)
             break;
 
             case XML_UNIT_ID:
-                // Here we do one _bad_ thing. We ignore unit id, what we read.
-                // It won't matter, if all id's of units in units.xml file go
+                // Here we do one _bad_ thing: we ignore unit id, what we read.
+                // It won't matter, if all ids of units in units.xml file go
                 // in ascending from 0 to (some number) without any missing
                 // numbers between.
                 temp_data = malloc(sizeof(UnitCommonInfo));

@@ -1,5 +1,5 @@
 # object files to compile
-OBJ = graph.o dyn_array.o string_functions.o expat_handlers.o xml.o technology.o cell.o world.o test.o
+OBJ = dyn_array.o graph.o cell.o string_functions.o expat_handlers.o xml.o technology.o unit.o world.o test.o
 
 # debug flag
 DEBUG = -g
@@ -18,6 +18,9 @@ test: $(OBJ)
 
 technology.o: ../../modules/technology/technology.c
 	gcc $(CFLAGS) ../../modules/technology/technology.c
+
+unit.o: ../../modules/unit/unit.c
+	gcc $(CFLAGS) ../../modules/unit/unit.c
 
 cell.o: ../../modules/cell/cell.c
 	gcc $(CFLAGS) ../../modules/cell/cell.c
