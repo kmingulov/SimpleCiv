@@ -19,28 +19,6 @@ void destroyNode(unsigned char type, void * data)
     free(data);
 }
 
-/*
-    Doesn't free anything (because data was free'd already).
-*/
-void destroyNull(void * data)
-{
-    // nothing
-}
-
-/*
-    Free TechnologyParseInfo.
-*/
-void destroyTechnologyParseInfo(void * data)
-{
-    TechnologyParseInfo * t = (TechnologyParseInfo *) data;
-
-    free(t -> name);
-    daDestroy(t -> provides_units, &destroyNull);
-    daDestroy(t -> provides_technologies, &destroyNull);
-    daDestroy(t -> requires_resources, &destroyNull);
-    free(t);
-}
-
 World * createWorld()
 {
     // Creating world.
@@ -68,20 +46,47 @@ World * createWorld()
 
     // Parsing technologies.xml.
     printf("Parsing resources/technologies.xml… ");
-    DynArray * techs_additional_data = parseXML(XML_TECHNOLOGIES);
-    if(techs_additional_data == NULL)
+    DynArray * techs_data = parseXML(XML_TECHNOLOGIES);
+    if(techs_data == NULL)
     {
         printf("Failed\n\033[1;31mError:\033[0m resources/technologies.xml doesn't exist or corrupted.\n");
         return NULL;
     }
-    printf("%d technologies loaded\n", techs_additional_data -> length);
+    printf("%d technologies loaded\n", techs_data -> length);
+
+    // Going through techs_data and creating tech tree.
+    printf("Creating technology tree… ");
+    world -> techs_tree = ((TechnologyParseInfo *) techs_data -> data[0]) -> tech_in_tree;
+    // Passing each technology.
+    for(int i = 0; i < techs_data -> length; i++)
+    {
+        TechnologyParseInfo * current = (TechnologyParseInfo *) techs_data -> data[i];
+        DynArray * provides = current -> provides_technologies;
+        // For each neighbour creating two edges (TECH_PROVIDES and
+        // TECH_REQUIRES).
+        if(provides != NULL)
+        {
+            for(int j = 0; j < provides -> length; j++)
+            {
+                // Getting neighbour.
+                int id = (int) provides -> data[j];
+                TechnologyParseInfo * neighbour = (TechnologyParseInfo *) techs_data -> data[id];
+                // Creating two edges.
+                addEdge(current -> tech_in_tree, neighbour -> tech_in_tree, EDGE_TECH_PROVIDES);
+                addEdge(neighbour -> tech_in_tree, current -> tech_in_tree, EDGE_TECH_REQUIRES);
+            }
+        }
+    }
+    printf("Done\n");
+
+    // Free techs_data.
+    printf("Freeing auxiliary data… ");
+    daDestroy(techs_data, &destroyTechnologyParseInfo);
+    printf("Done\n");
 
     // TODO Go through techs_additional_data array and create tree of
     // technologies. Create array of TechnologyCommonInfo. After create arrays
     // of technologies and units for each players.
-
-    // Destroy techs_additional_data.
-    daDestroy(techs_additional_data, &destroyTechnologyParseInfo);
 
     // Creating map.
     printf("Creating map %dx%d… ", world -> properties -> map_w, world -> properties -> map_h);
@@ -136,11 +141,14 @@ void destroyWorld(World * world)
     destroyMap(world -> graph_map, world -> properties -> map_w, world -> properties -> map_h);
 
     // Destroy properties.
-    daDestroy(world -> properties -> player_names, &destroyNull);
+    daDestroy(world -> properties -> player_names, NULL);
     free(world -> properties);
 
     // Destroy array of UnitCommonInfo.
     daDestroy(world -> units_info, &destroyUnitCommonInfo);
+
+    // Destroy tech tree.
+    destroyGraph(world -> techs_tree, deleted, &destroyTechnology);
 
     // Destroy world.
     destroyGraph(world -> graph_players, deleted, &destroyNode);

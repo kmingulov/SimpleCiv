@@ -36,7 +36,7 @@ typedef struct World
     Node * graph_map;     // Map.
 
     // Technology tree. Type of each node is struct Technology.
-    Node * tech_head;
+    Node * techs_tree;
 
     // Common info about technologies and units.
     DynArray * units_info; // Type — UnitCommonInfo.

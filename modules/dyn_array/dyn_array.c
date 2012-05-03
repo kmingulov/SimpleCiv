@@ -20,7 +20,10 @@ void daDestroy(DynArray * array, void (* deleteFunc)(void * data))
 {
     for(int i = 0; i < array -> length; i++)
     {
-        deleteFunc(array -> data[i]);
+        if(deleteFunc != NULL)
+        {
+            deleteFunc(array -> data[i]);
+        }
     }
 
     free(array -> data);

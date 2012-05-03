@@ -9,25 +9,38 @@
     Each player will have table with technologies' id and value (see definitions
     in game/model/definitions.h).
 */
-typedef struct Techology
+typedef struct Technology
 {
 	int id;
+    char * name;
+    DynArray * requires_resources;
+    DynArray * provides_units;
 } Technology;
 
 typedef struct TechnologyCommonInfo
 {
-    char * name;
-    DynArray * requires_resources;
     Node * tech_in_tree;
 } TechnologyCommonInfo;
 
 typedef struct TechnologyParseInfo
 {
-    char * name;
-    DynArray * provides_units;
     DynArray * provides_technologies;
-    DynArray * requires_resources;
     Node * tech_in_tree;
 } TechnologyParseInfo;
+
+/*
+    Creates new variable of type TechnologyParseInfo.
+*/
+TechnologyParseInfo * createTechnologyParseInfo();
+
+/*
+    Destroys TechnologyParseInfo.
+*/
+void destroyTechnologyParseInfo(void * data);
+
+/*
+    Destroys Technology.
+*/
+void destroyTechnology(unsigned char type, void * data);
 
 #endif

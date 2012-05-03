@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../../game/world/definitions.h"
+#include "../graph/graph.h"
 #include "../dyn_array/dyn_array.h"
 #include "../unit/unit.h"
 #include "../technology/technology.h"
@@ -98,7 +100,7 @@ void elementContent(void * data, const char * s, int len)
             break;
 
             case XML_UNIT_ID:
-                // Here We do one _bad_ thing. We ignore unit id, what we read.
+                // Here we do one _bad_ thing. We ignore unit id, what we read.
                 // It won't matter, if all id's of units in units.xml file go
                 // in ascending from 0 to (some number) without any missing
                 // numbers between.
@@ -121,17 +123,17 @@ void elementContent(void * data, const char * s, int len)
 
             case XML_TECH_ID:
                 // Same note as for XML_UNIT_ID.
-                temp_data = malloc(sizeof(TechnologyParseInfo));
+                temp_data = createTechnologyParseInfo();
                 daPrepend(p_data -> data, temp_data);
             break;
 
             case XML_TECH_NAME:
                 temp_data = malloc(sizeof(char) * (strlen(temp) + 1));
-                ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> name = strcpy(temp_data, temp);
+                ((Technology *) ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> tech_in_tree -> data) -> name = strcpy(temp_data, temp);
             break;
 
             case XML_TECH_PROVIDES_UNITS:
-                ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> provides_units = strSplitAndAtoi(',', temp, 4);
+                ((Technology *) ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> tech_in_tree -> data) -> provides_units = strSplitAndAtoi(',', temp, 4);
             break;
 
             case XML_TECH_PROVIDES_TECHS:
@@ -139,7 +141,7 @@ void elementContent(void * data, const char * s, int len)
             break;
 
             case XML_TECH_REQUIRES_RESOURCES:
-                ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> requires_resources = strSplitAndAtoi(',', temp, 4);
+                ((Technology *) ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> tech_in_tree -> data) -> requires_resources = strSplitAndAtoi(',', temp, 4);
             break;
         }
     }
