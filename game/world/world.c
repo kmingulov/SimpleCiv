@@ -79,14 +79,20 @@ World * createWorld()
     }
     printf("Done\n");
 
+    // Creating techs_info table.
+    world -> techs_info = daCreate();
+    for(int i = 0; i < techs_data -> length; i++)
+    {
+        TechnologyParseInfo * t = (TechnologyParseInfo *) techs_data -> data[i];
+        daPrepend(world -> techs_info, createTechnologyCommonInfo(t));
+    }
+
     // Free techs_data.
     printf("Freeing auxiliary data… ");
     daDestroy(techs_data, &destroyTechnologyParseInfo);
     printf("Done\n");
 
-    // TODO Go through techs_additional_data array and create tree of
-    // technologies. Create array of TechnologyCommonInfo. After create arrays
-    // of technologies and units for each players.
+    // TODO Create arrays of technologies and units for each players.
 
     // Creating map.
     printf("Creating map %dx%d… ", world -> properties -> map_w, world -> properties -> map_h);
@@ -144,8 +150,11 @@ void destroyWorld(World * world)
     daDestroy(world -> properties -> player_names, NULL);
     free(world -> properties);
 
-    // Destroy array of UnitCommonInfo.
+    // Destroy array of UnitCommonInfos.
     daDestroy(world -> units_info, &destroyUnitCommonInfo);
+
+    // Destroy array of TechnologyCommonInfos.
+    daDestroy(world -> techs_info, &free);
 
     // Destroy tech tree.
     destroyGraph(world -> techs_tree, deleted, &destroyTechnology);

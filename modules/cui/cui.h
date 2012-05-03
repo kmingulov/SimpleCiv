@@ -27,7 +27,7 @@
 #define CUI
 
 #include <ncurses.h>
-#include "../map/map.h"
+#include "../cell/cell.h"
 
 /*
     Key definitions.

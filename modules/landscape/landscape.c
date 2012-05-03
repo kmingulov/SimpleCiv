@@ -1,8 +1,78 @@
 #include "landscape.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
+#include <time.h>
 
-void generateLandscape(Cell * c, int k, char required, char fill)
+double noiseRand(double x, double y)
+{
+    int n = (int) x + (int) y * 57;
+    n = (n << 13) ^ n;
+    int nn = (n * (n * n * 60493 + 19990303) + 1376312589) & 0x7fffffff;
+    return 1.0 - ((double) nn / 1073741824.0);
+}
+
+double noiseInterpolate(double a, double b, double x)
+{
+    double ft = x * 3.1415;
+    double f = (1.0 - cos(ft)) * 0.5;
+    return a * (1.0 - f) + b * f;
+}
+
+double noise(double x, double y)
+{
+    double floorx = (double) ((int) x);
+    double floory = (double) ((int) y);
+    double s, t, u, v;
+    s = noiseRand(floorx,     floory); 
+    t = noiseRand(floorx + 1, floory);
+    u = noiseRand(floorx,     floory + 1);
+    v = noiseRand(floorx + 1, floory + 1);
+    double int1 = noiseInterpolate(s, t, x - floorx);
+    double int2 = noiseInterpolate(u, v, x - floorx);
+    return noiseInterpolate(int1, int2, y - floory);
+}
+
+void generateLandscape(Node * map_head, int w, int h, double p)
+{
+    Node * current = map_head;
+    int octaves = 5;
+
+    srand(time(NULL));
+
+    double max = -100, min = 100;
+
+    for(int i = h; i < 2*h; i++)
+    {
+        for(int j = w; j < 2*w; j++)
+        {
+            // Calculating the noise.
+            double cur_noise = 0;
+            for(int k = 0; k < octaves - 1; k++)
+            {
+                double frequency = pow(2, k);
+                double amplitude = pow(p, k);
+                double x = ((double) j) * frequency, y = ((double) i) * frequency;
+                //printf("%lf %lf\n", x, y);
+                cur_noise += noise(x, y) * amplitude;
+            }
+            if(cur_noise < min)
+            {
+                min = cur_noise;
+            }
+            if(cur_noise > max)
+            {
+                max = cur_noise;
+            }
+            // Update node.
+            printf("%lf ", cur_noise);
+        }
+        printf("\n");
+    }
+}
+
+
+/*void generateLandscape(Cell * c, int k, char required, char fill)
 {
     while(k >= 0 && isWhereCell(c, required))
     {
@@ -40,4 +110,4 @@ void generateMap(Cell * map, int w, int h)
             generateLandscape(c, k - i * dk, j - 1, j);
         }
     }
-}
+}*/

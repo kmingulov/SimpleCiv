@@ -20,7 +20,7 @@
 
         <provides>
             <units>2,3</units>
-            <technologies>2</technologies>
+            <technologies></technologies>
         </provides>
 
         <requires>

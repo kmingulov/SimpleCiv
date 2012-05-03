@@ -39,6 +39,11 @@ TechnologyParseInfo * createTechnologyParseInfo();
 void destroyTechnologyParseInfo(void * data);
 
 /*
+    Creates TechnologyCommonInfo from TechnologyParseInfo * data.
+*/
+TechnologyCommonInfo * createTechnologyCommonInfo(TechnologyParseInfo * data);
+
+/*
     Destroys Technology.
 */
 void destroyTechnology(unsigned char type, void * data);

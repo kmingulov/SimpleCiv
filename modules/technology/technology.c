@@ -31,6 +31,15 @@ void destroyTechnologyParseInfo(void * data)
     free(t);
 }
 
+TechnologyCommonInfo * createTechnologyCommonInfo(TechnologyParseInfo * data)
+{
+    TechnologyCommonInfo * t = malloc(sizeof(TechnologyCommonInfo));
+
+    t -> tech_in_tree = data -> tech_in_tree;
+
+    return t;
+}
+
 void destroyTechnology(unsigned char type, void * data)
 {
     Technology * t = (Technology *) data;
