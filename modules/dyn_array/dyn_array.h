@@ -1,7 +1,8 @@
 #ifndef DYN_ARRAY
 #define DYN_ARRAY
 
-#include <stdlib.h>
+#define ARRAY_INCREMENT 5
+#define SIZE            sizeof(int)
 
 typedef struct DynArray
 {
@@ -19,6 +20,11 @@ DynArray * daCreate();
     Destroy dynamic array. deleteFunc is deletion (for data) function.
 */
 void daDestroy(DynArray * array, void (* deleteFunc)(void * data));
+
+/*
+    Expands array to another ARRAY_INCREMENT elements.
+*/
+void daExpand(DynArray * array);
 
 /*
     Puts element in the end of array.
@@ -46,7 +52,7 @@ int daSearchForData(DynArray * array, void * data);
 void daForEach(DynArray * array, void (* function)(int index, void * data));
 
 /*
-    Removes _first_ element pointer data. Will return 0, if nothing found, 
+    Removes _first_ element with pointer data. Will return 0, if nothing found, 
     and 1, if element succefully removed. deleteFunc is deletion (for data)
     function.
 */

@@ -1,5 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
+
 #include "../../modules/graph/graph.h"
 
 #define NODE_TYPE 126
@@ -45,8 +47,14 @@ int main()
     assert( *((int *) getNeighbour(head, 4) -> data) == 4 );
     assert( getNeighbour(head, 5) == NULL );
 
-    // And destroy it.
-    destroyGraph(head, &deleteFunc);
+    // Auxiliary array for deletion.
+    DynArray * deleted = daCreate();
+
+    // Destroing graph.
+    destroyGraph(head, deleted, &deleteFunc);
+
+    // Add auxiliary array.
+    daDestroy(deleted, NULL);
 
     return 0;
 }

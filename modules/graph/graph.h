@@ -6,16 +6,13 @@
 typedef struct Node
 {
     // Type of this node.
-    // TODO Maybe do something more good? Or char type, where types are 0..99,
-    // and +100, if there is color. I.e. type == 1 means that type is 1 and
-    // color is 0, type == 101 means that type is 1 and color is 1.
     unsigned char type;
     // Color of this node. Used for graph traversal. 0 is white, 1 is black.
     unsigned char color;
     // Data of this node.
     void * data;
     // Edges to neighbours.
-    DynArray * neighbours;
+    DynArray * edges;
 } Node;
 
 typedef struct Edge
@@ -43,8 +40,15 @@ void addEdge(Node * node1, Node * node2, unsigned char edge_type);
 Node * createGraph(unsigned char node_type, void * data);
 
 /*
+    Destroys node and all it's edges (node -> edges array). This function won't
+    delete edges to this node! Use carefully!
+*/
+void destroyNode(Node * target);
+
+/*
     Destroys graph. deleteFunc is deletion function for data. unsigned char type
     is required for user, who need to know, what type of data he received.
+    DynArray deleted is array of pointers to already deleted nodes.
     All module structs (DynArray in struct Node and target in struct Edge) will
     be destroyed by free() function.
 */
@@ -53,7 +57,7 @@ void destroyGraph(Node * head, DynArray * deleted, void (* deleteFunc)(unsigned 
 /*
     Runs function for each neighbour of Node parent.
 */
-void foreachNeighbour(Node * parent, void (* function)(Node * parent, Node * child, Edge * link));
+void foreachNeighbour(Node * parent, void (* function)(Node * parent, Node * child, Edge * edge));
 
 /*
     Returns _first_ neighbour-node with edge_type. Returns NULL, if nothing

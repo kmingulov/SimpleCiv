@@ -1,9 +1,7 @@
-#include "dyn_array.h"
 #include <string.h>
 #include <stdlib.h>
 
-#define ARRAY_INCREMENT 5
-#define SIZE            sizeof(int)
+#include "dyn_array.h"
 
 DynArray * daCreate()
 {
@@ -20,6 +18,7 @@ void daDestroy(DynArray * array, void (* deleteFunc)(void * data))
 {
     for(int i = 0; i < array -> length; i++)
     {
+        // deleteFunc == NULL means that user don't want to delete his data.
         if(deleteFunc != NULL)
         {
             deleteFunc(array -> data[i]);
@@ -30,21 +29,25 @@ void daDestroy(DynArray * array, void (* deleteFunc)(void * data))
     free(array);
 }
 
-void daIncrement(DynArray * array)
+void daExpand(DynArray * array)
 {
-    if(array -> available == 0)
-    {
-        array -> available += ARRAY_INCREMENT;
-        void ** new_data = malloc(SIZE * (array -> length + array -> available));
-        memcpy(new_data, array -> data, SIZE * array -> length);
-        free(array -> data);
-        array -> data = new_data;
-    }
+    // Expanding array.
+    array -> available += ARRAY_INCREMENT;
+    // Allocating new memory.
+    void ** new_data = malloc(SIZE * (array -> length + array -> available));
+    // Coping old data.
+    memcpy(new_data, array -> data, SIZE * array -> length);
+    // Deleting all data and remembering pointer.
+    free(array -> data);
+    array -> data = new_data;
 }
 
 void daPrepend(DynArray * array, void * data)
 {
-    daIncrement(array);
+    if(array -> available == 0)
+    {
+        daExpand(array);
+    }
 
     array -> data[array -> length] = data;
 
@@ -121,10 +124,12 @@ int daRemoveByPointer(DynArray * array, void * data, void (* deleteFunc)(void * 
     {
         array -> data[i] = array -> data[i + 1];
     }
+
     array -> length--;
     array -> available++;
 
-    // TODO: check, if array -> available > 5. daDecriment?
+    // We don't use function same as daExpand() because in our need there is no
+    // reason for this (we don't use remove so often).
 
     // All done.
     return 1;

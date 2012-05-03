@@ -10,9 +10,6 @@ typedef struct Cell
     unsigned char territory;
     // Resources.
     unsigned char resources;
-    // TODO
-    //      city
-    //      units
 } Cell;
 
 /*
@@ -26,14 +23,15 @@ Node * createRow(int l);
 void mergeRows(Node * n1, Node * n2);
 
 /*
-    Creates list with width w and height h.
+    Creates map with width w and height h.
 */
 Node * createMap(int w, int h);
 
 /*
     Destroys map. This functions doesn't use destroyGraph() function.
     It's _highly_ recommended to use this function instead of destroyGraph().
-    Reason is simple — map is symmetric.
+    Reason is simple — map is symmetric. Computational complexity of this
+    algorithm is O(N), of destroyGraph() algorithm — O(N²).
 */
 void destroyMap(Node * map_head, int w, int h);
 

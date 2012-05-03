@@ -6,28 +6,31 @@ Node * createRow(int l)
 {
     Cell * head = malloc(sizeof(Cell));
     head -> territory = 0;
+    head -> resources = 0;
 
-    // Create graph.
-    Node * graph_head = createGraph(NODE_CELL, head);
-    Node * previous = graph_head;
+    // Creating row.
+    Node * row_head = createGraph(NODE_CELL, head);
+    Node * previous = row_head;
 
     for(int i = 0; i < l - 1; i++)
     {
-        // Create new cell.
+        // Creating new cell.
         Cell * temp = malloc(sizeof(Cell));
         temp -> territory = 0;
-        // Add this cell to graph (+ edge from previous to new).
+        temp -> resources = 0;
+        // Adding this cell to row (+ edge from previous to new).
         Node * new = addNode(previous, EDGE_CELL_RIGHT, NODE_CELL, temp);
-        // Add edge (from new to previous).
+        // Adding edge (from new to previous).
         addEdge(new, previous, EDGE_CELL_LEFT);
+        // Going on.
         previous = new;
     }
 
     // Add last edges.
-    addEdge(previous, graph_head, EDGE_CELL_RIGHT);
-    addEdge(graph_head, previous, EDGE_CELL_LEFT);
+    addEdge(previous, row_head, EDGE_CELL_RIGHT);
+    addEdge(row_head, previous, EDGE_CELL_LEFT);
 
-    return graph_head;
+    return row_head;
 }
 
 void mergeRows(Node * n1, Node * n2)
@@ -51,11 +54,11 @@ Node * createMap(int w, int h)
 
     for(int i = 0; i < h - 1; i++)
     {
-        // Create new row.
+        // Creating new row.
         Node * new_row = createRow(w);
-        // Merge two rows.
+        // Merging two rows.
         mergeRows(row, new_row);
-        // Go on.
+        // Going on.
         row = new_row;
     }
 
@@ -74,18 +77,16 @@ void destroyMap(Node * map_head, int w, int h)
         next_row = getNeighbour(next_row, EDGE_CELL_BOTTOM);
         for(int j = 0; j < w; j++)
         {
-            // Get next.
+            // Getting next.
             Node * next = getNeighbour(current, EDGE_CELL_RIGHT);
-            // Remove this node and all it's edges.
-            daDestroy(current -> neighbours, &free);
-            free(current -> data);
-            free(current);
-            // Go on.
+            // Removing this node and all it's edges.
+            destroyNode(current);
+            // Going on.
             current = next;
         }
         current = next_row;
         // At first next_row = getNeighbour(next_row, EDGE_CELL_BOTTOM); was
         // here, but it was moved because at final step we deleted all map and
-        // have no cell to getNeighbour().
+        // have no cell to getNeighbour() => segmentation fault.
     }
 }
