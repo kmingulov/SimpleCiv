@@ -10,13 +10,14 @@ FLAGS = -std=c99 -Wall -pedantic
 # flags for compilation object files
 CFLAGS = $(FLAGS) -c $(DEBUG) 
 
+# libs
 LFLIB = -lexpat -lncurses -lm
+
 # flags for linking
 LFLAGS = $(FLAGS) $(LFLIB) $(DEBUG)
 
 test: $(OBJ)
 	gcc $(LFLAGS) -o test $(OBJ)
-
 
 technology.o: ../../modules/technology/technology.c
 	gcc $(CFLAGS) ../../modules/technology/technology.c
