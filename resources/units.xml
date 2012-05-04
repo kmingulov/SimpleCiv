@@ -20,4 +20,18 @@
         <health>7</health>
         <damage>1</damage>
     </unit>
+
+    <unit>
+        <id>3</id>
+        <name>Swordsman</name>
+        <health>10</health>
+        <damage>3</damage>
+    </unit>
+
+    <unit>
+        <id>4</id>
+        <name>Horseman</name>
+        <health>15</health>
+        <damage>3</damage>
+    </unit>
 </units>
