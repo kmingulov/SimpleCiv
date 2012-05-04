@@ -7,6 +7,10 @@
 #include "../../modules/parser/xml.h"
 #include "../../modules/technology/technology.h"
 
+#include "../../modules/view/view.h"
+
+
+
 void techForeachNeighbour(Node * parent, Node * child, Edge * link)
 {
     Technology * t1 = (Technology *) parent -> data;
@@ -25,6 +29,18 @@ int main()
         return 1;
     }
 
+    View * view = createView();
+
+    if(view == NULL)
+    {
+        printf("An error has occurred. Terminating.\n");
+        return 1;
+    }
+
+    //~ drawInterface(&view->iface);
+    //~ drawMap(world->graph_map, &view->iface);
+
+
     /*foreachNeighbour(world -> techs_tree, &techForeachNeighbour);
     printf("\n");
 
@@ -36,6 +52,7 @@ int main()
 
     // Destroing world.
     destroyWorld(world);
+    destroyView(view);
 
     return 0;
 }

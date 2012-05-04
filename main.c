@@ -4,6 +4,8 @@
 #include "modules/map/map.h"
 #include "modules/cui/cui.h"
 
+#include "modules/view/view.h"
+
 int main()
 {
     // Initialize random.
@@ -22,7 +24,7 @@ int main()
     drawInterface(&iface);
     drawMap(map, &iface);
 
-    // Key code.    
+    // Key code.
     int key = 0;
 
     while(true)

@@ -1,20 +1,22 @@
 # object files to compile
-OBJ = dyn_array.o int_array.o graph.o cell.o string_functions.o expat_handlers.o xml.o technology.o unit.o world.o test.o
+OBJ = dyn_array.o int_array.o graph.o cell.o string_functions.o expat_handlers.o xml.o technology.o unit.o view.o world.o  test.o
 
 # debug flag
-DEBUG = -g
+DEBUG = #-g
 
 # common flags
-FLAGS = -std=c99 -Wall -pedantic
+FLAGS = -std=c99 -Wall -pedantic  
 
 # flags for compilation object files
-CFLAGS = $(FLAGS) -c $(DEBUG)
+CFLAGS = $(FLAGS) -c $(DEBUG) 
 
+LFLIB = -lexpat -lncurses -lm
 # flags for linking
-LFLAGS = $(FLAGS) -lexpat $(DEBUG)
+LFLAGS = $(FLAGS) $(LFLIB) $(DEBUG)
 
 test: $(OBJ)
 	gcc $(LFLAGS) -o test $(OBJ)
+
 
 technology.o: ../../modules/technology/technology.c
 	gcc $(CFLAGS) ../../modules/technology/technology.c
@@ -42,6 +44,9 @@ expat_handlers.o: ../../modules/parser/expat_handlers.c
 
 xml.o: ../../modules/parser/xml.c
 	gcc $(CFLAGS) -lexpat ../../modules/parser/xml.c
+	
+view.o: ../../modules/view/view.c
+	gcc $(CFLAGS) ../../modules/view/view.c
 
 world.o: ../../game/world/world.c
 	gcc $(CFLAGS) ../../game/world/world.c
