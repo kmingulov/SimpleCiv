@@ -10,8 +10,8 @@ typedef struct Player
     // Array of player's units (type: Unit, not UnitCommonInfo!).
     DynArray * units;
     // Arrays of available units and technologies.
-    DynArray * available_units;
-    DynArray * available_techs;
+    IntArray * available_units;
+    IntArray * available_techs;
     // TODO Add city struct and DynArray of cities.
 } Player;
 

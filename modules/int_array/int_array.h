@@ -20,6 +20,11 @@ typedef struct IntArray
 IntArray * iaCreate();
 
 /*
+    Copy the array.
+*/
+IntArray * iaCopy(IntArray * array);
+
+/*
     Creates an array with length.
 */
 IntArray * iaLengthCreate(int length);

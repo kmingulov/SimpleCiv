@@ -14,6 +14,22 @@ IntArray * iaCreate()
     return array;
 }
 
+IntArray * iaCopy(IntArray * array)
+{
+    IntArray * copy = malloc(sizeof(IntArray));
+
+    copy -> length = array -> length;
+    copy -> available = array -> available;
+    copy -> data = malloc(sizeof(int) * (copy -> length + copy -> available));
+
+    for(int i = 0; i < copy -> length; i++)
+    {
+        copy -> data[i] = array -> data[i];
+    }
+
+    return copy;
+}
+
 IntArray * iaLengthCreate(int length)
 {
     IntArray * array = malloc(sizeof(IntArray));
