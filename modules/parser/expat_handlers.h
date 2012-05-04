@@ -6,6 +6,9 @@
 /*
     Definitions for parser.
 */
+// Count of states.
+#define XML_STATES                  20
+
 #define XML_NONE                    0
 
 #define XML_MAP                     1
@@ -21,15 +24,16 @@
 #define XML_UNIT_NAME               9
 #define XML_UNIT_HEALTH             10
 #define XML_UNIT_DAMAGE             11
+#define XML_UNIT_MOVES              12
 
-#define XML_TECH                    12
-#define XML_TECH_ID                 13
-#define XML_TECH_NAME               14
-#define XML_TECH_PROVIDES           15
-#define XML_TECH_PROVIDES_UNITS     16
-#define XML_TECH_PROVIDES_TECHS     17
-#define XML_TECH_REQUIRES           18
-#define XML_TECH_REQUIRES_RESOURCES 19
+#define XML_TECH                    13
+#define XML_TECH_ID                 14
+#define XML_TECH_NAME               15
+#define XML_TECH_PROVIDES           16
+#define XML_TECH_PROVIDES_UNITS     17
+#define XML_TECH_PROVIDES_TECHS     18
+#define XML_TECH_REQUIRES           19
+#define XML_TECH_REQUIRES_RESOURCES 20
 
 /*
     Struct for parser data.

@@ -5,6 +5,7 @@
         <name>Worker</name>
         <health>5</health>
         <damage>0</damage>
+        <moves>3</moves>
     </unit>
 
     <unit>
@@ -12,6 +13,7 @@
         <name>Warrior</name>
         <health>10</health>
         <damage>1</damage>
+        <moves>3</moves>
     </unit>
 
     <unit>
@@ -19,6 +21,7 @@
         <name>Archer</name>
         <health>7</health>
         <damage>1</damage>
+        <moves>5</moves>
     </unit>
 
     <unit>
@@ -26,6 +29,7 @@
         <name>Swordsman</name>
         <health>10</health>
         <damage>3</damage>
+        <moves>4</moves>
     </unit>
 
     <unit>
@@ -33,5 +37,6 @@
         <name>Horseman</name>
         <health>15</health>
         <damage>3</damage>
+        <moves>7</moves>
     </unit>
 </units>

@@ -1,10 +1,24 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include <stdio.h>
+
 #include "../../game/world/definitions.h"
 #include "../graph/graph.h"
 #include "../technology/technology.h"
 #include "unit.h"
+
+UnitCommonInfo * createUnitCommonInfo()
+{
+    UnitCommonInfo * unit = malloc(sizeof(UnitCommonInfo));
+
+    unit -> name = NULL;
+    unit -> max_health = 0;
+    unit -> max_damage = 0;
+    unit -> max_moves = 0;
+
+    return unit;
+}
 
 void destroyUnitCommonInfo(void * data)
 {

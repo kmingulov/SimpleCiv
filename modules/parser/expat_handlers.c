@@ -10,9 +10,6 @@
 #include "string_functions.h"
 #include "expat_handlers.h"
 
-// This is a lenght of arrays (see below).
-#define XML_STATES 19
-
 /*
     Auxiliary arrays for comfortable view of elementStart() function.
     xml_tags[] — array of xml tags of our xml files.
@@ -20,18 +17,18 @@
     xml_parents[i] — state, which required for state xml_states[i].
 */
 const char xml_tags[][13] = {"map", "width", "height", "players", "count",
-    "names", "unit", "id", "name", "health", "damage", "technology", "id",
-    "name", "provides", "units", "technologies", "requires", "resources"};
+    "names", "unit", "id", "name", "health", "damage", "moves", "technology", 
+    "id", "name", "provides", "units", "technologies", "requires", "resources"};
 
 const int xml_states[] = {XML_MAP, XML_MAP_WIDTH, XML_MAP_HEIGHT, XML_PLAYERS,
     XML_PLAYERS_COUNT, XML_PLAYERS_NAMES, XML_UNIT, XML_UNIT_ID, XML_UNIT_NAME,
-    XML_UNIT_HEALTH, XML_UNIT_DAMAGE, XML_TECH, XML_TECH_ID, XML_TECH_NAME,
-    XML_TECH_PROVIDES, XML_TECH_PROVIDES_UNITS, XML_TECH_PROVIDES_TECHS,
-    XML_TECH_REQUIRES, XML_TECH_REQUIRES_RESOURCES};
+    XML_UNIT_HEALTH, XML_UNIT_DAMAGE, XML_UNIT_MOVES, XML_TECH, XML_TECH_ID,
+    XML_TECH_NAME, XML_TECH_PROVIDES, XML_TECH_PROVIDES_UNITS,
+    XML_TECH_PROVIDES_TECHS, XML_TECH_REQUIRES, XML_TECH_REQUIRES_RESOURCES};
 
 const int xml_parents[] = {0, XML_MAP, XML_MAP, 0, XML_PLAYERS, XML_PLAYERS, 0, 
-    XML_UNIT, XML_UNIT, XML_UNIT, XML_UNIT, 0, XML_TECH, XML_TECH, XML_TECH,
-    XML_TECH_PROVIDES, XML_TECH_PROVIDES, XML_TECH, XML_TECH_REQUIRES};
+    XML_UNIT, XML_UNIT, XML_UNIT, XML_UNIT, XML_UNIT, 0, XML_TECH, XML_TECH,
+    XML_TECH, XML_TECH_PROVIDES, XML_TECH_PROVIDES, XML_TECH, XML_TECH_REQUIRES};
 
 void elementStart(void * data, const char * name, const char ** attr)
 {
@@ -103,7 +100,7 @@ void elementContent(void * data, const char * s, int len)
                 // It won't matter, if all ids of units in units.xml file go
                 // in ascending from 0 to (some number) without any missing
                 // numbers between.
-                temp_data = malloc(sizeof(UnitCommonInfo));
+                temp_data = createUnitCommonInfo();
                 daPrepend(p_data -> data, temp_data);
             break;
 
@@ -118,6 +115,10 @@ void elementContent(void * data, const char * s, int len)
 
             case XML_UNIT_DAMAGE:
                 ((UnitCommonInfo *) daGetLast(p_data -> data)) -> max_damage = atoi(temp);
+            break;
+
+            case XML_UNIT_MOVES:
+                ((UnitCommonInfo *) daGetLast(p_data -> data)) -> max_moves = atoi(temp);
             break;
 
             case XML_TECH_ID:

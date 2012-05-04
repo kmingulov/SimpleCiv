@@ -17,9 +17,9 @@
 typedef struct UnitCommonInfo
 {
     char * name;
-    int max_health;
-    int max_damage;
-    int max_moves;
+    unsigned int max_health;
+    unsigned int max_damage;
+    unsigned int max_moves;
 } UnitCommonInfo;
 
 /*
@@ -27,12 +27,17 @@ typedef struct UnitCommonInfo
 */
 typedef struct Unit
 {
-    int unit_id;    // Unit id in units' info table.
-    Player * owner; // Owner of this unit.
-    int x, y;       // X and Y coordinates.
-    int health;     // Current health.
-    int moves;      // Available moves.
+    unsigned char unit_id;   // Unit id in units' info table.
+    Player * owner;          // Owner of this unit.
+    unsigned int x, y;       // X and Y coordinates.
+    unsigned int health;     // Current health.
+    unsigned int moves;      // Available moves.
 } Unit;
+
+/*
+    Creates UnitCommonInfo.
+*/
+UnitCommonInfo * createUnitCommonInfo();
 
 /*
     Destroys UnitCommonInfo variable.
