@@ -69,18 +69,22 @@ World * createWorld()
     for(int i = 0; i < techs_data -> length; i++)
     {
         TechnologyParseInfo * t = (TechnologyParseInfo *) daGetByIndex(techs_data, i);
-        daPrepend(world -> techs_info, createTechnologyCommonInfo(t));
+        daPrepend(world -> techs_info, t -> tech_in_tree);
     }
+
+    // Creating tech tables.
+    printf("Creating technology table… ");
+    IntArray * techs_status = createTechnologyStatus(world -> techs_info);
+    printf("Done\n");
+
+    // Creating unit tables.
+    printf("Creating units table… ");
+    IntArray * units_status = createUnitStatus(techs_status, world -> techs_info, world -> units_info);
+    printf("Done\n");
 
     // Free techs_data.
     printf("Freeing auxiliary data… ");
     daDestroy(techs_data, &destroyTechnologyParseInfo);
-    printf("Done\n");
-
-    // Creating map.
-    printf("Creating map %dx%d… ", world -> properties -> map_w, world -> properties -> map_h);
-    world -> graph_map = createMap(world -> properties -> map_w, world -> properties -> map_h);
-    //generateMap(world -> map_head, properties -> map_w, properties -> map_h);
     printf("Done\n");
 
     // Creating players list.
@@ -95,7 +99,9 @@ World * createWorld()
         data -> name = (char *) daGetByIndex(world -> properties -> player_names, i);
         // Adding him to graph.
         temp = addNode(temp, EDGE_NEXT_PLAYER, NODE_PLAYER, data);
-        // TODO Create arrays of technologies and units for each player.
+        // Creating arrays of technologies and units for each player.
+        data -> available_units = iaCopy(units_status);
+        data -> available_techs = iaCopy(techs_status);
         // Remembering head.
         if(head == NULL)
         {
@@ -104,6 +110,14 @@ World * createWorld()
     }
     addEdge(temp, head, EDGE_NEXT_PLAYER);
     world -> graph_players = head;
+    iaDestroy(units_status);
+    iaDestroy(techs_status);
+    printf("Done\n");
+
+    // Creating map.
+    printf("Creating map %dx%d… ", world -> properties -> map_w, world -> properties -> map_h);
+    world -> graph_map = createMap(world -> properties -> map_w, world -> properties -> map_h);
+    //generateMap(world -> map_head, properties -> map_w, properties -> map_h);
     printf("Done\n");
 
     printf("All done!\n");
@@ -120,6 +134,8 @@ void destroyGraphNode(unsigned char type, void * data)
     switch(type)
     {
         case NODE_PLAYER:
+            iaDestroy( ((Player *) data) -> available_units );
+            iaDestroy( ((Player *) data) -> available_techs );
             free( ((Player *) data) -> name );
         break;
     }
@@ -142,11 +158,8 @@ void destroyWorld(World * world)
     // Destroy array of UnitCommonInfos.
     daDestroy(world -> units_info, &destroyUnitCommonInfo);
 
-    // Destroy array of TechnologyCommonInfos.
-    daDestroy(world -> techs_info, &free);
-
-    // Destroy tech tree.
-    destroyGraph(world -> tech_tree, deleted, &destroyTechnology);
+    // Destroy array of pointers to tech_in_tree.
+    daDestroy(world -> techs_info, &destroyTechCommonInfo);
 
     // Destroy world.
     destroyGraph(world -> graph_players, deleted, &destroyGraphNode);

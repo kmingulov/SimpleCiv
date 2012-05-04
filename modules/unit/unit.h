@@ -1,5 +1,9 @@
 #ifndef UNIT
 #define UNIT
+
+#include "../int_array/int_array.h"
+#include "../dyn_array/dyn_array.h"
+
 /*
     This is struct of unit. It's really similar to technology struct (see
     modules/technology/technology.h file).
@@ -33,5 +37,10 @@ typedef struct Unit
     Destroys UnitCommonInfo variable.
 */
 void destroyUnitCommonInfo(void * data);
+
+/*
+    Creates unit table.
+*/
+IntArray * createUnitStatus(IntArray * techs_status, DynArray * techs_info, DynArray * units_info);
 
 #endif

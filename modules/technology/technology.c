@@ -24,7 +24,7 @@ TechnologyParseInfo * createTechnologyParseInfo()
     return data;
 }
 
-void * destroyTechCommonInfo(void * data)
+void destroyTechCommonInfo(void * data)
 {
     Node * n = (Node *) data;
     daDestroy(n -> edges, &free);

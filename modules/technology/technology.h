@@ -35,7 +35,10 @@ TechnologyParseInfo * createTechnologyParseInfo();
 */
 void destroyTechnologyParseInfo(void * data);
 
-void * destroyTechCommonInfo(void * data);
+/*
+    Destroys Node with technology.
+*/
+void destroyTechCommonInfo(void * data);
 
 /*
     Destroys Technology.
