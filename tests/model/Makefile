@@ -2,7 +2,7 @@
 OBJ = dyn_array.o int_array.o graph.o cell.o string_functions.o expat_handlers.o xml.o technology.o unit.o view.o world.o  test.o
 
 # debug flag
-DEBUG = #-g
+DEBUG = -g
 
 # common flags
 FLAGS = -std=c99 -Wall -pedantic  
