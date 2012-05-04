@@ -20,6 +20,11 @@ typedef struct IntArray
 IntArray * iaCreate();
 
 /*
+    Creates an array with length.
+*/
+IntArray * iaLengthCreate(int length);
+
+/*
     Destroys array.
 */
 void iaDestroy(IntArray * array);
@@ -38,5 +43,10 @@ void iaPrepend(IntArray * array, int n);
     Returns element #index.
 */
 int iaGetByIndex(IntArray * array, int index);
+
+/*
+    Sets element #index value to value.
+*/
+void iaSetByIndex(IntArray * array, int index, int value);
 
 #endif
