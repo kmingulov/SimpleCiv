@@ -120,6 +120,7 @@ World * createWorld()
     //generateMap(world -> map_head, properties -> map_w, properties -> map_h);
     printf("Done\n");
 
+
     printf("All done!\n");
 
     // Returning world.
