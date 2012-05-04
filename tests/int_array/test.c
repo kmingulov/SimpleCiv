@@ -3,7 +3,6 @@
 #include <assert.h>
 
 #include "../../modules/int_array/int_array.h"
-#include "../../modules/parser/string_functions.h"
 
 int main()
 {
@@ -23,12 +22,13 @@ int main()
     // All done.
     iaDestroy(array);
 
-    // Test for strSplitToInts function.
-    array = strSplitToInts('|', "12|42|652");
-    assert(array -> data[0] == 12);
-    assert(array -> data[1] == 42);
-    assert(array -> data[2] == 652);
+    // Test for iaLengthCreate().
+    array = iaLengthCreate(3);
+    assert(array -> length == 3);
+    assert(array -> data[0] == 0);
+    assert(array -> data[1] == 0);
+    assert(array -> data[2] == 0);
     iaDestroy(array);
-
+    
     return 0;
 }

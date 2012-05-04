@@ -1,5 +1,10 @@
 #ifndef UNIT
 #define UNIT
+
+#include "../int_array/int_array.h"
+#include "../dyn_array/dyn_array.h"
+#include "../player/player.h"
+
 /*
     This is struct of unit. It's really similar to technology struct (see
     modules/technology/technology.h file).
@@ -22,16 +27,31 @@ typedef struct UnitCommonInfo
 */
 typedef struct Unit
 {
-    int unit_id;  // Unit id in units' info table.
-    int owner_id; // Id of owner of this unit.
-    int x, y;     // X and Y coordinates.
-    int health;   // Current health.
-    int moves;    // Available moves.
+    int unit_id;    // Unit id in units' info table.
+    Player * owner; // Owner of this unit.
+    int x, y;       // X and Y coordinates.
+    int health;     // Current health.
+    int moves;      // Available moves.
 } Unit;
 
 /*
     Destroys UnitCommonInfo variable.
 */
 void destroyUnitCommonInfo(void * data);
+
+/*
+    Creates unit table.
+*/
+IntArray * createUnitStatus(IntArray * techs_status, DynArray * techs_info, DynArray * units_info);
+
+/*
+    Creates new unit, id is unit_id, owner is player.
+*/
+Unit * createUnit(DynArray * units_info, int unit_id, Player * player);
+
+/*
+    Figth between two units.
+*/
+void unitsFight(DynArray * units_info, Unit * u1, Unit * u2);
 
 #endif

@@ -2,29 +2,85 @@
 <technologies>
     <technology>
         <id>0</id>
-        <name>Stone weapons</name>
+        <name>Handling wood</name>
 
         <provides>
-            <units>0,1</units>
-            <technologies>1</technologies>
+            <units>2</units>
+            <technologies>2</technologies>
         </provides>
 
         <requires>
-            <resources>0</resources>
+            <resources></resources>
         </requires>
     </technology>
 
     <technology>
         <id>1</id>
+        <name>Farmer</name>
+
+        <provides>
+            <units>0</units>
+            <technologies>4</technologies>
+        </provides>
+
+        <requires>
+            <resources></resources>
+        </requires>
+    </technology>
+
+    <technology>
+        <id>2</id>
+        <name>Stone weapons</name>
+
+        <provides>
+            <units>1</units>
+            <technologies>3</technologies>
+        </provides>
+
+        <requires>
+            <resources></resources>
+        </requires>
+    </technology>
+
+    <technology>
+        <id>3</id>
         <name>Handling iron</name>
 
         <provides>
-            <units>2,3</units>
+            <units>3</units>
+            <technologies>5</technologies>
+        </provides>
+
+        <requires>
+            <resources></resources>
+        </requires>
+    </technology>
+
+    <technology>
+        <id>4</id>
+        <name>Horses</name>
+
+        <provides>
+            <units></units>
+            <technologies>5</technologies>
+        </provides>
+
+        <requires>
+            <resources></resources>
+        </requires>
+    </technology>
+
+    <technology>
+        <id>5</id>
+        <name>Horseman</name>
+
+        <provides>
+            <units>4</units>
             <technologies></technologies>
         </provides>
 
         <requires>
-            <resources>1</resources>
+            <resources></resources>
         </requires>
     </technology>
 </technologies>

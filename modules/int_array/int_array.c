@@ -14,6 +14,33 @@ IntArray * iaCreate()
     return array;
 }
 
+IntArray * iaCopy(IntArray * array)
+{
+    IntArray * copy = malloc(sizeof(IntArray));
+
+    copy -> length = array -> length;
+    copy -> available = array -> available;
+    copy -> data = malloc(sizeof(int) * (copy -> length + copy -> available));
+
+    for(int i = 0; i < copy -> length; i++)
+    {
+        copy -> data[i] = array -> data[i];
+    }
+
+    return copy;
+}
+
+IntArray * iaLengthCreate(int length)
+{
+    IntArray * array = malloc(sizeof(IntArray));
+
+    array -> length = length;
+    array -> available = 0;
+    array -> data = calloc(length, sizeof(int));
+
+    return array;
+}
+
 void iaDestroy(IntArray * array)
 {
     free(array -> data);
@@ -50,4 +77,9 @@ int iaGetByIndex(IntArray * array, int index)
 {
     // TODO If index > array -> length - 1 || index < 0? What I shall return?
     return array -> data[index];
+}
+
+void iaSetByIndex(IntArray * array, int index, int value)
+{
+    array -> data[index] = value;
 }

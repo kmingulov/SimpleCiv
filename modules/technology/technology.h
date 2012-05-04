@@ -19,11 +19,6 @@ typedef struct Technology
     IntArray * provides_units;
 } Technology;
 
-typedef struct TechnologyCommonInfo
-{
-    Node * tech_in_tree;
-} TechnologyCommonInfo;
-
 typedef struct TechnologyParseInfo
 {
     IntArray * provides_technologies;
@@ -41,13 +36,23 @@ TechnologyParseInfo * createTechnologyParseInfo();
 void destroyTechnologyParseInfo(void * data);
 
 /*
-    Creates TechnologyCommonInfo from TechnologyParseInfo * data.
+    Destroys Node with technology.
 */
-TechnologyCommonInfo * createTechnologyCommonInfo(TechnologyParseInfo * data);
+void destroyTechCommonInfo(void * data);
 
 /*
     Destroys Technology.
 */
-void destroyTechnology(unsigned char type, void * data);
+void destroyTechnology(void * data);
+
+/*
+    Creates technology status table.
+*/
+IntArray * createTechnologyStatus(DynArray * techs_info);
+
+/*
+    Updates technology status table for one technology.
+*/
+void updateTechnologyStatus(IntArray * techs_status, Node * tech);
 
 #endif

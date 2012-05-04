@@ -69,21 +69,28 @@ IntArray * strSplitToInts(char delimiter, char * str)
     // Creating array
     IntArray * array = iaCreate();
 
-    int current = 0;
+    int current = -1;
     for(int i = 0; i < strlen(str); i++)
     {
         if(str[i] != delimiter)
         {
             // Zero is 48.
+            if(current == -1)
+            {
+                current = 0;
+            }
             current = current * 10 + ( (int) str[i] - 48);
         }
         else
         {
             iaPrepend(array, current);
-            current = 0;
+            current = -1;
         }
     }
-    iaPrepend(array, current);
+    if(current != -1)
+    {
+        iaPrepend(array, current);
+    }
 
     return array;
 }

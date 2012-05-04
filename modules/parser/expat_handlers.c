@@ -124,6 +124,7 @@ void elementContent(void * data, const char * s, int len)
                 // Same note as for XML_UNIT_ID.
                 temp_data = createTechnologyParseInfo();
                 daPrepend(p_data -> data, temp_data);
+                ((Technology *) ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> tech_in_tree -> data) -> id = ((DynArray *) p_data -> data) -> length - 1;
             break;
 
             case XML_TECH_NAME:
