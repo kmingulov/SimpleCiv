@@ -24,6 +24,14 @@ TechnologyParseInfo * createTechnologyParseInfo()
     return data;
 }
 
+void * destroyTechCommonInfo(void * data)
+{
+    Node * n = (Node *) data;
+    daDestroy(n -> edges, &free);
+    destroyTechnology(n -> data);
+    free(n);
+}
+
 void destroyTechnologyParseInfo(void * data)
 {
     TechnologyParseInfo * t = (TechnologyParseInfo *) data;
@@ -34,7 +42,7 @@ void destroyTechnologyParseInfo(void * data)
     free(t);
 }
 
-void destroyTechnology(unsigned char type, void * data)
+void destroyTechnology(void * data)
 {
     Technology * t = (Technology *) data;
 

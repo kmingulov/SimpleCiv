@@ -35,10 +35,12 @@ TechnologyParseInfo * createTechnologyParseInfo();
 */
 void destroyTechnologyParseInfo(void * data);
 
+void * destroyTechCommonInfo(void * data);
+
 /*
     Destroys Technology.
 */
-void destroyTechnology(unsigned char type, void * data);
+void destroyTechnology(void * data);
 
 /*
     Creates technology status table.
