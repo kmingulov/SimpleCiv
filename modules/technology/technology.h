@@ -38,12 +38,17 @@ void destroyTechnologyParseInfo(void * data);
 /*
     Destroys Node with technology.
 */
-void destroyTechCommonInfo(void * data);
+void destroyTechnologyCommonInfo(void * data);
 
 /*
     Destroys Technology.
 */
 void destroyTechnology(void * data);
+
+/*
+    Creates edges in technology tree.
+*/
+Node * createEdgesInTechnologyTree(DynArray * techs_data);
 
 /*
     Creates technology status table.

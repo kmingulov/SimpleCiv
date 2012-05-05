@@ -24,7 +24,7 @@ TechnologyParseInfo * createTechnologyParseInfo()
     return data;
 }
 
-void destroyTechCommonInfo(void * data)
+void destroyTechnologyCommonInfo(void * data)
 {
     Node * n = (Node *) data;
     daDestroy(n -> edges, &free);
@@ -62,6 +62,33 @@ void destroyTechnology(void * data)
     }
 
     free(t);
+}
+
+Node * createEdgesInTechnologyTree(DynArray * techs_data)
+{
+    // Passing each technology.
+    for(int i = 0; i < techs_data -> length; i++)
+    {
+        TechnologyParseInfo * current = (TechnologyParseInfo *) daGetByIndex(techs_data, i);
+        IntArray * provides = current -> provides_technologies;
+        // For each neighbour creating two edges (TECH_PROVIDES and
+        // TECH_REQUIRES).
+        if(provides != NULL)
+        {
+            for(int j = 0; j < provides -> length; j++)
+            {
+                // Getting neighbour.
+                int id = iaGetByIndex(provides, j);
+                TechnologyParseInfo * neighbour = (TechnologyParseInfo *) daGetByIndex(techs_data, id);
+                // Creating two edges.
+                addEdge(current -> tech_in_tree, neighbour -> tech_in_tree, EDGE_TECH_PROVIDES);
+                addEdge(neighbour -> tech_in_tree, current -> tech_in_tree, EDGE_TECH_REQUIRES);
+            }
+        }
+    }
+
+    // Returning first technology.
+    return ((TechnologyParseInfo *) daGetByIndex(techs_data, 0)) -> tech_in_tree;
 }
 
 IntArray * createTechnologyStatus(DynArray * techs_info)

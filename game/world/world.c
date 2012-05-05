@@ -1,8 +1,6 @@
 #include "world.h"
 
 #include "../../modules/parser/xml.h"
-#include "../../modules/unit/unit.h"
-#include "../../modules/technology/technology.h"
 
 World * createWorld()
 {
@@ -41,27 +39,8 @@ World * createWorld()
 
     // Going through techs_data and creating tech tree.
     printf("Creating technology tree… ");
-    world -> tech_tree = ((TechnologyParseInfo *) daGetByIndex(techs_data, 0)) -> tech_in_tree;
-    // Passing each technology.
-    for(int i = 0; i < techs_data -> length; i++)
-    {
-        TechnologyParseInfo * current = (TechnologyParseInfo *) daGetByIndex(techs_data, i);
-        IntArray * provides = current -> provides_technologies;
-        // For each neighbour creating two edges (TECH_PROVIDES and
-        // TECH_REQUIRES).
-        if(provides != NULL)
-        {
-            for(int j = 0; j < provides -> length; j++)
-            {
-                // Getting neighbour.
-                int id = iaGetByIndex(provides, j);
-                TechnologyParseInfo * neighbour = (TechnologyParseInfo *) daGetByIndex(techs_data, id);
-                // Creating two edges.
-                addEdge(current -> tech_in_tree, neighbour -> tech_in_tree, EDGE_TECH_PROVIDES);
-                addEdge(neighbour -> tech_in_tree, current -> tech_in_tree, EDGE_TECH_REQUIRES);
-            }
-        }
-    }
+    // Creates edges in technology tree (we already have nodes).
+    world -> tech_tree = createEdgesInTechnologyTree(techs_data);
     printf("Done\n");
 
     // Creating techs_info table.
@@ -89,27 +68,21 @@ World * createWorld()
 
     // Creating players list.
     printf("Creating list of %d players… ", world -> properties -> players_count);
-    Node * head = NULL; // Graph head.
-    Node * temp = NULL; // Temporary variable.
+    world -> graph_players = NULL; // Graph head.
+    Node * temp = NULL;            // Temporary variable.
     for(int i = 0; i < world -> properties -> players_count; i++)
     {
         // Creating new player.
-        Player * data = malloc(sizeof(Player));
-        // Adding name to players list.
-        data -> name = (char *) daGetByIndex(world -> properties -> player_names, i);
-        // Adding him to graph.
-        temp = addNode(temp, EDGE_NEXT_PLAYER, NODE_PLAYER, data);
-        // Creating arrays of technologies and units for each player.
-        data -> available_units = iaCopy(units_status);
-        data -> available_techs = iaCopy(techs_status);
+        char * name = (char *) daGetByIndex(world -> properties -> player_names, i);
+        Player * player = createPlayer(name, iaCopy(units_status), iaCopy(techs_status));
+        temp = addNode(temp, EDGE_NEXT_PLAYER, NODE_PLAYER, player);
         // Remembering head.
-        if(head == NULL)
+        if(world -> graph_players == NULL)
         {
-            head = temp;
+            world -> graph_players = temp;
         }
     }
-    addEdge(temp, head, EDGE_NEXT_PLAYER);
-    world -> graph_players = head;
+    addEdge(temp, world -> graph_players, EDGE_NEXT_PLAYER);
     iaDestroy(units_status);
     iaDestroy(techs_status);
     printf("Done\n");
@@ -160,7 +133,7 @@ void destroyWorld(World * world)
     daDestroy(world -> units_info, &destroyUnitCommonInfo);
 
     // Destroy array of pointers to tech_in_tree.
-    daDestroy(world -> techs_info, &destroyTechCommonInfo);
+    daDestroy(world -> techs_info, &destroyTechnologyCommonInfo);
 
     // Destroy world.
     destroyGraph(world -> graph_players, deleted, &destroyGraphNode);

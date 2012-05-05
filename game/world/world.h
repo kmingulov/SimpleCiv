@@ -7,8 +7,13 @@
 #include "definitions.h"
 #include "../../modules/dyn_array/dyn_array.h"
 #include "../../modules/int_array/int_array.h"
+
 #include "../../modules/graph/graph.h"
 #include "../../modules/cell/cell.h"
+
+#include "../../modules/unit/unit.h"
+#include "../../modules/technology/technology.h"
+
 #include "../../modules/player/player.h"
 
 /*

@@ -1,5 +1,5 @@
 # object files to compile
-OBJ = dyn_array.o int_array.o graph.o cell.o string_functions.o expat_handlers.o xml.o technology.o unit.o view.o world.o  test.o
+OBJ = dyn_array.o int_array.o graph.o cell.o string_functions.o expat_handlers.o xml.o player.o technology.o unit.o view.o world.o  test.o
 
 # debug flag
 DEBUG = -g
@@ -45,6 +45,9 @@ expat_handlers.o: ../../modules/parser/expat_handlers.c
 
 xml.o: ../../modules/parser/xml.c
 	gcc $(CFLAGS) -lexpat ../../modules/parser/xml.c
+
+player.o: ../../modules/player/player.c
+	gcc $(CFLAGS) -lexpat ../../modules/player/player.c
 	
 view.o: ../../modules/view/view.c
 	gcc $(CFLAGS) ../../modules/view/view.c
