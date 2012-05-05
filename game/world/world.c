@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "world.h"
 
 #include "../../modules/parser/xml.h"
 
+#include "../../modules/city/city.h"
 #include "../../modules/unit/unit.h"
 #include "../../modules/technology/technology.h"
 
@@ -74,6 +76,12 @@ World * createWorld()
     daDestroy(techs_data, &destroyTechnologyParseInfo);
     printf("Done\n");
 
+    // Creating map.
+    printf("Creating map %dx%d… ", world -> properties -> map_r, world -> properties -> map_c);
+    world -> graph_map = createMap(world -> properties -> map_r, world -> properties -> map_c);
+    //generateMap(world -> map_head, properties -> map_r, properties -> map_h);
+    printf("Done\n");
+
     // Creating players list.
     printf("Creating list of %d players… ", world -> properties -> players_count);
     world -> graph_players = NULL; // Graph head.
@@ -83,6 +91,16 @@ World * createWorld()
         // Creating new player.
         char * name = (char *) daGetByIndex(world -> properties -> player_names, i);
         Player * player = createPlayer(name, iaCopy(units_status), iaCopy(techs_status));
+        // Creating default city.
+        char * city_name = malloc(sizeof(char) * 13);
+        strcpy(city_name, "Default City");
+        City * city = NULL;
+        // createCity() function returns NULL, if nothing created. Trying create
+        // city!
+        while(city == NULL)
+        { 
+            city = createCity(world, city_name, rand() % world -> properties -> map_r, rand() % world -> properties -> map_c, player);
+        }
         temp = addNode(temp, EDGE_NEXT_PLAYER, NODE_PLAYER, player);
         // Remembering head.
         if(world -> graph_players == NULL)
@@ -94,13 +112,6 @@ World * createWorld()
     iaDestroy(units_status);
     iaDestroy(techs_status);
     printf("Done\n");
-
-    // Creating map.
-    printf("Creating map %dx%d… ", world -> properties -> map_r, world -> properties -> map_c);
-    world -> graph_map = createMap(world -> properties -> map_r, world -> properties -> map_c);
-    //generateMap(world -> map_head, properties -> map_r, properties -> map_h);
-    printf("Done\n");
-
 
     printf("All done!\n");
 

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 
+#include "../city/city.h"
 #include "cell.h"
 
 Node * createRow(int l)
@@ -69,8 +70,13 @@ Node * createMap(int max_r, int max_c)
 
 void destroyUnitsAndCities(Node * parent, Node * child, Edge * edge)
 {
-    if(edge -> type == EDGE_CELL_UNIT || edge -> type == EDGE_CELL_CITY)
+    if(edge -> type == EDGE_CELL_UNIT)
     {
+        destroyNode(child);
+    }
+    else if(edge -> type == EDGE_CELL_CITY)
+    {
+        free( ((City *) child -> data) -> name );
         destroyNode(child);
     }
 }
