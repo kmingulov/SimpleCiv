@@ -19,17 +19,17 @@ void * parseXML(int type)
     {
         case XML_CONFIG:
             data = malloc(sizeof(WorldProperties));
-            file = fopen("../../config.xml", "r");
+            file = fopen("config.xml", "r");
         break;
 
         case XML_UNITS:
             data = daCreate();
-            file = fopen("../../resources/units.xml", "r");
+            file = fopen("resources/units.xml", "r");
         break;
 
         case XML_TECHNOLOGIES:
             data = daCreate();
-            file = fopen("../../resources/technologies.xml", "r");
+            file = fopen("resources/technologies.xml", "r");
         break;
 
         default:
