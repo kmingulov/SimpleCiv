@@ -10,12 +10,11 @@
 
 // For player.
 #define NODE_PLAYER        1
-#define NODE_CITIES_LIST   2
-#define NODE_UNITS_LIST    3
-#define NODE_TECH_TABLE    4
+#define NODE_UNIT          2
+#define NODE_CITY          3
 
 // For technologies.
-#define NODE_TECHNOLOGY    5
+#define NODE_TECHNOLOGY    4
 
 /*
     Defines for edges' types.

@@ -1,20 +1,12 @@
 #ifndef MODEL
 #define MODEL
 
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "definitions.h"
 #include "../../modules/dyn_array/dyn_array.h"
 #include "../../modules/int_array/int_array.h"
 
 #include "../../modules/graph/graph.h"
 #include "../../modules/cell/cell.h"
-
-#include "../../modules/unit/unit.h"
-#include "../../modules/technology/technology.h"
-
-#include "../../modules/player/player.h"
 
 /*
     Struct of world properties.
@@ -60,13 +52,5 @@ World * createWorld();
     Destroys world.
 */
 void destroyWorld(World * world);
-
-/*
-    Save world to xml files.
-    TODO This is _just_ draft. In future this function will receive char * name,
-    save world to several xml files and add them to tar.gz (or any other)
-    archive. So variable FILE * map_file is temporary.
-*/
-void saveWorld(World * world, WorldProperties * properties, FILE * map_file);
 
 #endif

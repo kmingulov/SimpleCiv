@@ -50,19 +50,25 @@ IntArray * createUnitStatus(IntArray * techs_status, DynArray * techs_info, DynA
     return result;
 }
 
-Unit * createUnit(DynArray * units_info, int unit_id, Player * player)
+Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char unit_id, Player * player)
 {
     Unit * unit = malloc(sizeof(Unit));
-    UnitCommonInfo * info = (UnitCommonInfo *) daGetByIndex(units_info, unit_id);
+    UnitCommonInfo * info = (UnitCommonInfo *) daGetByIndex(world -> units_info, unit_id);
+    Node * node = createGraph(NODE_UNIT, unit);
 
+    // Copying basic info.
     unit -> unit_id = unit_id;
-    unit -> owner = player;
-    unit -> x = -1;
-    unit -> y = -1;
     unit -> health = info -> max_health;
     unit -> moves = info -> max_moves;
 
+    // Adding owner info.
+    unit -> owner = player;
     // TODO add to player -> units
+
+    // Adding coordinates.
+    unit -> r = r;
+    unit -> c = c;
+    addEdge(getCell(world -> graph_map, r, c), node, EDGE_CELL_UNIT);
 
     return unit;
 }

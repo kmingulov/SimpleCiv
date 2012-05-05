@@ -1,6 +1,14 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "world.h"
 
 #include "../../modules/parser/xml.h"
+
+#include "../../modules/unit/unit.h"
+#include "../../modules/technology/technology.h"
+
+#include "../../modules/player/player.h"
 
 World * createWorld()
 {
@@ -141,23 +149,4 @@ void destroyWorld(World * world)
 
     // Destroy auxiliary array.
     daDestroy(deleted, NULL);
-}
-
-void saveWorld(World * world, WorldProperties * properties, FILE * map_file)
-{
-    fprintf(map_file, "<?xml version=\"1.0\" encoding=\"UTF-8\">\n<map>\n\t<width>%d</width>\n\t<height>%d</height>\n", properties -> map_r, properties -> map_c);
-
-    Node * current = world -> graph_map;
-
-    for(int i = 0; i < properties -> map_r; i++)
-    {
-        for(int j = 0; j < properties -> map_c; j++)
-        {
-            fprintf(map_file, "\t<cell x=\"%d\" y=\"%d\" territory=\"%d\">\n", i, j, ( (Cell *) current -> data ) -> territory);
-            current = getNeighbour(current, EDGE_CELL_RIGHT);
-        }
-        current = getNeighbour(current, EDGE_CELL_BOTTOM);
-    }
-
-    fprintf(map_file, "</map>");
 }

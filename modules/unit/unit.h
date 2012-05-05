@@ -1,6 +1,8 @@
 #ifndef UNIT
 #define UNIT
 
+#include "../../game/world/world.h"
+
 #include "../int_array/int_array.h"
 #include "../dyn_array/dyn_array.h"
 #include "../player/player.h"
@@ -29,7 +31,7 @@ typedef struct Unit
 {
     unsigned char unit_id;   // Unit id in units' info table.
     Player * owner;          // Owner of this unit.
-    unsigned int x, y;       // X and Y coordinates.
+    unsigned int r, c;       // X and Y coordinates.
     unsigned int health;     // Current health.
     unsigned int moves;      // Available moves.
 } Unit;
@@ -50,9 +52,10 @@ void destroyUnitCommonInfo(void * data);
 IntArray * createUnitStatus(IntArray * techs_status, DynArray * techs_info, DynArray * units_info);
 
 /*
-    Creates new unit, id is unit_id, owner is player.
+    Creates new unit in world in row r, column c. Id of unit is unit_id and
+    owner is player.
 */
-Unit * createUnit(DynArray * units_info, int unit_id, Player * player);
+Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char unit_id, Player * player);
 
 /*
     Figth between two units.
