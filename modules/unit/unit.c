@@ -52,6 +52,13 @@ IntArray * createUnitStatus(IntArray * techs_status, DynArray * techs_info, DynA
 
 Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char unit_id, Player * player)
 {
+    // Cell (r,c) already have a unit.
+    if(getNeighbour( getCell(world -> graph_map, r, c), EDGE_CELL_UNIT ) != NULL)
+    {
+        return NULL;
+    }
+
+    // Allocate some memory.
     Unit * unit = malloc(sizeof(Unit));
     UnitCommonInfo * info = (UnitCommonInfo *) daGetByIndex(world -> units_info, unit_id);
     Node * node = createGraph(NODE_UNIT, unit);
