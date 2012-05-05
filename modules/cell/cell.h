@@ -23,9 +23,9 @@ Node * createRow(int l);
 void mergeRows(Node * n1, Node * n2);
 
 /*
-    Creates map with width w and height h.
+    Creates map with max_r rows and max_c columns.
 */
-Node * createMap(int w, int h);
+Node * createMap(int max_r, int max_c);
 
 /*
     Destroys map. This functions doesn't use destroyGraph() function.
@@ -33,6 +33,11 @@ Node * createMap(int w, int h);
     Reason is simple — map is symmetric. Computational complexity of this
     algorithm is O(N), of destroyGraph() algorithm — O(N²).
 */
-void destroyMap(Node * map_head, int w, int h);
+void destroyMap(Node * map_head, int max_r, int max_c);
+
+/*
+    Gets cell in row r, column c (assumed that Node * map_head is (0,0) point).
+*/
+Node * getCell(Node * map_head, int r, int c);
 
 #endif

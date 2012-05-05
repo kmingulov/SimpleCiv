@@ -18,7 +18,16 @@ int main()
         assert( temp == n );
     }
 
+    assert(getCell(n, 10, 10) == n);
+
     destroyMap(n, 10, 10);
+
+    // Creating non-square map.
+    n = createMap(7, 13);
+
+    assert(getCell(n, 7, 0) == n);
+
+    destroyMap(n, 7, 13);
 
     return 0;
 }

@@ -47,15 +47,15 @@ void mergeRows(Node * n1, Node * n2)
     } while (x1 != n1 || x2 != n2);
 }
 
-Node * createMap(int w, int h)
+Node * createMap(int max_r, int max_c)
 {
-    Node * head = createRow(w);
+    Node * head = createRow(max_c);
     Node * row = head;
 
-    for(int i = 0; i < h - 1; i++)
+    for(int i = 0; i < max_r - 1; i++)
     {
         // Creating new row.
-        Node * new_row = createRow(w);
+        Node * new_row = createRow(max_c);
         // Merging two rows.
         mergeRows(row, new_row);
         // Going on.
@@ -67,15 +67,15 @@ Node * createMap(int w, int h)
     return head;
 }
 
-void destroyMap(Node * map_head, int w, int h)
+void destroyMap(Node * map_head, int max_r, int max_c)
 {
     Node * current = map_head;
     Node * next_row = current;
 
-    for(int i = 0; i < h; i++)
+    for(int i = 0; i < max_r; i++)
     {
         next_row = getNeighbour(next_row, EDGE_CELL_BOTTOM);
-        for(int j = 0; j < w; j++)
+        for(int j = 0; j < max_c; j++)
         {
             // Getting next.
             Node * next = getNeighbour(current, EDGE_CELL_RIGHT);
@@ -89,4 +89,21 @@ void destroyMap(Node * map_head, int w, int h)
         // here, but it was moved because at final step we deleted all map and
         // have no cell to getNeighbour() => segmentation fault.
     }
+}
+
+Node * getCell(Node * map_head, int r, int c)
+{
+    Node * result = map_head;
+
+    for(int i = 0; i < r; i++)
+    {
+        result = getNeighbour(result, EDGE_CELL_BOTTOM);
+    }
+
+    for(int i = 0; i < c; i++)
+    {
+        result = getNeighbour(result, EDGE_CELL_RIGHT);
+    }
+
+    return result;
 }
