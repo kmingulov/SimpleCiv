@@ -25,7 +25,10 @@ int main()
     // Creating non-square map.
     n = createMap(7, 13);
 
+    assert(getCell(n, 0, 0) == n);
     assert(getCell(n, 7, 0) == n);
+    assert(getCell(n, 7, 13) == n);
+    assert(getCell(n, 0, 13) == n);
 
     destroyMap(n, 7, 13);
 

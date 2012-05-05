@@ -12,8 +12,8 @@
 #define XML_NONE                    0
 
 #define XML_MAP                     1
-#define XML_MAP_WIDTH               2
-#define XML_MAP_HEIGHT              3
+#define XML_MAP_ROWS                2
+#define XML_MAP_COLUMNS             3
 
 #define XML_PLAYERS                 4
 #define XML_PLAYERS_COUNT           5

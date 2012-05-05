@@ -16,11 +16,11 @@
     xml_states[] — array of XMLParserData's states.
     xml_parents[i] — state, which required for state xml_states[i].
 */
-const char xml_tags[][13] = {"map", "width", "height", "players", "count",
+const char xml_tags[][13] = {"map", "rows", "columns", "players", "count",
     "names", "unit", "id", "name", "health", "damage", "moves", "technology", 
     "id", "name", "provides", "units", "technologies", "requires", "resources"};
 
-const int xml_states[] = {XML_MAP, XML_MAP_WIDTH, XML_MAP_HEIGHT, XML_PLAYERS,
+const int xml_states[] = {XML_MAP, XML_MAP_ROWS, XML_MAP_COLUMNS, XML_PLAYERS,
     XML_PLAYERS_COUNT, XML_PLAYERS_NAMES, XML_UNIT, XML_UNIT_ID, XML_UNIT_NAME,
     XML_UNIT_HEALTH, XML_UNIT_DAMAGE, XML_UNIT_MOVES, XML_TECH, XML_TECH_ID,
     XML_TECH_NAME, XML_TECH_PROVIDES, XML_TECH_PROVIDES_UNITS,
@@ -79,12 +79,12 @@ void elementContent(void * data, const char * s, int len)
 
         switch(p_data -> state)
         {
-            case XML_MAP_WIDTH:
-                ((WorldProperties *) p_data -> data) -> map_w = atoi(temp);
+            case XML_MAP_ROWS:
+                ((WorldProperties *) p_data -> data) -> map_r = atoi(temp);
             break;
 
-            case XML_MAP_HEIGHT:
-                ((WorldProperties *) p_data -> data) -> map_h = atoi(temp);
+            case XML_MAP_COLUMNS:
+                ((WorldProperties *) p_data -> data) -> map_c = atoi(temp);
             break;
 
             case XML_PLAYERS_COUNT:

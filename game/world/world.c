@@ -88,9 +88,9 @@ World * createWorld()
     printf("Done\n");
 
     // Creating map.
-    printf("Creating map %dx%d… ", world -> properties -> map_w, world -> properties -> map_h);
-    world -> graph_map = createMap(world -> properties -> map_w, world -> properties -> map_h);
-    //generateMap(world -> map_head, properties -> map_w, properties -> map_h);
+    printf("Creating map %dx%d… ", world -> properties -> map_r, world -> properties -> map_c);
+    world -> graph_map = createMap(world -> properties -> map_r, world -> properties -> map_c);
+    //generateMap(world -> map_head, properties -> map_r, properties -> map_h);
     printf("Done\n");
 
 
@@ -123,7 +123,7 @@ void destroyWorld(World * world)
     DynArray * deleted = daCreate();
 
     // Destroy map.
-    destroyMap(world -> graph_map, world -> properties -> map_w, world -> properties -> map_h);
+    destroyMap(world -> graph_map, world -> properties -> map_r, world -> properties -> map_c);
 
     // Destroy properties.
     daDestroy(world -> properties -> player_names, NULL);
@@ -145,13 +145,13 @@ void destroyWorld(World * world)
 
 void saveWorld(World * world, WorldProperties * properties, FILE * map_file)
 {
-    fprintf(map_file, "<?xml version=\"1.0\" encoding=\"UTF-8\">\n<map>\n\t<width>%d</width>\n\t<height>%d</height>\n", properties -> map_w, properties -> map_h);
+    fprintf(map_file, "<?xml version=\"1.0\" encoding=\"UTF-8\">\n<map>\n\t<width>%d</width>\n\t<height>%d</height>\n", properties -> map_r, properties -> map_c);
 
     Node * current = world -> graph_map;
 
-    for(int i = 0; i < properties -> map_w; i++)
+    for(int i = 0; i < properties -> map_r; i++)
     {
-        for(int j = 0; j < properties -> map_h; j++)
+        for(int j = 0; j < properties -> map_c; j++)
         {
             fprintf(map_file, "\t<cell x=\"%d\" y=\"%d\" territory=\"%d\">\n", i, j, ( (Cell *) current -> data ) -> territory);
             current = getNeighbour(current, EDGE_CELL_RIGHT);

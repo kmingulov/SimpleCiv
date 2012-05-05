@@ -21,10 +21,12 @@
 */
 typedef struct WorldProperties
 {
-    // Map width and height.
-    int map_w, map_h;
+    // Count of rows and columns in map.
+    int map_r, map_c;
+
     // Players' count.
     int players_count;
+
     // And their names.
     DynArray * player_names;
 } WorldProperties;
