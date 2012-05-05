@@ -116,13 +116,9 @@ void destroyGraphNode(unsigned char type, void * data)
     switch(type)
     {
         case NODE_PLAYER:
-            iaDestroy( ((Player *) data) -> available_units );
-            iaDestroy( ((Player *) data) -> available_techs );
-            free( ((Player *) data) -> name );
+            destroyPlayer( ((Player *) data) );
         break;
     }
-
-    free(data);
 }
 
 void destroyWorld(World * world)

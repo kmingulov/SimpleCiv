@@ -63,7 +63,7 @@ Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char u
 
     // Adding owner info.
     unit -> owner = player;
-    // TODO add to player -> units
+    listPrepend(player -> units, unit);
 
     // Adding coordinates.
     unit -> r = r;

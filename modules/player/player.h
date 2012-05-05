@@ -1,6 +1,7 @@
 #ifndef PLAYERS
 #define PLAYERS
 
+#include "../list/list.h"
 #include "../graph/graph.h"
 #include "../int_array/int_array.h"
 
@@ -13,8 +14,8 @@ typedef struct Player
     Node * graph_map;
 
     // Array of player's units (type: Unit, not UnitCommonInfo!) and cities.
-    //List * units;
-    //List * cities;
+    List * units;
+    List * cities;
 
     // Arrays of available units and technologies.
     IntArray * available_units;
@@ -25,5 +26,10 @@ typedef struct Player
     Creates new player.
 */
 Player * createPlayer(char * name, IntArray * available_units, IntArray * available_techs);
+
+/*
+    Destroys player.
+*/
+void destroyPlayer(Player * player);
 
 #endif

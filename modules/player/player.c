@@ -10,9 +10,19 @@ Player * createPlayer(char * name, IntArray * available_units, IntArray * availa
     player -> available_units = available_units;
     player -> available_techs = available_techs;
 
-    // player -> graph_map = ?
-    // player -> cities = ?
-    // player -> units = ?
+    player -> graph_map = NULL;
+    player -> cities = listCreate();
+    player -> units = listCreate();
 
     return player;
+}
+
+void destroyPlayer(Player * player)
+{
+    listDestroy(player -> cities, &free);
+    listDestroy(player -> units, &free);
+    iaDestroy(player -> available_units);
+    iaDestroy(player -> available_techs);
+    free(player -> name);
+    free(player);
 }
