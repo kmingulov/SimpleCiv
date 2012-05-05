@@ -17,7 +17,10 @@ void listDestroy(List * list, void (* function)(void * data))
     for(int i = 0; i < list -> length; i++)
     {
         ListElement * next = current -> next;
-        function(current -> data);
+        if(function != NULL)
+        {
+            function(current -> data);
+        }
         free(current);
         current = next;
     }

@@ -67,6 +67,14 @@ Node * createMap(int max_r, int max_c)
     return head;
 }
 
+void destroyUnitsAndCities(Node * parent, Node * child, Edge * edge)
+{
+    if(edge -> type == EDGE_CELL_UNIT || edge -> type == EDGE_CELL_CITY)
+    {
+        destroyNode(child);
+    }
+}
+
 void destroyMap(Node * map_head, int max_r, int max_c)
 {
     Node * current = map_head;
@@ -77,6 +85,8 @@ void destroyMap(Node * map_head, int max_r, int max_c)
         next_row = getNeighbour(next_row, EDGE_CELL_BOTTOM);
         for(int j = 0; j < max_c; j++)
         {
+            // Destroing units and cities.
+            foreachNeighbour(current, &destroyUnitsAndCities);
             // Getting next.
             Node * next = getNeighbour(current, EDGE_CELL_RIGHT);
             // Removing this node and all it's edges.

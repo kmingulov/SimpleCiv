@@ -19,8 +19,8 @@ Player * createPlayer(char * name, IntArray * available_units, IntArray * availa
 
 void destroyPlayer(Player * player)
 {
-    listDestroy(player -> cities, &free);
-    listDestroy(player -> units, &free);
+    listDestroy(player -> cities, NULL);
+    listDestroy(player -> units, NULL);
     iaDestroy(player -> available_units);
     iaDestroy(player -> available_techs);
     free(player -> name);
