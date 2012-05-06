@@ -28,7 +28,7 @@ int main()
 
 
 
-    unsigned char key;
+    int key = 0;
     while(true)
     {
         key = getch();

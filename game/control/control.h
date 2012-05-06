@@ -30,6 +30,6 @@ void destroyControl(Control * control);
 /*
     Process control and returns a message for view.
 */
-Message * controlProcess(World * world, Control * control, char key);
+Message * controlProcess(World * world, Control * control, int key);
 
 #endif
