@@ -58,8 +58,8 @@ xml.o: modules/parser/xml.c
 player.o: modules/player/player.c
 	gcc $(CFLAGS) -lexpat modules/player/player.c
 	
-view.o: modules/view/view.c
-	gcc $(CFLAGS) modules/view/view.c
+view.o: game/view/view.c
+	gcc $(CFLAGS) game/view/view.c
 
 world.o: game/world/world.c
 	gcc $(CFLAGS) game/world/world.c

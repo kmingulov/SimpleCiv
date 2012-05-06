@@ -4,6 +4,7 @@
 # Backups.
 *~
 .backup/*
+*.gch
 
 # Executable files.
 project
