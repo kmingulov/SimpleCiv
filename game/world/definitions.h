@@ -50,10 +50,19 @@
 #define UNIT_AVAILABLE     1
 
 /*
+    Defines for cell's types.
+*/
+#define CELL_TYPE_WATER    1
+#define CELL_TYPE_GRASS    2
+#define CELL_TYPE_TREE     3
+#define CELL_TYPE_HILL     4
+#define CELL_TYPE_MOUNTAIN 5
+
+/*
     Defines for resources.
 */
-#define CELL_RES_COUNT 2
-#define CELL_RES_IRON  0
-#define CELL_RES_COAL  1
+#define CELL_RES_COUNT     2
+#define CELL_RES_IRON      0
+#define CELL_RES_COAL      1
 
 #endif

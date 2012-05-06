@@ -4,6 +4,63 @@
 #include <math.h>
 #include <time.h>
 
+void generateLandscape(Node * c, int k, char required, char fill)
+{
+    unsigned char directions[4] = {EDGE_CELL_RIGHT, EDGE_CELL_LEFT,
+        EDGE_CELL_BOTTOM, EDGE_CELL_TOP};
+    int tries = 4;
+    while(k >= 0 && tries >= 0)
+    {
+        tries--;
+        Node * neighbour = getNeighbour(c, directions[rand() % 4]);
+
+        if( ((Cell *) neighbour -> data) -> territory == required )
+        {
+            k--;
+            ( (Cell *) neighbour -> data) -> territory = fill;
+            generateLandscape(neighbour, k, required, fill);
+        }
+    }
+}
+
+void generateMap(Node * map, int max_r, int max_c)
+{
+    unsigned char territories[4] = {CELL_TYPE_WATER, CELL_TYPE_TREE,
+        CELL_TYPE_HILL, CELL_TYPE_MOUNTAIN};
+    unsigned char required[4] = {CELL_TYPE_GRASS, CELL_TYPE_GRASS,
+        CELL_TYPE_GRASS, CELL_TYPE_HILL};
+
+    srand(time(NULL));
+
+    Node * current = map;
+
+    // Filling up by default type of territory (grass).
+    for(int i = 0; i < max_r; i++)
+    {
+        for(int j = 0; j < max_c; j++)
+        {
+            ((Cell *) current -> data) -> territory = CELL_TYPE_GRASS;
+            current = getNeighbour(current, EDGE_CELL_RIGHT);
+        }
+        current = getNeighbour(current, EDGE_CELL_BOTTOM);
+    }
+
+    for(int i = 0; i < 4; i++)
+    {
+        int n = 7;
+        int k = pow(2, n);
+        for(int j = 0; j < n; j++)
+        {
+            Node * c = getCell(map, rand() % max_r, rand() % max_c);
+            generateLandscape(c, k, required[i], territories[i]);
+            k /= 2;
+        }
+    }
+}
+
+/*
+    Big chunk of code, where I tried to implement Perlin noise for cycled map.
+
 double noiseRand(double x, double y)
 {
     int n = (int) x + (int) y * 57;
@@ -24,7 +81,7 @@ double noise(double x, double y)
     double floorx = (double) ((int) x);
     double floory = (double) ((int) y);
     double s, t, u, v;
-    s = noiseRand(floorx,     floory); 
+    s = noiseRand(floorx,  floory); 
     t = noiseRand(floorx + 1, floory);
     u = noiseRand(floorx,     floory + 1);
     v = noiseRand(floorx + 1, floory + 1);
@@ -42,9 +99,9 @@ void generateLandscape(Node * map_head, int w, int h, double p)
 
     double max = -100, min = 100;
 
-    for(int i = h; i < 2*h; i++)
+    for(int i = 0; i < h; i++)
     {
-        for(int j = w; j < 2*w; j++)
+        for(int j = 0; j < w; j++)
         {
             // Calculating the noise.
             double cur_noise = 0;
@@ -65,49 +122,10 @@ void generateLandscape(Node * map_head, int w, int h, double p)
                 max = cur_noise;
             }
             // Update node.
-            printf("%lf ", cur_noise);
+            printf("%d ", (int) round(cur_noise));
         }
         printf("\n");
     }
 }
 
-
-/*void generateLandscape(Cell * c, int k, char required, char fill)
-{
-    while(k >= 0 && isWhereCell(c, required))
-    {
-        Cell * neighboor = getCellByNumber(c, rand() % 4);
-
-        if(neighboor -> territory == required)
-        {
-            k--;
-            neighboor -> territory = fill;
-            generateLandscape(neighboor, k, required, fill);
-        }
-    }
-}
-
-void generateMap(Cell * map, int w, int h)
-{
-    // Magic numbers. Found by logarithmical approximation k = f( sqrt(w * h) ).
-    // sqrt(w * h) is the characteristic size of map.
-
-    // TODO 24.04.12. I've played with coefs and make them acceptable for maps
-    // with sqrt(w * h) < 1000. Maybe it will be good to implement a Perlin 
-    // noise instead?
-    int k = round( (float) 102.4540490757f * log(sqrt(w * h)) - 409.3374246835f );
-    int dk = 2;
-    // 3kn = 0,8WH, 20% is water.
-    int n = round( (float) 0.8f * w * h / k / 3 );
-
-    // j is type of adding territory.
-    // i — one of points, from where we start generateLandscape().
-    for(int j = 1; j < 5; j++)
-    {
-        for(int i = 0; i < n; i++)
-        {
-            Cell * c = getCell(map, rand() % h, rand() % w);
-            generateLandscape(c, k - i * dk, j - 1, j);
-        }
-    }
-}*/
+*/

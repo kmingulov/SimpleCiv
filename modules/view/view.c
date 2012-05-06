@@ -38,11 +38,11 @@ View * createView()
 
     // Color pairs. 0 — default, 1-5 — territories' colors.
     init_pair(0, COLOR_WHITE, COLOR_BLACK);
-    init_pair(1, COLOR_BLUE,  COLOR_BLACK);
-    init_pair(2, COLOR_GREEN, COLOR_BLACK);
-    init_pair(3, COLOR_WHITE, COLOR_BLACK);
-    init_pair(4, COLOR_GREEN, COLOR_BLACK);
-    init_pair(5, COLOR_WHITE, COLOR_BLACK);
+    init_pair(CELL_TYPE_WATER, COLOR_BLUE,  COLOR_BLACK);
+    init_pair(CELL_TYPE_GRASS, COLOR_GREEN, COLOR_BLACK);
+    init_pair(CELL_TYPE_HILL, COLOR_WHITE, COLOR_BLACK);
+    init_pair(CELL_TYPE_TREE, COLOR_GREEN, COLOR_BLACK);
+    init_pair(CELL_TYPE_MOUNTAIN, COLOR_WHITE, COLOR_BLACK);
 
     view -> iface = createInterface();
 
@@ -220,16 +220,16 @@ void drawMap(Node * map, Interface * iface)
     {
         for(int j = start_column; j <= end_column; j++)
         {
-            int type = (int)current -> data;
+            unsigned char type = ((Cell *) current -> data) -> territory;
             move(i, j);
 
-            attron(COLOR_PAIR(type + 1));
-            if(type == 0) printw(".");
-            else if(type == 1) printw("_");
-            else if(type == 2) printw("-");
-            else if(type == 3) printw("T");
-            else if(type == 4) printw("^");
-            attroff(COLOR_PAIR(type + 1));
+            attron(COLOR_PAIR(type));
+            if(type == CELL_TYPE_WATER) printw(".");
+            else if(type == CELL_TYPE_GRASS) printw("_");
+            else if(type == CELL_TYPE_HILL) printw("-");
+            else if(type == CELL_TYPE_TREE) printw("T");
+            else if(type == CELL_TYPE_MOUNTAIN) printw("^");
+            attroff(COLOR_PAIR(type));
 
             current = getNeighbour(current, EDGE_CELL_RIGHT);
         }

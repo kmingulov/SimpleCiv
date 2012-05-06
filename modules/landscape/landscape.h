@@ -1,6 +1,7 @@
 #ifndef LANDSCAPE
 #define LANDSCAPE
 
+#include "../graph/graph.h"
 #include "../cell/cell.h"
 
 /*
@@ -10,15 +11,13 @@
         required — value, what we need to fill this cell.
         fill — value, with that we will fill this cell.
 */
-//void generateLandscape(Cell * c, int k, char required, char fill);
-
-void generateLandscape(Node * map_head, int w, int h, double p);
+void generateLandscape(Node * c, int k, char required, char fill);
 
 /*
     Function generate random landscape and put it in fourly circular list "map".
-    Ints w and h are map width and height respectively.
+    Ints max_r and max_c are count of rows and columns.
     Uses generateLandscape function.
 */
-//void generateMap(Cell * map, int w, int h);
+void generateMap(Node * map, int max_r, int max_c);
 
 #endif

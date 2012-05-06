@@ -6,6 +6,8 @@
 
 #include "../../modules/parser/xml.h"
 
+#include "../../modules/landscape/landscape.h"
+
 #include "../../modules/city/city.h"
 #include "../../modules/unit/unit.h"
 #include "../../modules/technology/technology.h"
@@ -79,7 +81,7 @@ World * createWorld()
     // Creating map.
     printf("Creating map %dx%d… ", world -> properties -> map_r, world -> properties -> map_c);
     world -> graph_map = createMap(world -> properties -> map_r, world -> properties -> map_c);
-    //generateMap(world -> map_head, properties -> map_r, properties -> map_h);
+    generateMap(world -> graph_map, world -> properties -> map_r, world -> properties -> map_c);
     printf("Done\n");
 
     // Creating players list.
