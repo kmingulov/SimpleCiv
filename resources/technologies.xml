@@ -2,11 +2,11 @@
 <technologies>
     <technology>
         <id>0</id>
-        <name>Handling wood</name>
+        <name>Wood working</name>
 
         <provides>
-            <units>2</units>
-            <technologies>2</technologies>
+            <units>0</units>
+            <technologies>2,6</technologies>
         </provides>
 
         <requires>
@@ -16,11 +16,11 @@
 
     <technology>
         <id>1</id>
-        <name>Farmer</name>
+        <name>Cultivation</name>
 
         <provides>
-            <units>0</units>
-            <technologies>4</technologies>
+            <units></units>
+            <technologies>5</technologies>
         </provides>
 
         <requires>
@@ -30,7 +30,7 @@
 
     <technology>
         <id>2</id>
-        <name>Stone weapons</name>
+        <name>Stone working</name>
 
         <provides>
             <units>1</units>
@@ -44,35 +44,35 @@
 
     <technology>
         <id>3</id>
-        <name>Handling iron</name>
+        <name>Bronze working</name>
 
         <provides>
-            <units>3</units>
-            <technologies>5</technologies>
+            <units>2</units>
+            <technologies>4</technologies>
         </provides>
 
         <requires>
-            <resources></resources>
+            <resources>0</resources>
         </requires>
     </technology>
 
     <technology>
         <id>4</id>
-        <name>Horses</name>
+        <name>Iron working</name>
 
         <provides>
-            <units></units>
-            <technologies>5</technologies>
+            <units>3</units>
+            <technologies>5,9</technologies>
         </provides>
 
         <requires>
-            <resources></resources>
+            <resources>1</resources>
         </requires>
     </technology>
 
     <technology>
         <id>5</id>
-        <name>Horseman</name>
+        <name>Animal domestication</name>
 
         <provides>
             <units>4</units>
@@ -80,7 +80,175 @@
         </provides>
 
         <requires>
+            <resources>4</resources>
+        </requires>
+    </technology>
+
+    <technology>
+        <id>6</id>
+        <name>The wheel</name>
+
+        <provides>
+            <units></units>
+            <technologies>7</technologies>
+        </provides>
+
+        <requires>
             <resources></resources>
+        </requires>
+    </technology>
+
+    <technology>
+        <id>7</id>
+        <name>Engineering</name>
+
+        <provides>
+            <units></units>
+            <technologies>8</technologies>
+        </provides>
+
+        <requires>
+            <resources></resources>
+        </requires>
+    </technology>
+
+    <technology>
+        <id>8</id>
+        <name>Steam engine</name>
+
+        <provides>
+            <units>10</units>
+            <technologies>17</technologies>
+        </provides>
+
+        <requires>
+            <resources></resources>
+        </requires>
+    </technology>
+
+    <technology>
+        <id>9</id>
+        <name>Gunpowder</name>
+
+        <provides>
+            <units>5</units>
+            <technologies>12,13</technologies>
+        </provides>
+
+        <requires>
+            <resources>3</resources>
+        </requires>
+    </technology>
+
+    <technology>
+        <id>10</id>
+        <name>Alphabet</name>
+
+        <provides>
+            <units></units>
+            <technologies>11,16</technologies>
+        </provides>
+
+        <requires>
+            <resources></resources>
+        </requires>
+    </technology>
+
+    <technology>
+        <id>11</id>
+        <name>Map</name>
+
+        <provides>
+            <units>6</units>
+            <technologies></technologies>
+        </provides>
+
+        <requires>
+            <resources></resources>
+        </requires>
+    </technology>
+
+    <technology>
+        <id>12</id>
+        <name>Metallurgy</name>
+
+        <provides>
+            <units>7</units>
+            <technologies></technologies>
+        </provides>
+
+        <requires>
+            <resources></resources>
+        </requires>
+    </technology>
+
+    <technology>
+        <id>13</id>
+        <name>Tactics</name>
+
+        <provides>
+            <units></units>
+            <technologies>14</technologies>
+        </provides>
+
+        <requires>
+            <resources></resources>
+        </requires>
+    </technology>
+
+    <technology>
+        <id>14</id>
+        <name>Mobile warfare</name>
+
+        <provides>
+            <units>9</units>
+            <technologies></technologies>
+        </provides>
+
+        <requires>
+            <resources></resources>
+        </requires>
+    </technology>
+
+    <technology>
+        <id>15</id>
+        <name>Leadership</name>
+
+        <provides>
+            <units>8</units>
+            <technologies>13</technologies>
+        </provides>
+
+        <requires>
+            <resources></resources>
+        </requires>
+    </technology>
+
+    <technology>
+        <id>16</id>
+        <name>Knowledge</name>
+
+        <provides>
+            <units></units>
+            <technologies>14</technologies>
+        </provides>
+
+        <requires>
+            <resources></resources>
+        </requires>
+    </technology>
+
+    <technology>
+        <id>17</id>
+        <name>Combustion</name>
+
+        <provides>
+            <units>11</units>
+            <technologies></technologies>
+        </provides>
+
+        <requires>
+            <resources>2</resources>
         </requires>
     </technology>
 </technologies>

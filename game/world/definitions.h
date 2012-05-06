@@ -61,8 +61,11 @@
 /*
     Defines for resources.
 */
-#define CELL_RES_COUNT     2
-#define CELL_RES_IRON      0
-#define CELL_RES_COAL      1
+#define CELL_RES_COUNT     5
+#define CELL_RES_BRONZE    0
+#define CELL_RES_IRON      1
+#define CELL_RES_COAL      2
+#define CELL_RES_GUNPOWDER 3
+#define CELL_RES_HORSES    4
 
 #endif

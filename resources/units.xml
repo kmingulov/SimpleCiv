@@ -2,22 +2,6 @@
 <units>
     <unit>
         <id>0</id>
-        <name>Worker</name>
-        <health>5</health>
-        <damage>0</damage>
-        <moves>3</moves>
-    </unit>
-
-    <unit>
-        <id>1</id>
-        <name>Warrior</name>
-        <health>10</health>
-        <damage>1</damage>
-        <moves>3</moves>
-    </unit>
-
-    <unit>
-        <id>2</id>
         <name>Archer</name>
         <health>7</health>
         <damage>1</damage>
@@ -25,10 +9,26 @@
     </unit>
 
     <unit>
-        <id>3</id>
-        <name>Swordsman</name>
+        <id>1</id>
+        <name>Primordial warrior</name>
+        <health>10</health>
+        <damage>1</damage>
+        <moves>3</moves>
+    </unit>
+
+    <unit>
+        <id>2</id>
+        <name>Bronze swordsman</name>
         <health>10</health>
         <damage>3</damage>
+        <moves>4</moves>
+    </unit>
+
+    <unit>
+        <id>3</id>
+        <name>Iron swordsman</name>
+        <health>10</health>
+        <damage>4</damage>
         <moves>4</moves>
     </unit>
 
@@ -37,6 +37,62 @@
         <name>Horseman</name>
         <health>15</health>
         <damage>3</damage>
+        <moves>7</moves>
+    </unit>
+
+    <unit>
+        <id>5</id>
+        <name>Gunner</name>
+        <health>20</health>
+        <damage>5</damage>
+        <moves>6</moves>
+    </unit>
+
+    <unit>
+        <id>6</id>
+        <name>Explorer</name>
+        <health>10</health>
+        <damage>1</damage>
+        <moves>7</moves>
+    </unit>
+
+    <unit>
+        <id>7</id>
+        <name>Cannon</name>
+        <health>15</health>
+        <damage>6</damage>
+        <moves>3</moves>
+    </unit>
+
+    <unit>
+        <id>8</id>
+        <name>Leader</name>
+        <health>10</health>
+        <damage>8</damage>
+        <moves>6</moves>
+    </unit>
+
+    <unit>
+        <id>9</id>
+        <name>Tank</name>
+        <health>20</health>
+        <damage>8</damage>
+        <moves>5</moves>
+    </unit>
+
+    <unit>
+        <id>10</id>
+        <name>Steamboat</name>
+        <health>10</health>
+        <damage>3</damage>
+        <moves>5</moves>
+    </unit>
+
+    <unit>
+        <id>11</id>
+        <name>Ship</name>
+        <health>15</health>
+        <damage>4</damage>
         <moves>7</moves>
     </unit>
 </units>
