@@ -135,6 +135,7 @@ void drawView(World * world, View * view)
 
 void drawMap(World * world, View * view)
 {
+
     int start_row = 1,    end_row = view -> rows - 2;
     int start_column = 1, end_column = view -> sidebar - 1;
 
@@ -148,7 +149,18 @@ void drawMap(World * world, View * view)
         for(int j = start_column; j <= end_column; j++)
         {
 
-            unsigned char type = ((Cell *) current -> data) -> territory;
+            unsigned char type;
+
+            type = ((Cell *) current -> data) -> territory;
+
+            if (getNeighbour(current, EDGE_CELL_CITY) != NULL)
+                type = EDGE_CELL_CITY+100;
+
+            if (getNeighbour(current, EDGE_CELL_UNIT) != NULL)
+                type = EDGE_CELL_UNIT+100;
+
+
+
             move(i, j);
             attron(COLOR_PAIR(type));
 
@@ -159,6 +171,8 @@ void drawMap(World * world, View * view)
                 case CELL_TYPE_HILL     : printw("-");  break;
                 case CELL_TYPE_TREE     : printw("T");  break;
                 case CELL_TYPE_MOUNTAIN : printw("^");  break;
+                case EDGE_CELL_UNIT+100     : printw("C");  break;
+                case EDGE_CELL_CITY+100     : printw("U");  break;
                 default                 : printw("unknown type of the territory");  break;
             }
 
