@@ -15,6 +15,6 @@ Message * createMessage(unsigned char type, void * data);
 /*
     Destroys message.
 */
-void destroyMessage(Message * mes);
+void destroyMessage(Message * message);
 
 #endif

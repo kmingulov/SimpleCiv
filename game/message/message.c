@@ -12,6 +12,9 @@ Message * createMessage(unsigned char type, void * data)
 
 void destroyMessage(Message * message)
 {
-    free(message -> data);
+    if(message -> data != NULL)
+    {
+        free(message -> data);
+    }
     free(message);
 }

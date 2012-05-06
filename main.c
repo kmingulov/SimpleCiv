@@ -3,6 +3,7 @@
 
 #include "game/world/world.h"
 #include "game/view/view.h"
+#include "game/control/control.h"
 
 #include "game/message/message.h"
 
@@ -21,10 +22,8 @@ int main()
 
 
 
-    drawView(view);
-    drawMap(world->graph_map, view);
-
-
+    drawView(world, view);
+    drawMap(world, view);
 
 
 
@@ -33,7 +32,7 @@ int main()
     {
         key = getch();
 
-        //~ // Good bye.
+        //~ Good bye.
         if(key == KEY_ESCAPE)
         {
             break;
@@ -49,7 +48,8 @@ int main()
         // test
         if(key == 9)  // TAB
         {
-            viewProcess(world, view, 0);
+            Message * mes = createMessage(VIEW_REDRAW_MAP, NULL);
+            viewProcess(world, view, mes);
         }
     }
 

@@ -1,26 +1,8 @@
 /*
     View module.
-    It's important to remember difference in sequence (and their orientation)
-    of axis between ncurses library and our map module.
-
-          y                 0--------> columns
-          ^                 |
-          |                 |
-          |                 |
-    ------0------> x        |
-          |                 |
-          |                 | rows
-
-      (our module)              (ncurses)
-
-    So, then we do something with coordinates, we need change their order and
-    change orientation of y axis.
 
     Ncurses has "memory leaks". Read more at:
     http://invisible-island.net/ncurses/ncurses.faq.html#config_leaks
-
-    TODO
-        Line 62: maybe rewrite it more compactly? Or not?
 */
 
 #ifndef MODULE_VIEW
@@ -30,8 +12,11 @@
 #define GAME_NAME "SimpleCiv"
 
 #include <ncurses.h>
+
+#include "definitions.h"
 #include "../../modules/cell/cell.h"
 #include "../world/world.h"
+#include "../message/message.h"
 
 /*
     Key definitions.
@@ -78,18 +63,16 @@ void putInRight(int start_r, int start_c, int length, char * string);
 /*
     Draws basic view. d is width of side bar.
 */
-void drawView(View * view);
-
+void drawView(World * world, View * view);
 
 /*
     Draws map.
 */
-void drawMap(Node * map, View * view);
-
+void drawMap(World * world, View * view);
 
 /*
     Event handling.
 */
-void viewProcess(World * world, View *view, int action);
+void viewProcess(World * world, View * view, Message * message);
 
 #endif

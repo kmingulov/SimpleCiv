@@ -5,11 +5,9 @@
 
 #include "view.h"
 
-#include "definitions.h"
-
 #include "../../modules/graph/graph.h"
+#include "../../modules/player/player.h"
 #include "../world/definitions.h"
-#include "../world/world.h"
 
 
 
@@ -35,16 +33,15 @@ View * createView()
 
     getmaxyx(stdscr, result->rows, result->columns);
 
-    result->sidebar = 0.85 * result->columns;
-    result->cur_r = result->rows / 2;
-    result->cur_c = result->sidebar / 2;
+    result -> sidebar = 0.85 * result -> columns;
+    result -> cur_r = result -> rows / 2;
+    result -> cur_c = result -> sidebar / 2;
 
     return result;
 }
 
 void destroyView(View * view)
 {
-
     endwin();
     free(view);
 }
@@ -79,7 +76,7 @@ void putInRight(int start_r, int start_c, int length, char * string)
     mvprintw(start_r, start_c + length - strlen(string), "%s", string);
 }
 
-void drawView(View * view)
+void drawView(World * world, View * view)
 {
     // Copying rows, columns and sidebar.
     int r = view -> rows;
@@ -136,16 +133,13 @@ void drawView(View * view)
 }
 
 
-void drawMap(Node * map, View * view)
+void drawMap(World * world, View * view)
 {
     int start_row = 1,    end_row = view -> rows - 2;
     int start_column = 1, end_column = view -> sidebar - 1;
-//~
-    //~ Cell * current = map;
-    //~ Cell * line = map;
-    //~
-    Node * current = map;
-    Node * line = map;
+
+    Node * current = ((Player *) world -> graph_players -> data) -> graph_map;
+    Node * line = current;
 
     attron(A_BOLD);
 
@@ -179,17 +173,15 @@ void drawMap(Node * map, View * view)
 }
 
 
-void viewProcess(World * world, View * view, int action)
+void viewProcess(World * world, View * view, Message * message)
 {
-    switch(action)
+    switch(message -> type)
     {
-        case (VIEW_REDRAW_MAP):
-        {
-            view = createView();
-            drawView(view);
-            drawMap(world->graph_map, view);
-        };
+        case VIEW_REDRAW_MAP:
+            drawMap(world, view);
+        break;
 
     }
-  //  destroyMessage(message);
+
+    destroyMessage(message);
 }
