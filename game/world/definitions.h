@@ -1,5 +1,5 @@
-#ifndef DEFINITIONS
-#define DEFINITIONS
+#ifndef WORLD_DEFINITIONS
+#define WORLD_DEFINITIONS
 
 /*
     Defines for nodes' types.

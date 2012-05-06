@@ -1,9 +1,9 @@
 #ifndef CONTROL
 #define CONTROL
 
-#include "../../player/player.h"
-#include "../../unit/unit.h"
-#include "../../city/city.h"
+#include "../../modules/player/player.h"
+#include "../../modules/unit/unit.h"
+#include "../../modules/city/city.h"
 
 typedef struct Control
 {

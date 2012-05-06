@@ -1,5 +1,5 @@
 # object files to compile
-OBJ = list.o dyn_array.o int_array.o graph.o cell.o landscape.o string_functions.o expat_handlers.o xml.o unit.o city.o player.o technology.o view.o world.o main.o
+OBJ = list.o dyn_array.o int_array.o graph.o cell.o landscape.o string_functions.o expat_handlers.o xml.o unit.o city.o player.o technology.o view.o world.o message.o control.o main.o
 
 # debug flag
 DEBUG = -g
@@ -63,7 +63,14 @@ view.o: game/view/view.c
 
 world.o: game/world/world.c
 	gcc $(CFLAGS) game/world/world.c
-
+	
+message.o: game/message/message.c
+	gcc $(CFLAGS) game/message/message.c
+	
+control.o: game/control/control.c
+	gcc $(CFLAGS) game/control/control.c
+	
+	
 main.o: main.c
 	gcc $(CFLAGS) main.c
 

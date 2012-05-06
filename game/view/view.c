@@ -5,10 +5,11 @@
 
 #include "view.h"
 
-
+#include "definitions.h"
 
 #include "../../modules/graph/graph.h"
 #include "../world/definitions.h"
+#include "../world/world.h"
 
 
 
@@ -153,18 +154,18 @@ void drawMap(Node * map, View * view)
         for(int j = start_column; j <= end_column; j++)
         {
 
-           unsigned char type = ((Cell *) current -> data) -> territory;
+            unsigned char type = ((Cell *) current -> data) -> territory;
             move(i, j);
             attron(COLOR_PAIR(type));
 
             switch ( type )
             {
-            case CELL_TYPE_WATER    : printw(".");  break;
-            case CELL_TYPE_GRASS    : printw("_");  break;
-            case CELL_TYPE_HILL     : printw("-");  break;
-            case CELL_TYPE_TREE   : printw("T");  break;
-            case CELL_TYPE_MOUNTAIN : printw("^");  break;
-            default: printw("unknown type of the territory");  break;
+                case CELL_TYPE_WATER    : printw(".");  break;
+                case CELL_TYPE_GRASS    : printw("_");  break;
+                case CELL_TYPE_HILL     : printw("-");  break;
+                case CELL_TYPE_TREE     : printw("T");  break;
+                case CELL_TYPE_MOUNTAIN : printw("^");  break;
+                default                 : printw("unknown type of the territory");  break;
             }
 
             attroff(COLOR_PAIR(type));
@@ -175,4 +176,20 @@ void drawMap(Node * map, View * view)
     }
 
     attroff(A_BOLD);
+}
+
+
+void viewProcess(World * world, View * view, int action)
+{
+    switch(action)
+    {
+        case (VIEW_REDRAW_MAP):
+        {
+            view = createView();
+            drawView(view);
+            drawMap(world->graph_map, view);
+        };
+
+    }
+  //  destroyMessage(message);
 }

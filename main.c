@@ -4,6 +4,8 @@
 #include "game/world/world.h"
 #include "game/view/view.h"
 
+#include "game/message/message.h"
+
 int main()
 {
     // Creating world and view and control.
@@ -24,12 +26,14 @@ int main()
 
 
 
-    int key = 0;
+
+
+    unsigned char key;
     while(true)
     {
         key = getch();
 
-        // Good bye.
+        //~ // Good bye.
         if(key == KEY_ESCAPE)
         {
             break;
@@ -37,9 +41,16 @@ int main()
 
         // Process control. Does something with world. Depends on key.
         // int action = controlProcess(world, control, key);
-        // Process view. Redraw some elements. Depends on action = control's 
+        // Process view. Redraw some elements. Depends on action = control's
         // decision what view need to redraw.
         // viewProcess(world, view, action);
+        //int action = controlProcess(world, control, key);
+
+        // test
+        if(key == 9)  // TAB
+        {
+            viewProcess(world, view, 0);
+        }
     }
 
 

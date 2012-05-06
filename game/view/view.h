@@ -23,14 +23,15 @@
         Line 62: maybe rewrite it more compactly? Or not?
 */
 
-#ifndef VIEW
-#define VIEW
+#ifndef MODULE_VIEW
+#define MODULE_VIEW
 
 // For name game
 #define GAME_NAME "SimpleCiv"
 
 #include <ncurses.h>
 #include "../../modules/cell/cell.h"
+#include "../world/world.h"
 
 /*
     Key definitions.
@@ -84,5 +85,11 @@ void drawView(View * view);
     Draws map.
 */
 void drawMap(Node * map, View * view);
+
+
+/*
+    Event handling.
+*/
+void viewProcess(World * world, View *view, int action);
 
 #endif
