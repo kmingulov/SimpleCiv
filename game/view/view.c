@@ -183,6 +183,7 @@ void drawMap(World * world, View * view)
         line = getNeighbour(line, EDGE_CELL_BOTTOM);
         current = line;
     }
+    move(view->cur_r,view->cur_c);
 
     attroff(A_BOLD);
 }
