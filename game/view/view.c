@@ -169,8 +169,6 @@ void drawMap(World * world, View * view)
                     case CELL_TYPE_HILL     : printw("-");  break;
                     case CELL_TYPE_TREE     : printw("T");  break;
                     case CELL_TYPE_MOUNTAIN : printw("^");  break;
-                    //~ case EDGE_CELL_CITY+100     : printw("C");  break;
-                    //~ case EDGE_CELL_UNIT+100     : printw("U");  break;
                     default                 : printw("unknown type of the territory");  break;
                 }
             }
