@@ -26,14 +26,7 @@
 #ifndef VIEW
 #define VIEW
 
-// For type map
-#define VIEW_COLOR_WATER    0
-#define VIEW_COLOR_GRASS    1
-#define VIEW_COLOR_HILL     2
-#define VIEW_COLOR_FOREST   3
-#define VIEW_COLOR_MOUNTAIN 4
-
-
+// For name game
 #define GAME_NAME "SimpleCiv"
 
 #include <ncurses.h>

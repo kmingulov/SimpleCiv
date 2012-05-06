@@ -159,11 +159,11 @@ void drawMap(Node * map, View * view)
 
             switch ( type )
             {
-            case VIEW_COLOR_WATER    : printw(".");  break;
-            case VIEW_COLOR_GRASS    : printw("_");  break;
-            case VIEW_COLOR_HILL     : printw("-");  break;
-            case VIEW_COLOR_FOREST   : printw("T");  break;
-            case VIEW_COLOR_MOUNTAIN : printw("^");  break;
+            case CELL_TYPE_WATER    : printw(".");  break;
+            case CELL_TYPE_GRASS    : printw("_");  break;
+            case CELL_TYPE_HILL     : printw("-");  break;
+            case CELL_TYPE_TREE   : printw("T");  break;
+            case CELL_TYPE_MOUNTAIN : printw("^");  break;
             default: printw("unknown type of the territory");  break;
             }
 
