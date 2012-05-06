@@ -45,6 +45,7 @@ void generateMap(Node * map, int max_r, int max_c)
         current = getNeighbour(current, EDGE_CELL_BOTTOM);
     }
 
+    // Generating landscape.
     for(int i = 0; i < 4; i++)
     {
         int n = 7;
@@ -55,6 +56,27 @@ void generateMap(Node * map, int max_r, int max_c)
             generateLandscape(c, k, required[i], territories[i]);
             k /= 2;
         }
+    }
+
+    // Generating resources.
+    unsigned char resources[CELL_RES_COUNT] = {CELL_RES_BRONZE, CELL_RES_IRON,
+        CELL_RES_COAL, CELL_RES_GUNPOWDER, CELL_RES_HORSES};
+    for(int i = 0; i < max_r; i++)
+    {
+        for(int j = 0; j < max_c; j++)
+        {
+            Cell * c = (Cell *) current -> data;
+            if(c -> territory != CELL_TYPE_WATER)
+            {
+                int random = rand() % 3;
+                if(random == 2)
+                {
+                    c -> resources = resources[rand() % CELL_RES_COUNT];
+                }
+            }
+            current = getNeighbour(current, EDGE_CELL_RIGHT);
+        }
+        current = getNeighbour(current, EDGE_CELL_BOTTOM);
     }
 }
 

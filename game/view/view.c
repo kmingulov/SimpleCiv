@@ -7,11 +7,13 @@
 
 #include "../../modules/graph/graph.h"
 #include "../../modules/player/player.h"
+#include "../../modules/city/city.h"
+#include "../../modules/unit/unit.h"
 #include "../world/definitions.h"
 
 
 
-View * createView()
+View * createView(World * world)
 {
     View * result = malloc(sizeof(View));
 
@@ -36,6 +38,9 @@ View * createView()
     result -> sidebar = 0.85 * result -> columns;
     result -> cur_r = result -> rows / 2;
     result -> cur_c = result -> sidebar / 2;
+    result -> map_r = result -> cur_r - 1;
+    result -> map_c = result -> cur_c - 1;
+    result -> current_cell = getCell(world -> graph_map, result -> map_r, result -> map_c);
 
     return result;
 }
@@ -124,7 +129,7 @@ void drawView(World * world, View * view)
 void drawInfo(World * world, View * view)
 {
     // Copying rows, columns and sidebar.
-    //int r = view -> rows;
+    int r = view -> rows;
     //int c = view -> columns;
     int s = view -> sidebar;
 
@@ -134,7 +139,45 @@ void drawInfo(World * world, View * view)
     mvprintw(SIDEBAR_PLAYER_BLOCK + 1, s + 1, "%s", player -> name);
     mvprintw(SIDEBAR_PLAYER_BLOCK + 2, s + 1, "%d gold", player -> gold);
 
-    // Cell info
+    // Cell info.
+    // Type of territory.
+    Cell * c = (Cell *) view -> current_cell -> data;
+    switch(c -> territory)
+    {
+        case CELL_TYPE_WATER:    mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Water    "); break;
+        case CELL_TYPE_GRASS:    mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Grass    "); break;
+        case CELL_TYPE_TREE:     mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Forest   "); break;
+        case CELL_TYPE_HILL:     mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Hill     "); break;
+        case CELL_TYPE_MOUNTAIN: mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Mountains"); break;
+    }
+    // Resources.
+    switch(c -> resources)
+    {
+        case CELL_RES_NONE:      mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "No resources"); break;
+        case CELL_RES_BRONZE:    mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "Bronze      "); break;
+        case CELL_RES_IRON:      mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "Iron        "); break;
+        case CELL_RES_COAL:      mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "Coal        "); break;
+        case CELL_RES_GUNPOWDER: mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "Gunpowder   "); break;
+        case CELL_RES_HORSES:    mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "Horses      "); break;
+    }
+    // City.
+    Node * city = getNeighbour(view -> current_cell, EDGE_CELL_CITY);
+    if(city != NULL)
+    {
+        City * c = (City *) city -> data;
+        mvprintw(SIDEBAR_CELL_BLOCK + 3, s + 1, "City:  ");
+        mvprintw(SIDEBAR_CELL_BLOCK + 4, s + 1, " %s", c -> name);
+        mvprintw(SIDEBAR_CELL_BLOCK + 5, s + 1, " %s", c -> owner -> name);
+    }
+    else
+    {
+        mvprintw(SIDEBAR_CELL_BLOCK + 3, s + 1, "No city");
+        mvprintw(SIDEBAR_CELL_BLOCK + 4, s + 1, "             ");
+        mvprintw(SIDEBAR_CELL_BLOCK + 5, s + 1, "             ");
+    }
+    // TODO Units.
+    // Other info.
+    mvprintw(r - 2, s + 1, "(%d,%d)    ", view -> map_r, view -> map_c);
 }
 
 void drawMap(World * world, View * view)
@@ -157,10 +200,14 @@ void drawMap(World * world, View * view)
 
             type = ((Cell *) current -> data) -> territory;
 
-            if (getNeighbour(current, EDGE_CELL_CITY))
+            if(getNeighbour(current, EDGE_CELL_CITY))
+            {
                 printw("C");
-            else if (getNeighbour(current, EDGE_CELL_UNIT))
+            }
+            else if(getNeighbour(current, EDGE_CELL_UNIT))
+            {
                 printw("U");
+            }
             else
             {
                 move(i, j);
@@ -173,7 +220,7 @@ void drawMap(World * world, View * view)
                     case CELL_TYPE_HILL     : printw("-");  break;
                     case CELL_TYPE_TREE     : printw("T");  break;
                     case CELL_TYPE_MOUNTAIN : printw("^");  break;
-                    default                 : printw("U");  break;
+                    default                 : printw("E");  break;
                 }
             }
 
@@ -202,6 +249,9 @@ void viewProcess(World * world, View * view, Message * message)
             break;
 
             case VIEW_MOVE_CURSOR_TOP:
+                view -> current_cell = getNeighbour(view -> current_cell, EDGE_CELL_TOP);
+                view -> map_r--; view -> map_r = view -> map_r < 0 ? view -> map_r + world -> properties -> map_r : view -> map_r;
+                drawInfo(world, view);
                 if(view -> cur_r > 5)
                 {
                     view -> cur_r--;
@@ -215,6 +265,9 @@ void viewProcess(World * world, View * view, Message * message)
             break;
 
             case VIEW_MOVE_CURSOR_BOTTOM:
+                view -> current_cell = getNeighbour(view -> current_cell, EDGE_CELL_BOTTOM);
+                view -> map_r = (view -> map_r + 1) % world -> properties -> map_r;
+                drawInfo(world, view);
                 if(view -> cur_r < view -> rows - 5)
                 {
                     view -> cur_r++;
@@ -228,6 +281,9 @@ void viewProcess(World * world, View * view, Message * message)
             break;
 
             case VIEW_MOVE_CURSOR_RIGHT:
+                view -> current_cell = getNeighbour(view -> current_cell, EDGE_CELL_RIGHT);
+                view -> map_c = (view -> map_c + 1) % world -> properties -> map_c;
+                drawInfo(world, view);
                 if(view -> cur_c < view -> sidebar - 5)
                 {
                     view -> cur_c++;
@@ -241,6 +297,9 @@ void viewProcess(World * world, View * view, Message * message)
             break;
 
             case VIEW_MOVE_CURSOR_LEFT:
+                view -> current_cell = getNeighbour(view -> current_cell, EDGE_CELL_LEFT);
+                view -> map_c--; view -> map_c = view -> map_c < 0 ? view -> map_c + world -> properties -> map_c : view -> map_c;
+                drawInfo(world, view);
                 if(view -> cur_c > 5)
                 {
                     view -> cur_c--;

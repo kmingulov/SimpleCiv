@@ -81,6 +81,9 @@ World * createWorld()
     // Creating map.
     printf("Creating map %dx%d… ", world -> properties -> map_r, world -> properties -> map_c);
     world -> graph_map = createMap(world -> properties -> map_r, world -> properties -> map_c);
+    printf("Done\n");
+
+    printf("Creating landscape… ");
     generateMap(world -> graph_map, world -> properties -> map_r, world -> properties -> map_c);
     printf("Done\n");
 
@@ -99,14 +102,11 @@ World * createWorld()
         City * city = NULL;
         // createCity() function returns NULL, if nothing created. Trying create
         // city!
-        int r = 0, c = 0;
         while(city == NULL)
         {
-            r = rand() % world -> properties -> map_r;
-            c = rand() % world -> properties -> map_c;
             city = createCity(world, city_name, rand() % world -> properties -> map_r, rand() % world -> properties -> map_c, player);
         }
-        player -> graph_map = getCell(world -> graph_map, r, c);
+        player -> graph_map = world -> graph_map;
         temp = addNode(temp, EDGE_NEXT_PLAYER, NODE_PLAYER, player);
         // Remembering head.
         if(world -> graph_players == NULL)

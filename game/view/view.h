@@ -43,7 +43,7 @@ typedef struct View
 /*
     Functions of initialization and deinitialization of View.
 */
-View * createView();
+View * createView(World * world);
 void destroyView(View * view);
 
 /*

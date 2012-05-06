@@ -11,7 +11,7 @@ int main()
 {
     // Creating world and view and control.
     World * world = createWorld();
-    View * view = createView();
+    View * view = createView(world);
     Control * control = createControl();
 
     if(world == NULL || view == NULL || control == NULL)
@@ -49,9 +49,9 @@ int main()
 
 
     // Destroing everything.
-    destroyWorld(world);
-    destroyView(view);
     destroyControl(control);
+    destroyView(view);
+    destroyWorld(world);
 
 
 
