@@ -33,7 +33,6 @@
     View struct, which contains general settings of view.
 */
 
-
 typedef struct View
 {
     // Number of rows and columns and distance between left edge of screen and
@@ -64,6 +63,11 @@ void putInRight(int start_r, int start_c, int length, char * string);
     Draws basic view. d is width of side bar.
 */
 void drawView(World * world, View * view);
+
+/*
+    Draws info.
+*/
+void drawInfo(World * world, View * view);
 
 /*
     Draws map.

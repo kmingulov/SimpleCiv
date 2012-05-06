@@ -23,6 +23,7 @@ int main()
 
 
     drawView(world, view);
+    drawInfo(world, view);
     drawMap(world, view);
 
 

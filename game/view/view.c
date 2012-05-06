@@ -92,9 +92,8 @@ void drawView(World * world, View * view)
         maddch(r - 1, i, ACS_HLINE);
         if(i > s && i < c - 1)
         {
-            maddch(PLAYER_START, i, ACS_HLINE);
-            maddch(INFO_START, i, ACS_HLINE);
-            maddch(r - 4, i, ACS_HLINE);
+            maddch(SIDEBAR_PLAYER_BLOCK, i, ACS_HLINE);
+            maddch(SIDEBAR_CELL_BLOCK, i, ACS_HLINE);
         }
     }
 
@@ -116,22 +115,27 @@ void drawView(World * world, View * view)
     // Project name.
     putInMiddle(1, s + 1, c - s - 2, GAME_NAME);
 
-    // Player info.
-    maddch(PLAYER_START, s, ACS_LTEE); maddch(PLAYER_START, c - 1, ACS_RTEE);
-    putInMiddle(PLAYER_START + 1, s + 1, c - s - 2, "Player");
-
-    // Territory info
-    maddch(INFO_START, s, ACS_LTEE); maddch(INFO_START, c - 1, ACS_RTEE);
-    putInMiddle(INFO_START + 1, s + 1, c - s - 2, "Information");
-
-    // Hints.
-    maddch(r - 4, s, ACS_LTEE); maddch(r - 4, c - 1, ACS_RTEE);
-    mvprintw(r - 3, s + 1, "ESC   Quit");
-    mvprintw(r - 2, s + 1, "ENTER End turn");
+    maddch(SIDEBAR_PLAYER_BLOCK, s, ACS_LTEE); maddch(SIDEBAR_PLAYER_BLOCK, c - 1, ACS_RTEE);
+    maddch(SIDEBAR_CELL_BLOCK, s, ACS_LTEE); maddch(SIDEBAR_CELL_BLOCK, c - 1, ACS_RTEE);
 
     attroff(COLOR_PAIR(0));
 }
 
+void drawInfo(World * world, View * view)
+{
+    // Copying rows, columns and sidebar.
+    int r = view -> rows;
+    int c = view -> columns;
+    int s = view -> sidebar;
+
+    Player * player = (Player *) world -> graph_players -> data;
+
+    // Player info.
+    mvprintw(SIDEBAR_PLAYER_BLOCK + 1, s + 1, "%s", player -> name);
+    mvprintw(SIDEBAR_PLAYER_BLOCK + 2, s + 1, "%d gold", player -> gold);
+
+    // Cell info
+}
 
 void drawMap(World * world, View * view)
 {

@@ -11,6 +11,12 @@ City * createCity(World * world, char * name, unsigned int r, unsigned int c, Pl
         return NULL;
     }
 
+    // Cell (r,c) is a water :O
+    if(((Cell *) getCell(world -> graph_map, r, c) -> data) -> territory == CELL_TYPE_WATER)
+    {
+        return NULL;
+    }
+
     // Allocate some memory.
     City * city = malloc(sizeof(City));
     Node * node = createGraph(NODE_CITY, city);

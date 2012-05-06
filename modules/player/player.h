@@ -10,6 +10,9 @@ typedef struct Player
     // Name of player, used only for gamer's convenience.
     char * name;
 
+    // Gold.
+    int gold;
+
     // Head of map, which player see.
     Node * graph_map;
 
