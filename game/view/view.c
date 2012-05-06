@@ -153,27 +153,26 @@ void drawMap(World * world, View * view)
 
             type = ((Cell *) current -> data) -> territory;
 
-            if (getNeighbour(current, EDGE_CELL_CITY) != NULL)
-                type = EDGE_CELL_CITY+100;
-
-            if (getNeighbour(current, EDGE_CELL_UNIT) != NULL)
-                type = EDGE_CELL_UNIT+100;
-
-
-
-            move(i, j);
-            attron(COLOR_PAIR(type));
-
-            switch ( type )
+            if (getNeighbour(current, EDGE_CELL_CITY))
+                printw("C");
+            else if (getNeighbour(current, EDGE_CELL_UNIT))
+                printw("U");
+            else
             {
-                case CELL_TYPE_WATER    : printw(".");  break;
-                case CELL_TYPE_GRASS    : printw("_");  break;
-                case CELL_TYPE_HILL     : printw("-");  break;
-                case CELL_TYPE_TREE     : printw("T");  break;
-                case CELL_TYPE_MOUNTAIN : printw("^");  break;
-                case EDGE_CELL_UNIT+100     : printw("C");  break;
-                case EDGE_CELL_CITY+100     : printw("U");  break;
-                default                 : printw("unknown type of the territory");  break;
+                move(i, j);
+                attron(COLOR_PAIR(type));
+
+                switch ( type )
+                {
+                    case CELL_TYPE_WATER    : printw(".");  break;
+                    case CELL_TYPE_GRASS    : printw("_");  break;
+                    case CELL_TYPE_HILL     : printw("-");  break;
+                    case CELL_TYPE_TREE     : printw("T");  break;
+                    case CELL_TYPE_MOUNTAIN : printw("^");  break;
+                    //~ case EDGE_CELL_CITY+100     : printw("C");  break;
+                    //~ case EDGE_CELL_UNIT+100     : printw("U");  break;
+                    default                 : printw("unknown type of the territory");  break;
+                }
             }
 
             attroff(COLOR_PAIR(type));
