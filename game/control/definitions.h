@@ -1,0 +1,6 @@
+#ifndef CONTROL_DEFINITIONS
+#define CONTROL_DEFINITIONS
+
+#define CONTROL_MOVE_CURSOR 0
+
+#endif

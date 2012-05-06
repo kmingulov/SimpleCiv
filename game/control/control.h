@@ -12,13 +12,20 @@ typedef struct Control
     // State of the control.
     unsigned char state;
 
-    // Current player.
-    Player * cur_player;
-
     // Current unit and city.
     City * cur_city;
     Unit * cur_unit;
 } Control;
+
+/*
+    Creates control.
+*/
+Control * createControl();
+
+/*
+    Destroys control.
+*/
+void destroyControl(Control * control);
 
 /*
     Process control and returns a message for view.

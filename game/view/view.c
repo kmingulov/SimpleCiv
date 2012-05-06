@@ -191,13 +191,16 @@ void drawMap(World * world, View * view)
 
 void viewProcess(World * world, View * view, Message * message)
 {
-    switch(message -> type)
+    if(message != NULL)
     {
-        case VIEW_REDRAW_MAP:
-            drawMap(world, view);
-        break;
+        switch(message -> type)
+        {
+            case VIEW_REDRAW_MAP:
+                drawMap(world, view);
+            break;
 
+        }
+
+        destroyMessage(message);
     }
-
-    destroyMessage(message);
 }
