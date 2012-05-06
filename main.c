@@ -6,7 +6,6 @@
 
 int main()
 {
-
     // Creating world and view and control.
     World * world = createWorld();
     View * view = createView();
@@ -30,20 +29,18 @@ int main()
     {
         key = getch();
 
+        // Good bye.
         if(key == KEY_ESCAPE)
         {
             break;
         }
 
-        if(key >= KEY_DOWN && key <= KEY_RIGHT)
-        {
-            /*
-            moveCursor();
-            drawCellInfo();
-            */
-        }
+        // Process control. Does something with world. Depends on key.
+        // int action = controlProcess(world, control, key);
+        // Process view. Redraw some elements. Depends on action = control's 
+        // decision what view need to redraw.
+        // viewProcess(world, view, action);
     }
-
 
 
 
@@ -51,6 +48,7 @@ int main()
     destroyWorld(world);
     destroyView(view);
     //destroyControl(control);
+
 
 
     return 0;
