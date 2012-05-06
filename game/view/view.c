@@ -31,7 +31,7 @@ View * createView()
     init_pair(CELL_TYPE_TREE, COLOR_GREEN, COLOR_BLACK);
     init_pair(CELL_TYPE_MOUNTAIN, COLOR_WHITE, COLOR_BLACK);
 
-    getmaxyx(stdscr, result->rows, result->columns);
+    getmaxyx(stdscr, result -> rows, result -> columns);
 
     result -> sidebar = 0.85 * result -> columns;
     result -> cur_r = result -> rows / 2;
@@ -124,8 +124,8 @@ void drawView(World * world, View * view)
 void drawInfo(World * world, View * view)
 {
     // Copying rows, columns and sidebar.
-    int r = view -> rows;
-    int c = view -> columns;
+    //int r = view -> rows;
+    //int c = view -> columns;
     int s = view -> sidebar;
 
     Player * player = (Player *) world -> graph_players -> data;
@@ -146,7 +146,7 @@ void drawMap(World * world, View * view)
     Node * current = ((Player *) world -> graph_players -> data) -> graph_map;
     Node * line = current;
 
-    //attron(A_BOLD);
+    attron(A_BOLD);
 
     for(int i = start_row; i <= end_row; i++)
     {
@@ -185,7 +185,7 @@ void drawMap(World * world, View * view)
     }
     move(view->cur_r,view->cur_c);
 
-    //attroff(A_BOLD);
+    attroff(A_BOLD);
 }
 
 

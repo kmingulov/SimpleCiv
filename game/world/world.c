@@ -106,7 +106,7 @@ World * createWorld()
             c = rand() % world -> properties -> map_c;
             city = createCity(world, city_name, rand() % world -> properties -> map_r, rand() % world -> properties -> map_c, player);
         }
-        player -> graph_map = getCell(world -> graph_map, r - 40, c - 40);
+        player -> graph_map = getCell(world -> graph_map, r, c);
         temp = addNode(temp, EDGE_NEXT_PLAYER, NODE_PLAYER, player);
         // Remembering head.
         if(world -> graph_players == NULL)

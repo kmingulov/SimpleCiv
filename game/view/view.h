@@ -24,12 +24,6 @@
 #define KEY_ESCAPE 27
 
 /*
-    Constants.
-*/
-#define PLAYER_START 2
-#define INFO_START 10
-
-/*
     View struct, which contains general settings of view.
 */
 
@@ -38,8 +32,12 @@ typedef struct View
     // Number of rows and columns and distance between left edge of screen and
     // sidebar (in columns).
     int rows, columns, sidebar;
-    // Cursor coordinates.
+    // Cursor coordinates (in the ncurses).
     int cur_r, cur_c;
+    // Cursor coordinates (in the world).
+    int map_r, map_c;
+    // Current cell.
+    Node * current_cell;
 } View;
 
 /*
