@@ -151,33 +151,56 @@ void drawInfo(World * world, View * view)
         case CELL_TYPE_MOUNTAIN: mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Mountains"); break;
     }
     // Resources.
+    attron(A_BOLD);
     switch(c -> resources)
     {
-        case CELL_RES_NONE:      mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "No resources"); break;
+        case CELL_RES_NONE:      mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "            "); break;
         case CELL_RES_BRONZE:    mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "Bronze      "); break;
         case CELL_RES_IRON:      mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "Iron        "); break;
         case CELL_RES_COAL:      mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "Coal        "); break;
         case CELL_RES_GUNPOWDER: mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "Gunpowder   "); break;
         case CELL_RES_HORSES:    mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "Horses      "); break;
     }
+    attroff(A_BOLD);
     // City.
     Node * city = getNeighbour(view -> current_cell, EDGE_CELL_CITY);
     if(city != NULL)
     {
         City * c = (City *) city -> data;
-        mvprintw(SIDEBAR_CELL_BLOCK + 3, s + 1, "City:  ");
+        attron(A_BOLD); mvprintw(SIDEBAR_CELL_BLOCK + 3, s + 1, "City:  "); attroff(A_BOLD);
         mvprintw(SIDEBAR_CELL_BLOCK + 4, s + 1, " %s", c -> name);
         mvprintw(SIDEBAR_CELL_BLOCK + 5, s + 1, " %s", c -> owner -> name);
         mvprintw(SIDEBAR_CELL_BLOCK + 6, s + 1, " %d people", c -> population);
     }
     else
     {
-        mvprintw(SIDEBAR_CELL_BLOCK + 3, s + 1, "No city");
+        mvprintw(SIDEBAR_CELL_BLOCK + 3, s + 1, "             ");
         mvprintw(SIDEBAR_CELL_BLOCK + 4, s + 1, "             ");
         mvprintw(SIDEBAR_CELL_BLOCK + 5, s + 1, "             ");
         mvprintw(SIDEBAR_CELL_BLOCK + 6, s + 1, "             ");
     }
-    // TODO Units.
+    // Units info.
+    Node * unit = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
+    if(unit != NULL)
+    {
+        Unit * u = (Unit *) unit -> data;
+        UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, u -> unit_id);
+        attron(A_BOLD); mvprintw(SIDEBAR_CELL_BLOCK + 7, s + 1, "Unit:  "); attroff(A_BOLD);
+        mvprintw(SIDEBAR_CELL_BLOCK + 8, s + 1, " %s", u_info -> name);
+        mvprintw(SIDEBAR_CELL_BLOCK + 9, s + 1, " %s", u -> owner -> name);
+        mvprintw(SIDEBAR_CELL_BLOCK + 10, s + 1, " %d/%d health", u -> health, u_info -> max_health);
+        mvprintw(SIDEBAR_CELL_BLOCK + 11, s + 1, " %d/%d moves", u -> moves, u_info -> max_moves);
+    }
+    else
+    {
+    {
+        mvprintw(SIDEBAR_CELL_BLOCK + 7, s + 1, "             ");
+        mvprintw(SIDEBAR_CELL_BLOCK + 8, s + 1, "             ");
+        mvprintw(SIDEBAR_CELL_BLOCK + 9, s + 1, "             ");
+        mvprintw(SIDEBAR_CELL_BLOCK + 10, s + 1, "             ");
+        mvprintw(SIDEBAR_CELL_BLOCK + 11, s + 1, "             ");
+    }
+    }
     // Other info.
     mvprintw(r - 2, s + 1, "(%d,%d)    ", view -> map_r, view -> map_c);
 }
