@@ -43,15 +43,19 @@ void developCity(void * data)
     City * city = (City *) data;
 
     // TODO Add resources dependence in formula.
-    double n = (double) city -> population;
+    float n = (float) city -> population;
 
     // Random number.
-    double r = (double) (rand() % 100 + 1) / 100;
+    float r = (float) (rand() % 100 + 1) / 100;
 
     // Increase population.
-    n += 20.0f * r / 3.14f / (1.0f + ((double) city -> age * city -> age) / 10000);
+    n += 40.0f * r / 3.14f / (1.0f + ((float) city -> age * city -> age) / 10000);
     city -> population = ceil(n);
 
     // Increase age.
     (city -> age)++;
+
+    // Increase owner's money.
+    Player * player = city -> owner;
+    player -> gold += ceil((float) 20.0f * exp(log((float) n / 100000.0f) / 7.0f) );
 }

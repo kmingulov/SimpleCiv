@@ -1,8 +1,18 @@
 #ifndef VIEW_DEFINITIONS
 #define VIEW_DEFINITIONS
 
+/*
+    Key definitions.
+*/
+#undef  KEY_ENTER
 
+#define KEY_ESCAPE              27
+#define KEY_ENTER               10
+#define KEY_SPACE               32
 
+/*
+    View process definitions.
+*/
 #define VIEW_REDRAW_ALL         0
 #define VIEW_REDRAW_MAP         1
 #define VIEW_REDRAW_CELL        2
@@ -12,9 +22,10 @@
 #define VIEW_MOVE_CURSOR_TOP    5
 #define VIEW_MOVE_CURSOR_BOTTOM 6
 
+/*
+    Interface definitions.
+*/
 #define SIDEBAR_PLAYER_BLOCK    2
 #define SIDEBAR_CELL_BLOCK      10
-
-
 
 #endif
