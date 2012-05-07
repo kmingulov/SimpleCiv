@@ -22,15 +22,15 @@ int main()
 
 
 
-    drawView(world, view);
-    drawInfo(world, view);
-    drawMap(world, view);
-
-
-
+    Message * message = createMessage(VIEW_REDRAW_ALL, NULL);
     int key = 0;
     while(true)
     {
+        // Process view. Redraw some elements. Depends on action = control's
+        // decision what view need to redraw.
+        viewProcess(world, view, message);
+
+        // Reading key.
         key = getch();
 
         // Good bye.
@@ -40,10 +40,7 @@ int main()
         }
 
         // Process control. Does something with world. Depends on key.
-        Message * message = controlProcess(world, control, key);
-        // Process view. Redraw some elements. Depends on action = control's
-        // decision what view need to redraw.
-        viewProcess(world, view, message);
+        message = controlProcess(world, view, control, key);
     }
 
 

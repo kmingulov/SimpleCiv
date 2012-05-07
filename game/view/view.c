@@ -250,6 +250,7 @@ void viewProcess(World * world, View * view, Message * message)
                 drawView(world, view);
                 drawInfo(world, view);
                 drawMap(world, view);
+                move(view -> cur_r, view -> cur_c);
             break;
 
             case VIEW_REDRAW_MAP:
@@ -259,55 +260,54 @@ void viewProcess(World * world, View * view, Message * message)
             case VIEW_MOVE_CURSOR_TOP:
                 view -> current_cell = getNeighbour(view -> current_cell, EDGE_CELL_TOP);
                 view -> map_r--; view -> map_r = view -> map_r < 0 ? view -> map_r + world -> properties -> map_r : view -> map_r;
-                drawInfo(world, view);
                 if(view -> cur_r > 5)
                 {
                     view -> cur_r--;
-                    move(view -> cur_r, view -> cur_c);
                 }
                 else
                 {
                     player -> graph_map = getNeighbour(player -> graph_map, EDGE_CELL_TOP);
                     drawMap(world, view);
                 }
+                drawInfo(world, view);
+                move(view -> cur_r, view -> cur_c);
             break;
 
             case VIEW_MOVE_CURSOR_BOTTOM:
                 view -> current_cell = getNeighbour(view -> current_cell, EDGE_CELL_BOTTOM);
                 view -> map_r = (view -> map_r + 1) % world -> properties -> map_r;
-                drawInfo(world, view);
                 if(view -> cur_r < view -> rows - 5)
                 {
                     view -> cur_r++;
-                    move(view -> cur_r, view -> cur_c);
                 }
                 else
                 {
                     player -> graph_map = getNeighbour(player -> graph_map, EDGE_CELL_BOTTOM);
                     drawMap(world, view);
                 }
+                drawInfo(world, view);
+                move(view -> cur_r, view -> cur_c);
             break;
 
             case VIEW_MOVE_CURSOR_RIGHT:
                 view -> current_cell = getNeighbour(view -> current_cell, EDGE_CELL_RIGHT);
                 view -> map_c = (view -> map_c + 1) % world -> properties -> map_c;
-                drawInfo(world, view);
                 if(view -> cur_c < view -> sidebar - 5)
                 {
                     view -> cur_c++;
-                    move(view -> cur_r, view -> cur_c);
                 }
                 else
                 {
                     player -> graph_map = getNeighbour(player -> graph_map, EDGE_CELL_RIGHT);
                     drawMap(world, view);
                 }
+                drawInfo(world, view);
+                move(view -> cur_r, view -> cur_c);
             break;
 
             case VIEW_MOVE_CURSOR_LEFT:
                 view -> current_cell = getNeighbour(view -> current_cell, EDGE_CELL_LEFT);
                 view -> map_c--; view -> map_c = view -> map_c < 0 ? view -> map_c + world -> properties -> map_c : view -> map_c;
-                drawInfo(world, view);
                 if(view -> cur_c > 5)
                 {
                     view -> cur_c--;
@@ -318,6 +318,8 @@ void viewProcess(World * world, View * view, Message * message)
                     player -> graph_map = getNeighbour(player -> graph_map, EDGE_CELL_LEFT);
                     drawMap(world, view);
                 }
+                drawInfo(world, view);
+                move(view -> cur_r, view -> cur_c);
             break;
         }
 
