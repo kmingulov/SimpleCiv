@@ -52,7 +52,7 @@ Message * controlProcess(World * world, Control * control, int key)
     }
 
     // Enter (end of the turn).
-    if(key == 10)
+    if(key == KEY_ENTER)
     {
         // Nulling all.
         control -> state = CONTROL_MOVE_CURSOR;
