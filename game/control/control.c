@@ -60,9 +60,9 @@ Message * controlProcess(World * world, Control * control, int key)
         int cnt0 = 0;
         while (cnt0<=cnt)
         {
-            deployUnit(listGetByN(player -> units, cnt),world -> units_info);
+            deployUnit(listGetByN(player -> units, cnt0),world -> units_info);
             player -> units = player -> units ;
-            cnt++;
+            cnt0++;
         }
 
 
