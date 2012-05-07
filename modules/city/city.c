@@ -38,8 +38,10 @@ City * createCity(World * world, char * name, unsigned int r, unsigned int c, Pl
     return city;
 }
 
-void developCity(City * city)
+void developCity(void * data)
 {
+    City * city = (City *) data;
+
     // TODO Add resources dependence in formula.
     double n = (double) city -> population;
 

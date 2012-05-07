@@ -29,6 +29,6 @@ City * createCity(World * world, char * name, unsigned int r, unsigned int c, Pl
 /*
     Developes the city.
 */
-void developCity(City * city);
+void developCity(void * data);
 
 #endif

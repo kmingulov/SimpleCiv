@@ -16,7 +16,7 @@ typedef struct Player
     // Head of map, which player see.
     Node * graph_map;
 
-    // Array of player's units (type: Unit, not UnitCommonInfo!) and cities.
+    // Lists of player's units (type: Unit, not UnitCommonInfo!) and cities.
     List * units;
     List * cities;
 
