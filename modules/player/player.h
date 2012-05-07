@@ -15,6 +15,11 @@ typedef struct Player
 
     // Head of map, which player see.
     Node * graph_map;
+    Node * current_cell;
+    // Cursor coordinates (in the ncurses).
+    int cur_r, cur_c;
+    // Cursor coordinates (in the world).
+    int map_r, map_c;
 
     // Lists of player's units (type: Unit, not UnitCommonInfo!) and cities.
     List * units;
