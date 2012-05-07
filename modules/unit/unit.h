@@ -62,4 +62,11 @@ Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char u
 */
 void unitsFight(DynArray * units_info, Unit * u1, Unit * u2);
 
+
+/*
+    Treats units at the end of a course
+*/
+
+void developUnit(void * data, DynArray * info);
+
 #endif

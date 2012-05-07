@@ -6,6 +6,7 @@
 #include "../../game/world/definitions.h"
 #include "../graph/graph.h"
 #include "../technology/technology.h"
+#include "../dyn_array/dyn_array.h"
 #include "unit.h"
 
 UnitCommonInfo * createUnitCommonInfo()
@@ -98,3 +99,20 @@ void unitsFight(DynArray * units_info, Unit * unit1, Unit * unit2)
     unit1 -> health -= ceil(damage2);
     unit2 -> health -= ceil(damage1);
 }
+
+void developUnit(void * data, DynArray * info)
+{
+    ListElement * list = (ListElement * ) data;
+    Unit * unit = list->data;
+
+    UnitCommonInfo * unit_info = (UnitCommonInfo *) daGetByIndex(info, unit -> unit_id);
+
+    if (
+        unit -> moves == unit_info -> max_moves &&
+        unit -> health +1 <= unit_info -> max_health
+    )
+        unit -> health = unit -> health +1;
+
+    unit -> moves = unit_info-> max_moves;
+}
+

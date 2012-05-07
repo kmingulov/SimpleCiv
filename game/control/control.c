@@ -3,6 +3,7 @@
 
 #include "../../modules/list/list.h"
 #include "../../modules/city/city.h"
+#include "../../modules/unit/unit.h"
 #include "../view/definitions.h"
 #include "control.h"
 #include "definitions.h"
@@ -29,21 +30,12 @@ Message * controlProcess(World * world, Control * control, int key)
         // Move cursor state.
         if(control -> state == CONTROL_MOVE_CURSOR)
         {
-            if(key == KEY_UP)
+            switch (key)
             {
-                return createMessage(VIEW_MOVE_CURSOR_TOP,    NULL);
-            }
-            else if(key == KEY_DOWN)
-            {
-                return createMessage(VIEW_MOVE_CURSOR_BOTTOM, NULL);
-            }
-            else if(key == KEY_RIGHT)
-            {
-                return createMessage(VIEW_MOVE_CURSOR_RIGHT,  NULL);
-            }
-            else if(key == KEY_LEFT)
-            {
-                return createMessage(VIEW_MOVE_CURSOR_LEFT,   NULL);
+                case KEY_UP   : return createMessage(VIEW_MOVE_CURSOR_TOP,    NULL); break;
+                case KEY_DOWN : return createMessage(VIEW_MOVE_CURSOR_BOTTOM, NULL); break;
+                case KEY_RIGHT: return createMessage(VIEW_MOVE_CURSOR_RIGHT,  NULL); break;
+                case KEY_LEFT : return createMessage(VIEW_MOVE_CURSOR_LEFT,   NULL); break;
             }
         }
 
@@ -62,6 +54,18 @@ Message * controlProcess(World * world, Control * control, int key)
         Player * player = (Player *) world -> graph_players -> data;
         listForEach(player -> cities, &developCity);
         //listForEach(player -> units, &developUnit);
+
+
+        int cnt = player -> units -> length;
+        int cnt0 = 0;
+        while (cnt0<=cnt)
+        {
+            deployUnit(listGetByN(player -> units, cnt),world -> units_info);
+            player -> units = player -> units ;
+            cnt++;
+        }
+
+
         // Next player.
         world -> graph_players = getNeighbour(world -> graph_players, EDGE_NEXT_PLAYER);
         // Send redrawing message.
