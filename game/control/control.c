@@ -89,5 +89,7 @@ Message * controlProcess(World * world, View * view, Control * control, int key)
         return createMessage(VIEW_REDRAW_ALL, NULL);
     }
 
+    if (KEY_SPACE)
+
     return NULL;
 }
