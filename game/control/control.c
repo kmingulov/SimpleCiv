@@ -65,9 +65,10 @@ Message * controlProcess(World * world, View * view, Control * control, int key)
 
         int cnt = player -> units -> length;
         int cnt0 = 0;
-        while (cnt0<=cnt)
+        while (cnt0<cnt)
         {
-            deployUnit(listGetByN(player -> units, cnt0),world -> units_info);
+            ListElement *le = listGetByN(player -> units, cnt0);
+            developUnit(le->data,world -> units_info);
             player -> units = player -> units ;
             cnt0++;
         }

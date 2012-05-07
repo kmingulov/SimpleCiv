@@ -102,8 +102,8 @@ void unitsFight(DynArray * units_info, Unit * unit1, Unit * unit2)
 
 void developUnit(void * data, DynArray * info)
 {
-    ListElement * list = (ListElement * ) data;
-    Unit * unit = list->data;
+
+    Unit * unit = (Unit * )data;
 
     UnitCommonInfo * unit_info = (UnitCommonInfo *) daGetByIndex(info, unit -> unit_id);
 
