@@ -19,8 +19,9 @@ typedef struct WorldProperties
     // Players' count.
     int players_count;
 
-    // And their names.
+    // And their names and city's names.
     DynArray * player_names;
+    DynArray * player_cities;
 } WorldProperties;
 
 /*

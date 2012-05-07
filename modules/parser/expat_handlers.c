@@ -17,18 +17,21 @@
     xml_parents[i] — state, which required for state xml_states[i].
 */
 const char xml_tags[][13] = {"map", "rows", "columns", "players", "count",
-    "names", "unit", "id", "name", "health", "damage", "moves", "technology", 
-    "id", "name", "provides", "units", "technologies", "requires", "resources"};
+    "names", "cities", "unit", "id", "name", "health", "damage", "moves",
+    "technology", "id", "name", "provides", "units", "technologies", "requires",
+    "resources"};
 
 const int xml_states[] = {XML_MAP, XML_MAP_ROWS, XML_MAP_COLUMNS, XML_PLAYERS,
-    XML_PLAYERS_COUNT, XML_PLAYERS_NAMES, XML_UNIT, XML_UNIT_ID, XML_UNIT_NAME,
-    XML_UNIT_HEALTH, XML_UNIT_DAMAGE, XML_UNIT_MOVES, XML_TECH, XML_TECH_ID,
-    XML_TECH_NAME, XML_TECH_PROVIDES, XML_TECH_PROVIDES_UNITS,
-    XML_TECH_PROVIDES_TECHS, XML_TECH_REQUIRES, XML_TECH_REQUIRES_RESOURCES};
+    XML_PLAYERS_COUNT, XML_PLAYERS_NAMES, XML_PLAYERS_CITIES, XML_UNIT,
+    XML_UNIT_ID, XML_UNIT_NAME, XML_UNIT_HEALTH, XML_UNIT_DAMAGE,
+    XML_UNIT_MOVES, XML_TECH, XML_TECH_ID, XML_TECH_NAME, XML_TECH_PROVIDES,
+    XML_TECH_PROVIDES_UNITS, XML_TECH_PROVIDES_TECHS, XML_TECH_REQUIRES,
+    XML_TECH_REQUIRES_RESOURCES};
 
-const int xml_parents[] = {0, XML_MAP, XML_MAP, 0, XML_PLAYERS, XML_PLAYERS, 0, 
-    XML_UNIT, XML_UNIT, XML_UNIT, XML_UNIT, XML_UNIT, 0, XML_TECH, XML_TECH,
-    XML_TECH, XML_TECH_PROVIDES, XML_TECH_PROVIDES, XML_TECH, XML_TECH_REQUIRES};
+const int xml_parents[] = {0, XML_MAP, XML_MAP, 0, XML_PLAYERS, XML_PLAYERS,
+    XML_PLAYERS, 0, XML_UNIT, XML_UNIT, XML_UNIT, XML_UNIT, XML_UNIT, 0,
+    XML_TECH, XML_TECH, XML_TECH, XML_TECH_PROVIDES, XML_TECH_PROVIDES,
+    XML_TECH, XML_TECH_REQUIRES};
 
 void elementStart(void * data, const char * name, const char ** attr)
 {
@@ -92,7 +95,11 @@ void elementContent(void * data, const char * s, int len)
             break;
 
             case XML_PLAYERS_NAMES:
-                ((WorldProperties *) p_data -> data) -> player_names = strSplit(' ', temp, 16);
+                ((WorldProperties *) p_data -> data) -> player_names = strSplit(',', temp, 16);
+            break;
+
+            case XML_PLAYERS_CITIES:
+                ((WorldProperties *) p_data -> data) -> player_cities = strSplit(',', temp, 16);
             break;
 
             case XML_UNIT_ID:

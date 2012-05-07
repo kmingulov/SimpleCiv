@@ -95,13 +95,12 @@ World * createWorld()
     {
         // Creating new player.
         char * name = (char *) daGetByIndex(world -> properties -> player_names, i);
+        char * city_name = (char *) daGetByIndex(world -> properties -> player_cities, i);
         Player * player = createPlayer(name, iaCopy(units_status), iaCopy(techs_status));
         // Creating default city.
-        char * city_name = malloc(sizeof(char) * 13);
-        strcpy(city_name, "Default City");
-        City * city = NULL;
         // createCity() function returns NULL, if nothing created. Trying create
         // city!
+        City * city = NULL;
         while(city == NULL)
         {
             city = createCity(world, city_name, rand() % world -> properties -> map_r, rand() % world -> properties -> map_c, player);
@@ -148,6 +147,7 @@ void destroyWorld(World * world)
 
     // Destroy properties.
     daDestroy(world -> properties -> player_names, NULL);
+    daDestroy(world -> properties -> player_cities, NULL);
     free(world -> properties);
 
     // Destroy array of UnitCommonInfos.
