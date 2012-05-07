@@ -60,20 +60,12 @@ Message * controlProcess(World * world, View * view, Control * control, int key)
         control -> cur_city = NULL;
         // Processing player's units and cities.
         listForEach(player -> cities, &developCity);
-        //listForEach(player -> units, &developUnit);
-
-
-        int cnt = player -> units -> length;
-        int cnt0 = 0;
-        while (cnt0<cnt)
+        ListElement * le = player -> units -> head;
+        for(int i = 0; i < player -> units -> length; i++)
         {
-            ListElement *le = listGetByN(player -> units, cnt0);
-            developUnit(le->data,world -> units_info);
-            player -> units = player -> units ;
-            cnt0++;
+            developUnit(le -> data, world -> units_info);
+            le = le -> next;
         }
-
-
         // Next player.
         world -> graph_players = getNeighbour(world -> graph_players, EDGE_NEXT_PLAYER);
         player = (Player *) world -> graph_players -> data;

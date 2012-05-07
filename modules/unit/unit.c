@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include <ncurses.h>
 #include <stdio.h>
 
 #include "../../game/world/definitions.h"
@@ -102,12 +103,12 @@ void unitsFight(DynArray * units_info, Unit * unit1, Unit * unit2)
 
 void developUnit(void * data, DynArray * info)
 {
-
-    Unit * unit = (Unit * )data;
+    Unit * unit = (Unit *) data;
 
     UnitCommonInfo * unit_info = (UnitCommonInfo *) daGetByIndex(info, unit -> unit_id);
 
-    if (
+    if
+    (
         unit -> moves == unit_info -> max_moves &&
         unit -> health +1 <= unit_info -> max_health
     )
