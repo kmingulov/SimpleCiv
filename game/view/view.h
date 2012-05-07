@@ -19,11 +19,6 @@
 #include "../message/message.h"
 
 /*
-    Key definitions.
-*/
-#define KEY_ESCAPE 27
-
-/*
     View struct, which contains general settings of view.
 */
 

@@ -168,12 +168,14 @@ void drawInfo(World * world, View * view)
         mvprintw(SIDEBAR_CELL_BLOCK + 3, s + 1, "City:  ");
         mvprintw(SIDEBAR_CELL_BLOCK + 4, s + 1, " %s", c -> name);
         mvprintw(SIDEBAR_CELL_BLOCK + 5, s + 1, " %s", c -> owner -> name);
+        mvprintw(SIDEBAR_CELL_BLOCK + 6, s + 1, " %d people", c -> population);
     }
     else
     {
         mvprintw(SIDEBAR_CELL_BLOCK + 3, s + 1, "No city");
         mvprintw(SIDEBAR_CELL_BLOCK + 4, s + 1, "             ");
         mvprintw(SIDEBAR_CELL_BLOCK + 5, s + 1, "             ");
+        mvprintw(SIDEBAR_CELL_BLOCK + 6, s + 1, "             ");
     }
     // TODO Units.
     // Other info.
@@ -202,7 +204,7 @@ void drawMap(World * world, View * view)
 
             if(getNeighbour(current, EDGE_CELL_CITY))
             {
-                printw("C");
+                printw("M");
             }
             else if(getNeighbour(current, EDGE_CELL_UNIT))
             {
@@ -244,6 +246,12 @@ void viewProcess(World * world, View * view, Message * message)
     {
         switch(message -> type)
         {
+            case VIEW_REDRAW_ALL:
+                drawView(world, view);
+                drawInfo(world, view);
+                drawMap(world, view);
+            break;
+
             case VIEW_REDRAW_MAP:
                 drawMap(world, view);
             break;

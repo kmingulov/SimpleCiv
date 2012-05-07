@@ -48,7 +48,7 @@ Message * controlProcess(World * world, Control * control, int key)
         }
 
         // TODO Move unit state.
-        // TODO Choose technology state (onle up/down arrow keys).
+        // TODO Choose technology state (only up/down arrow keys).
     }
 
     // Enter (end of the turn).
@@ -61,9 +61,10 @@ Message * controlProcess(World * world, Control * control, int key)
         // Processing player's units and cities.
         Player * player = (Player *) world -> graph_players -> data;
         listForEach(player -> cities, &developCity);
+        //listForEach(player -> units, &developUnit);
         // Next player.
         world -> graph_players = getNeighbour(world -> graph_players, EDGE_NEXT_PLAYER);
-        // Send redrawing map message.
+        // Send redrawing message.
         return createMessage(VIEW_REDRAW_ALL, NULL);
     }
 
