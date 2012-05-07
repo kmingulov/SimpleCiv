@@ -75,3 +75,15 @@ void * listGetByN(List * list, int n)
 
     return result -> data;
 }
+
+void listForEach(List * list, void (* function)(void * data))
+{
+    ListElement * current = list -> head;
+
+    for(int i = 0; i < list -> length; i++)
+    {
+        ListElement * next = current -> next;
+        function(current -> data);
+        current = next;
+    }
+}

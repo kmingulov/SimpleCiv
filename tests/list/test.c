@@ -4,6 +4,11 @@
 
 #include "../../modules/list/list.h"
 
+void foreach(void * data)
+{
+    printf("%d\n", * ((int *) data));
+}
+
 int main()
 {
     List * l = listCreate();
@@ -16,6 +21,8 @@ int main()
         * d = i;
         listPrepend(l, d);
     }
+
+    listForEach(l, &foreach);
 
     ListElement * head = l -> head;
 

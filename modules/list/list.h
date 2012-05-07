@@ -39,4 +39,9 @@ void listPrepend(List * list, void * data);
 */
 void * listGetByN(List * list, int n);
 
+/*
+    Executes function for each list element.
+*/
+void listForEach(List * list, void (* function)(void * data));
+
 #endif
