@@ -119,20 +119,15 @@ void developUnit(void * data, DynArray * info)
 
 void moveUnit(Node * current_cell, int dir)
 {
-    int id;
     Edge * edge;
     for(int i = 0; i < current_cell -> edges -> length; i++)
     {
         edge = current_cell -> edges -> data[i];
         if(edge -> type == EDGE_CELL_UNIT)
         {
-            id = i;
             break;
         }
     }
     daRemoveByPointer(current_cell -> edges, edge, NULL);
     daPrepend(getNeighbour(current_cell, EDGE_CELL_TOP) -> edges, edge);
-    free(edge);
 }
-
-

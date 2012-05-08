@@ -117,7 +117,10 @@ int daRemoveByPointer(DynArray * array, void * data, void (* deleteFunc)(void * 
     }
 
     // Deleting data.
-    deleteFunc(array -> data[index]);
+    if(deleteFunc != NULL)
+    {
+        deleteFunc(array -> data[index]);
+    }
 
     // Moving all elements.
     for(int i = index; i < array -> length - 1; i++)
