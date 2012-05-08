@@ -5,6 +5,7 @@
 #include "../../modules/city/city.h"
 #include "../../modules/unit/unit.h"
 #include "../view/definitions.h"
+#include "../world/definitions.h"
 #include "../view/view.h"
 #include "control.h"
 #include "definitions.h"
@@ -81,7 +82,18 @@ Message * controlProcess(World * world, View * view, Control * control, int key)
         return createMessage(VIEW_REDRAW_ALL, NULL);
     }
 
-    if (KEY_SPACE)
+    if (key == KEY_SPACE)
+    {
+        if (getNeighbour(view -> current_cell, EDGE_CELL_UNIT) != NULL )
+        {
+            if (control -> state == CONTROL_MOVE_UNIT)
+                control -> state = CONTROL_MOVE_CURSOR;
+            else
+                control -> state = CONTROL_MOVE_UNIT;
+        }
+
+
+    }
 
     return NULL;
 }

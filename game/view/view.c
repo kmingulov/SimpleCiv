@@ -214,8 +214,6 @@ void drawMap(World * world, View * view)
     Node * current = ((Player *) world -> graph_players -> data) -> graph_map;
     Node * line = current;
 
-    attron(A_BOLD);
-
     for(int i = start_row; i <= end_row; i++)
     {
         for(int j = start_column; j <= end_column; j++)
@@ -247,9 +245,10 @@ void drawMap(World * world, View * view)
                     case CELL_TYPE_MOUNTAIN : printw("^");  break;
                     default                 : printw("E");  break;
                 }
+                attroff(COLOR_PAIR(type));
             }
 
-            attroff(COLOR_PAIR(type));
+
             current = getNeighbour(current, EDGE_CELL_RIGHT);
         }
         line = getNeighbour(line, EDGE_CELL_BOTTOM);
@@ -257,7 +256,6 @@ void drawMap(World * world, View * view)
     }
     move(view->cur_r,view->cur_c);
 
-    attroff(A_BOLD);
 }
 
 

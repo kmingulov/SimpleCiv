@@ -14,14 +14,14 @@ City * createCity(World * world, char * name, unsigned int r, unsigned int c, Pl
     // Cell (r+-1,c+-1) is a water :O
     // hindi code :)
     if(
-        ((Cell *) getCell(world -> graph_map, r, c  ) -> data) -> territory == CELL_TYPE_WATER &&
-        ((Cell *) getCell(world -> graph_map, r+1, c) -> data) -> territory == CELL_TYPE_WATER &&
-        ((Cell *) getCell(world -> graph_map, r-1, c) -> data) -> territory == CELL_TYPE_WATER &&
-        ((Cell *) getCell(world -> graph_map, r, c-1) -> data) -> territory == CELL_TYPE_WATER &&
-        ((Cell *) getCell(world -> graph_map, r, c+1) -> data) -> territory == CELL_TYPE_WATER &&
-        ((Cell *) getCell(world -> graph_map, r+2, c) -> data) -> territory == CELL_TYPE_WATER &&
-        ((Cell *) getCell(world -> graph_map, r-2, c) -> data) -> territory == CELL_TYPE_WATER &&
-        ((Cell *) getCell(world -> graph_map, r, c-2) -> data) -> territory == CELL_TYPE_WATER &&
+        ((Cell *) getCell(world -> graph_map, r, c  ) -> data) -> territory == CELL_TYPE_WATER ||
+        ((Cell *) getCell(world -> graph_map, r+1, c) -> data) -> territory == CELL_TYPE_WATER ||
+        ((Cell *) getCell(world -> graph_map, r-1, c) -> data) -> territory == CELL_TYPE_WATER ||
+        ((Cell *) getCell(world -> graph_map, r, c-1) -> data) -> territory == CELL_TYPE_WATER ||
+        ((Cell *) getCell(world -> graph_map, r, c+1) -> data) -> territory == CELL_TYPE_WATER ||
+        ((Cell *) getCell(world -> graph_map, r+2, c) -> data) -> territory == CELL_TYPE_WATER ||
+        ((Cell *) getCell(world -> graph_map, r-2, c) -> data) -> territory == CELL_TYPE_WATER ||
+        ((Cell *) getCell(world -> graph_map, r, c-2) -> data) -> territory == CELL_TYPE_WATER ||
         ((Cell *) getCell(world -> graph_map, r, c+2) -> data) -> territory == CELL_TYPE_WATER
 
     )
