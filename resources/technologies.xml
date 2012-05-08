@@ -103,7 +103,7 @@
         <name>Engineering</name>
 
         <provides>
-            <units></units>
+            <units>11</units>
             <technologies>8</technologies>
         </provides>
 
@@ -118,7 +118,7 @@
 
         <provides>
             <units>10</units>
-            <technologies>17</technologies>
+            <technologies></technologies>
         </provides>
 
         <requires>
@@ -235,20 +235,6 @@
 
         <requires>
             <resources></resources>
-        </requires>
-    </technology>
-
-    <technology>
-        <id>17</id>
-        <name>Combustion</name>
-
-        <provides>
-            <units>11</units>
-            <technologies></technologies>
-        </provides>
-
-        <requires>
-            <resources>2</resources>
         </requires>
     </technology>
 </technologies>
