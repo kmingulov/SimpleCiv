@@ -117,3 +117,21 @@ void developUnit(void * data, DynArray * info)
     unit -> moves = unit_info-> max_moves;
 }
 
+void moveUnit(Node * current_cell)
+{
+    Node * unit = getNeighbour(current_cell,EDGE_CELL_UNIT);
+
+    int edge;
+    for (int i = 0; i < current_cell -> edges -> length; i++)
+    {
+        if (unit == current_cell -> edges -> data[i])
+        {
+            edge = i;
+            break;
+        }
+    }
+
+
+}
+
+
