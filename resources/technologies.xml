@@ -20,7 +20,7 @@
 
         <provides>
             <units></units>
-            <technologies>5</technologies>
+            <technologies>5,17</technologies>
         </provides>
 
         <requires>
@@ -235,6 +235,20 @@
 
         <requires>
             <resources></resources>
+        </requires>
+    </technology>
+
+    <technology>
+        <id>17</id>
+        <name>Lord of mushrooms :O</name>
+
+        <provides>
+            <units>12</units>
+            <technologies></technologies>
+        </provides>
+
+        <requires>
+            <resources>6</resources>
         </requires>
     </technology>
 </technologies>

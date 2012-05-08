@@ -61,12 +61,13 @@
 /*
     Defines for resources.
 */
-#define CELL_RES_COUNT     5
+#define CELL_RES_COUNT     6
 #define CELL_RES_NONE      0
 #define CELL_RES_BRONZE    1
 #define CELL_RES_IRON      2
 #define CELL_RES_COAL      3
 #define CELL_RES_GUNPOWDER 4
 #define CELL_RES_HORSES    5
+#define CELL_RES_MUSHROOMS 6
 
 #endif

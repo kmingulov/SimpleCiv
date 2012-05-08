@@ -95,4 +95,12 @@
         <damage>3</damage>
         <moves>5</moves>
     </unit>
+
+    <unit>
+        <id>12</id>
+        <name>Mushrooms squad</name>
+        <health>20</health>
+        <damage>10</damage>
+        <moves>6</moves>
+    </unit>
 </units>
