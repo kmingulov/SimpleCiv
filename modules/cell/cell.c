@@ -111,14 +111,34 @@ Node * getCell(Node * map_head, int r, int c)
 {
     Node * result = map_head;
 
-    for(int i = 0; i < r; i++)
+    if(r > 0)
     {
-        result = getNeighbour(result, EDGE_CELL_BOTTOM);
+        for(int i = 0; i < r; i++)
+        {
+            result = getNeighbour(result, EDGE_CELL_BOTTOM);
+        }
+    }
+    else
+    {
+        for(int i = 0; i > r; i--)
+        {
+            result = getNeighbour(result, EDGE_CELL_TOP);
+        }
     }
 
-    for(int i = 0; i < c; i++)
+    if(c > 0)
     {
-        result = getNeighbour(result, EDGE_CELL_RIGHT);
+        for(int i = 0; i < c; i++)
+        {
+            result = getNeighbour(result, EDGE_CELL_RIGHT);
+        }
+    }
+    else
+    {
+        for(int i = 0; i > c; i--)
+        {
+            result = getNeighbour(result, EDGE_CELL_LEFT);
+        }
     }
 
     return result;

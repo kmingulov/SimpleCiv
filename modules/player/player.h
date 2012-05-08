@@ -28,6 +28,9 @@ typedef struct Player
     // Arrays of available units and technologies.
     IntArray * available_units;
     IntArray * available_techs;
+
+    // Array of player's resources.
+    IntArray * resources;
 } Player;
 
 /*

@@ -11,24 +11,29 @@ City * createCity(World * world, char * name, unsigned int r, unsigned int c, Pl
         return NULL;
     }
 
-    // Cell (r+-1,c+-1) is a water :O
-    // hindi code :)
-    if(
-        ((Cell *) getCell(world -> graph_map, r, c  ) -> data) -> territory == CELL_TYPE_WATER ||
-        ((Cell *) getCell(world -> graph_map, r+1, c) -> data) -> territory == CELL_TYPE_WATER ||
-        ((Cell *) getCell(world -> graph_map, r-1, c) -> data) -> territory == CELL_TYPE_WATER ||
-        ((Cell *) getCell(world -> graph_map, r, c-1) -> data) -> territory == CELL_TYPE_WATER ||
-        ((Cell *) getCell(world -> graph_map, r, c+1) -> data) -> territory == CELL_TYPE_WATER ||
-        ((Cell *) getCell(world -> graph_map, r+2, c) -> data) -> territory == CELL_TYPE_WATER ||
-        ((Cell *) getCell(world -> graph_map, r-2, c) -> data) -> territory == CELL_TYPE_WATER ||
-        ((Cell *) getCell(world -> graph_map, r, c-2) -> data) -> territory == CELL_TYPE_WATER ||
-        ((Cell *) getCell(world -> graph_map, r, c+2) -> data) -> territory == CELL_TYPE_WATER
-
-    )
+    // Checking that cells are not water.
+    int coord[][2] = {{r, c}, {r + 1, c}, {r - 1, c}, {r, c - 1}, {r, c + 1},
+        {r + 1, c + 1}, {r - 1, c + 1}, {r + 1, c - 1}, {r - 1, c - 1}};
+    for(int i = 0; i < 9; i++)
     {
-        return NULL;
+        Cell * c = getCell(world -> graph_map, coord[i][0], coord[i][1]) -> data;
+        if(c -> territory == CELL_TYPE_WATER)
+        {
+            return NULL;
+        }
     }
 
+    // Woohoo! Adding resources to player.
+    IntArray * array = player -> resources;
+    for(int i = 0; i < 9; i++)
+    {
+        Cell * c = getCell(world -> graph_map, coord[i][0], coord[i][1]) -> data;
+        unsigned char res = c -> resources;
+        if(res != CELL_RES_NONE)
+        {
+            array -> data[res - 1] += 1;
+        }
+    }
 
     // Allocate some memory.
     City * city = malloc(sizeof(City));
