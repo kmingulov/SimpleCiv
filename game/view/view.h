@@ -42,11 +42,14 @@ View * createView(World * world);
 void destroyView(View * view);
 
 /*
-    Put char string into the middle/right of row. Syntax is similar to printf
-    function.
+    Put char string into the middle/right/left of row. Syntax is similar to
+    printf function.
+    TODO Add to putInMiddle/putInRight functions check for strlen(buffer) >
+    length (string too long).
 */
 void putInMiddle(int start_r, int start_c, int length, const char * format, ...);
 void putInRight(int start_r, int start_c, int length, const char * format, ...);
+void putInLeft(int start_r, int start_c, int length, const char * format, ...);
 
 /*
     Draws basic view (for map).

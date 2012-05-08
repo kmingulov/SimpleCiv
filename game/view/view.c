@@ -36,7 +36,7 @@ View * createView(World * world)
 
     getmaxyx(stdscr, result -> rows, result -> columns);
 
-    result -> sidebar = 0.85 * result -> columns;
+    result -> sidebar = 0.8 * result -> columns;
     result -> cur_r = result -> rows / 2;
     result -> cur_c = result -> sidebar / 2;
     result -> map_r = result -> cur_r - 1;
@@ -77,6 +77,25 @@ void putInMiddle(int start_r, int start_c, int length, const char * format, ...)
     delta = floor((float) delta / 2);
     mvprintw(start_r, start_c + delta, s);
     free(s);
+}
+
+void putInLeft(int start_r, int start_c, int length, const char * format, ...)
+{
+    va_list args;
+    char buffer[1024];
+
+    va_start(args, format);
+
+    vsnprintf(buffer, sizeof(buffer) - 1, format, args);
+
+    if(strlen(buffer) > length)
+    {
+        buffer[length] = '\0';
+    }
+
+    mvprintw(start_r, start_c, buffer);
+
+    refresh();
 }
 
 void putInRight(int start_r, int start_c, int length, const char * format, ...)
@@ -148,7 +167,6 @@ void drawTechView(World * world, View * view)
     // Copying rows, columns and sidebar.
     int r = view -> rows;
     int c = view -> columns;
-    int s = view -> sidebar;
 
     // Drawing main lines.
     for(int i = 1; i < c; i++)
@@ -307,8 +325,8 @@ void drawCellInfo(World * world, View * view)
     {
         City * c = (City *) city -> data;
         attron(A_BOLD); mvprintw(SIDEBAR_CELL_BLOCK + 3, s + 1, "City:  "); attroff(A_BOLD);
-        mvprintw(SIDEBAR_CELL_BLOCK + 4, s + 2, c -> name);
-        mvprintw(SIDEBAR_CELL_BLOCK + 5, s + 2, c -> owner -> name);
+        putInLeft(SIDEBAR_CELL_BLOCK + 4, s + 2, len - 2, c -> name);
+        putInLeft(SIDEBAR_CELL_BLOCK + 5, s + 2, len - 2, c -> owner -> name);
         mvprintw(SIDEBAR_CELL_BLOCK + 6, s + 2, "People");
         putInRight(SIDEBAR_CELL_BLOCK + 6, s + 2, len - 2, "%d", c -> population);
     }
@@ -320,8 +338,8 @@ void drawCellInfo(World * world, View * view)
         Unit * u = (Unit *) unit -> data;
         UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, u -> unit_id);
         attron(A_BOLD); mvprintw(SIDEBAR_CELL_BLOCK + 7, s + 1, "Unit:  "); attroff(A_BOLD);
-        mvprintw(SIDEBAR_CELL_BLOCK + 8, s + 2, u_info -> name);
-        mvprintw(SIDEBAR_CELL_BLOCK + 9, s + 2, u -> owner -> name);
+        putInLeft(SIDEBAR_CELL_BLOCK + 8, s + 2, len - 2, u_info -> name);
+        putInLeft(SIDEBAR_CELL_BLOCK + 9, s + 2, len - 2, u -> owner -> name);
         mvprintw(SIDEBAR_CELL_BLOCK + 10, s + 2, "HP");
         putInRight(SIDEBAR_CELL_BLOCK + 10, s + 2, len - 2, "%d/%d", u -> health, u_info -> max_health);
         mvprintw(SIDEBAR_CELL_BLOCK + 11, s + 2, "Moves");
@@ -346,32 +364,32 @@ void drawMap(World * world, View * view)
     {
         for(int j = start_column; j <= end_column; j++)
         {
+            move(i, j);
 
-            unsigned char type;
-
-            type = ((Cell *) current -> data) -> territory;
-
-            if(getNeighbour(current, EDGE_CELL_CITY))
+            if(getNeighbour(current, EDGE_CELL_CITY) != NULL)
             {
-                printw("M");
+                addch('M');
             }
-            else if(getNeighbour(current, EDGE_CELL_UNIT))
+            else if(getNeighbour(current, EDGE_CELL_UNIT) != NULL)
             {
-                printw("U");
+                // Getting unit's char.
+                Unit * unit = (Unit *) getNeighbour(current, EDGE_CELL_UNIT) -> data;
+                UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, unit -> unit_id);
+                addch(u_info -> c);
             }
             else
             {
-                move(i, j);
+                unsigned char type = ((Cell *) current -> data) -> territory;
                 attron(COLOR_PAIR(type));
 
                 switch ( type )
                 {
-                    case CELL_TYPE_WATER    : printw(".");  break;
-                    case CELL_TYPE_GRASS    : printw("_");  break;
-                    case CELL_TYPE_HILL     : printw("-");  break;
-                    case CELL_TYPE_TREE     : printw("T");  break;
-                    case CELL_TYPE_MOUNTAIN : printw("^");  break;
-                    default                 : printw("E");  break;
+                    case CELL_TYPE_WATER    : addch('.'); break;
+                    case CELL_TYPE_GRASS    : addch('_'); break;
+                    case CELL_TYPE_HILL     : addch('-'); break;
+                    case CELL_TYPE_TREE     : addch('T'); break;
+                    case CELL_TYPE_MOUNTAIN : addch('^'); break;
+                    default                 : addch('E'); break;
                 }
                 attroff(COLOR_PAIR(type));
             }

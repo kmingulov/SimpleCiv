@@ -3,6 +3,7 @@
     <unit>
         <id>0</id>
         <name>Archer</name>
+        <char>a</char>
         <health>7</health>
         <damage>1</damage>
         <moves>5</moves>
@@ -11,6 +12,7 @@
     <unit>
         <id>1</id>
         <name>Primordial warrior</name>
+        <char>w</char>
         <health>10</health>
         <damage>1</damage>
         <moves>3</moves>
@@ -19,6 +21,7 @@
     <unit>
         <id>2</id>
         <name>Bronze swordsman</name>
+        <char>i</char>
         <health>10</health>
         <damage>3</damage>
         <moves>4</moves>
@@ -27,6 +30,7 @@
     <unit>
         <id>3</id>
         <name>Iron swordsman</name>
+        <char>i</char>
         <health>10</health>
         <damage>4</damage>
         <moves>4</moves>
@@ -35,6 +39,7 @@
     <unit>
         <id>4</id>
         <name>Horseman</name>
+        <char>h</char>
         <health>15</health>
         <damage>3</damage>
         <moves>7</moves>
@@ -43,6 +48,7 @@
     <unit>
         <id>5</id>
         <name>Gunner</name>
+        <char>g</char>
         <health>20</health>
         <damage>5</damage>
         <moves>6</moves>
@@ -51,6 +57,7 @@
     <unit>
         <id>6</id>
         <name>Explorer</name>
+        <char>e</char>
         <health>10</health>
         <damage>1</damage>
         <moves>7</moves>
@@ -59,6 +66,7 @@
     <unit>
         <id>7</id>
         <name>Cannon</name>
+        <char>c</char>
         <health>15</health>
         <damage>6</damage>
         <moves>3</moves>
@@ -67,6 +75,7 @@
     <unit>
         <id>8</id>
         <name>Leader</name>
+        <char>l</char>
         <health>10</health>
         <damage>8</damage>
         <moves>6</moves>
@@ -75,6 +84,7 @@
     <unit>
         <id>9</id>
         <name>Tank</name>
+        <char>t</char>
         <health>20</health>
         <damage>8</damage>
         <moves>5</moves>
@@ -83,6 +93,7 @@
     <unit>
         <id>10</id>
         <name>Steamboat</name>
+        <char>b</char>
         <health>15</health>
         <damage>4</damage>
         <moves>7</moves>
@@ -91,6 +102,7 @@
     <unit>
         <id>11</id>
         <name>Ship</name>
+        <char>s</char>
         <health>15</health>
         <damage>3</damage>
         <moves>5</moves>
@@ -99,6 +111,7 @@
     <unit>
         <id>12</id>
         <name>Mushrooms squad</name>
+        <char>m</char>
         <health>20</health>
         <damage>10</damage>
         <moves>6</moves>

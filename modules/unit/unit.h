@@ -19,6 +19,7 @@
 typedef struct UnitCommonInfo
 {
     char * name;
+    char c;
     unsigned int max_health;
     unsigned int max_damage;
     unsigned int max_moves;
