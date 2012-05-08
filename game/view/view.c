@@ -51,19 +51,21 @@ void destroyView(View * view)
     free(view);
 }
 
-void maddch(int row, int column, int letter)
+void putInMiddle(int start_r, int start_c, int length, const char * format, ...)
 {
-    move(row, column);
-    addch(letter);
-    refresh();
-}
+    // Preparing buffer string.
+    va_list args;
+    char buffer[1024];
 
-void putInMiddle(int start_r, int start_c, int length, char * string)
-{
-    int delta = length - strlen(string);
+    va_start(args, format);
+
+    vsnprintf(buffer, sizeof(buffer) - 1, format, args);
+
+    // Printing a piece of string.
+    int delta = length - strlen(buffer);
 
     char * s = malloc(sizeof(char) * length);
-    strcpy(s, string);
+    strcpy(s, buffer);
 
     if(delta < 0)
     {
@@ -72,16 +74,24 @@ void putInMiddle(int start_r, int start_c, int length, char * string)
     }
 
     delta = floor((float) delta / 2);
-    mvprintw(start_r, start_c + delta, "%s", s);
+    mvprintw(start_r, start_c + delta, s);
     free(s);
 }
 
-void putInRight(int start_r, int start_c, int length, char * string)
+void putInRight(int start_r, int start_c, int length, const char * format, ...)
 {
-    mvprintw(start_r, start_c + length - strlen(string), "%s", string);
+    va_list args;
+    char buffer[1024];
+
+    va_start(args, format);
+
+    vsnprintf(buffer, sizeof(buffer) - 1, format, args);
+    mvprintw(start_r, start_c + length - strlen(buffer), buffer);
+
+    refresh();
 }
 
-void drawView(World * world, View * view)
+void drawGeneralView(World * world, View * view)
 {
     // Copying rows, columns and sidebar.
     int r = view -> rows;
@@ -93,55 +103,87 @@ void drawView(World * world, View * view)
     // Drawing main lines.
     for(int i = 1; i < c; i++)
     {
-        maddch(0, i, ACS_HLINE);
-        maddch(r - 1, i, ACS_HLINE);
+        mvaddch(0, i, ACS_HLINE);
+        mvaddch(r - 1, i, ACS_HLINE);
         if(i > s && i < c - 1)
         {
-            maddch(SIDEBAR_PLAYER_BLOCK, i, ACS_HLINE);
-            maddch(SIDEBAR_CELL_BLOCK, i, ACS_HLINE);
+            mvaddch(SIDEBAR_PLAYER_BLOCK, i, ACS_HLINE);
+            mvaddch(SIDEBAR_CELL_BLOCK, i, ACS_HLINE);
+            mvaddch(r - 3, i, ACS_HLINE);
         }
     }
 
     for(int i = 1; i < r - 1; i++)
     {
-        maddch(i, s, ACS_VLINE);
-        maddch(i, 0, ACS_VLINE);
-        maddch(i, c - 1, ACS_VLINE);
+        mvaddch(i, s, ACS_VLINE);
+        mvaddch(i, 0, ACS_VLINE);
+        mvaddch(i, c - 1, ACS_VLINE);
     }
 
     // Corners.
-    maddch(0, 0, ACS_ULCORNER);
-    maddch(r - 1, 0, ACS_LLCORNER);
-    maddch(0, c - 1, ACS_URCORNER);
-    maddch(r - 1, c - 1, ACS_LRCORNER);
-    maddch(0, s, ACS_TTEE);
-    maddch(r - 1, s, ACS_BTEE);
+    mvaddch(0, 0, ACS_ULCORNER);
+    mvaddch(r - 1, 0, ACS_LLCORNER);
+    mvaddch(0, c - 1, ACS_URCORNER);
+    mvaddch(r - 1, c - 1, ACS_LRCORNER);
+    mvaddch(0, s, ACS_TTEE);
+    mvaddch(r - 1, s, ACS_BTEE);
+
+    mvaddch(SIDEBAR_PLAYER_BLOCK, s, ACS_LTEE); mvaddch(SIDEBAR_PLAYER_BLOCK, c - 1, ACS_RTEE);
+    mvaddch(SIDEBAR_CELL_BLOCK, s, ACS_LTEE); mvaddch(SIDEBAR_CELL_BLOCK, c - 1, ACS_RTEE);
+    mvaddch(r - 3, s, ACS_LTEE); mvaddch(r - 3, c - 1, ACS_RTEE);
 
     // Project name.
-    putInMiddle(1, s + 1, c - s - 2, GAME_NAME);
-
-    maddch(SIDEBAR_PLAYER_BLOCK, s, ACS_LTEE); maddch(SIDEBAR_PLAYER_BLOCK, c - 1, ACS_RTEE);
-    maddch(SIDEBAR_CELL_BLOCK, s, ACS_LTEE); maddch(SIDEBAR_CELL_BLOCK, c - 1, ACS_RTEE);
+    attron(A_BOLD); putInMiddle(1, s + 1, c - s - 2, GAME_NAME); attroff(A_BOLD);
 
     attroff(COLOR_PAIR(0));
 }
 
-void drawInfo(World * world, View * view)
+void clearBlock(int start_r, int start_c, int r, int c)
 {
-    // Copying rows, columns and sidebar.
-    int r = view -> rows;
-    //int c = view -> columns;
-    int s = view -> sidebar;
+    for(int i = start_r; i < start_r + r; i++)
+    {
+        for(int j = start_c; j< start_c + c; j++)
+        {
+            mvaddch(i, j, ' ');
+        }
+    }
+}
 
+void drawPlayerInfo(World * world, View * view)
+{
+    int s = view -> sidebar;
+    int len = view -> columns - view -> sidebar - 2;
+
+    clearBlock(SIDEBAR_PLAYER_BLOCK + 1, s + 1, 7, len);
+
+    // Player.
     Player * player = (Player *) world -> graph_players -> data;
 
     // Player info.
-    mvprintw(SIDEBAR_PLAYER_BLOCK + 1, s + 1, "%s", player -> name);
-    mvprintw(SIDEBAR_PLAYER_BLOCK + 2, s + 1, "%d gold", player -> gold);
+    attron(A_BOLD); putInMiddle(SIDEBAR_PLAYER_BLOCK + 1, s + 1, len, "%s", player -> name); attroff(A_BOLD);
+    mvprintw(SIDEBAR_PLAYER_BLOCK + 2, s + 1, "Gold");
+    putInRight(SIDEBAR_PLAYER_BLOCK + 2, s + 1, len, "%d", player -> gold);
+    const char res_names[][10] = {"Bronze", "Iron", "Coal", "Gunpowder", "Horses"};
+    for(int i = 0; i < 5; i++)
+    {
+        mvprintw(SIDEBAR_PLAYER_BLOCK + 3 + i, s + 1, res_names[i]);
+        putInRight(SIDEBAR_PLAYER_BLOCK + 3 + i, s + 1, len, "%d", iaGetByIndex(player -> resources, i));
+    }
+}
 
-    // Cell info.
-    // Type of territory.
+void drawCellInfo(World * world, View * view)
+{
+    int s = view -> sidebar;
+    int r = view -> rows;
+    int len = view -> columns - view -> sidebar - 2;
+
+    clearBlock(SIDEBAR_CELL_BLOCK + 1, s + 1, 11, len);
+
+    // Cell.
     Cell * c = (Cell *) view -> current_cell -> data;
+    attron(A_BOLD);
+
+    // Type of territory.
     switch(c -> territory)
     {
         case CELL_TYPE_WATER:    mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Water    "); break;
@@ -150,8 +192,8 @@ void drawInfo(World * world, View * view)
         case CELL_TYPE_HILL:     mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Hill     "); break;
         case CELL_TYPE_MOUNTAIN: mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Mountains"); break;
     }
+
     // Resources.
-    attron(A_BOLD);
     switch(c -> resources)
     {
         case CELL_RES_NONE:      mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "            "); break;
@@ -160,17 +202,21 @@ void drawInfo(World * world, View * view)
         case CELL_RES_COAL:      mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "Coal        "); break;
         case CELL_RES_GUNPOWDER: mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "Gunpowder   "); break;
         case CELL_RES_HORSES:    mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "Horses      "); break;
+        case CELL_RES_MUSHROOMS: mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "Mushrooms :O"); break;
     }
+
     attroff(A_BOLD);
+
     // City.
     Node * city = getNeighbour(view -> current_cell, EDGE_CELL_CITY);
     if(city != NULL)
     {
         City * c = (City *) city -> data;
         attron(A_BOLD); mvprintw(SIDEBAR_CELL_BLOCK + 3, s + 1, "City:  "); attroff(A_BOLD);
-        mvprintw(SIDEBAR_CELL_BLOCK + 4, s + 1, " %s", c -> name);
-        mvprintw(SIDEBAR_CELL_BLOCK + 5, s + 1, " %s", c -> owner -> name);
-        mvprintw(SIDEBAR_CELL_BLOCK + 6, s + 1, " %d people", c -> population);
+        mvprintw(SIDEBAR_CELL_BLOCK + 4, s + 2, c -> name);
+        mvprintw(SIDEBAR_CELL_BLOCK + 5, s + 2, c -> owner -> name);
+        mvprintw(SIDEBAR_CELL_BLOCK + 6, s + 2, "People");
+        putInRight(SIDEBAR_CELL_BLOCK + 6, s + 2, len - 2, "%d", c -> population);
     }
     else
     {
@@ -179,20 +225,22 @@ void drawInfo(World * world, View * view)
         mvprintw(SIDEBAR_CELL_BLOCK + 5, s + 1, "             ");
         mvprintw(SIDEBAR_CELL_BLOCK + 6, s + 1, "             ");
     }
-    // Units info.
+
+    // Unit.
     Node * unit = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
     if(unit != NULL)
     {
         Unit * u = (Unit *) unit -> data;
         UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, u -> unit_id);
         attron(A_BOLD); mvprintw(SIDEBAR_CELL_BLOCK + 7, s + 1, "Unit:  "); attroff(A_BOLD);
-        mvprintw(SIDEBAR_CELL_BLOCK + 8, s + 1, " %s", u_info -> name);
-        mvprintw(SIDEBAR_CELL_BLOCK + 9, s + 1, " %s", u -> owner -> name);
-        mvprintw(SIDEBAR_CELL_BLOCK + 10, s + 1, " %d/%d health", u -> health, u_info -> max_health);
-        mvprintw(SIDEBAR_CELL_BLOCK + 11, s + 1, " %d/%d moves", u -> moves, u_info -> max_moves);
+        mvprintw(SIDEBAR_CELL_BLOCK + 8, s + 2, u_info -> name);
+        mvprintw(SIDEBAR_CELL_BLOCK + 9, s + 2, u -> owner -> name);
+        mvprintw(SIDEBAR_CELL_BLOCK + 10, s + 2, "HP");
+        putInRight(SIDEBAR_CELL_BLOCK + 10, s + 2, len - 2, "%d/%d", u -> health, u_info -> max_health);
+        mvprintw(SIDEBAR_CELL_BLOCK + 11, s + 2, "Moves");
+        putInRight(SIDEBAR_CELL_BLOCK + 11, s + 2, len - 2, "%d/%d", u -> moves, u_info -> max_moves);
     }
     else
-    {
     {
         mvprintw(SIDEBAR_CELL_BLOCK + 7, s + 1, "             ");
         mvprintw(SIDEBAR_CELL_BLOCK + 8, s + 1, "             ");
@@ -200,9 +248,10 @@ void drawInfo(World * world, View * view)
         mvprintw(SIDEBAR_CELL_BLOCK + 10, s + 1, "             ");
         mvprintw(SIDEBAR_CELL_BLOCK + 11, s + 1, "             ");
     }
-    }
+
     // Other info.
-    mvprintw(r - 2, s + 1, "(%d,%d)    ", view -> map_r, view -> map_c);
+    clearBlock(r - 2, s + 1, 1, len);
+    putInMiddle(r - 2, s + 1, len, "(%d,%d)", view -> map_r, view -> map_c);
 }
 
 void drawMap(World * world, View * view)
@@ -258,7 +307,6 @@ void drawMap(World * world, View * view)
 
 }
 
-
 void viewProcess(World * world, View * view, Message * message)
 {
     Player * player = (Player *) world -> graph_players -> data;
@@ -268,8 +316,9 @@ void viewProcess(World * world, View * view, Message * message)
         switch(message -> type)
         {
             case VIEW_REDRAW_ALL:
-                drawView(world, view);
-                drawInfo(world, view);
+                drawGeneralView(world, view);
+                drawPlayerInfo(world, view);
+                drawCellInfo(world, view);
                 drawMap(world, view);
                 move(view -> cur_r, view -> cur_c);
             break;
@@ -290,7 +339,7 @@ void viewProcess(World * world, View * view, Message * message)
                     player -> graph_map = getNeighbour(player -> graph_map, EDGE_CELL_TOP);
                     drawMap(world, view);
                 }
-                drawInfo(world, view);
+                drawCellInfo(world, view);
                 move(view -> cur_r, view -> cur_c);
             break;
 
@@ -306,7 +355,7 @@ void viewProcess(World * world, View * view, Message * message)
                     player -> graph_map = getNeighbour(player -> graph_map, EDGE_CELL_BOTTOM);
                     drawMap(world, view);
                 }
-                drawInfo(world, view);
+                drawCellInfo(world, view);
                 move(view -> cur_r, view -> cur_c);
             break;
 
@@ -322,7 +371,7 @@ void viewProcess(World * world, View * view, Message * message)
                     player -> graph_map = getNeighbour(player -> graph_map, EDGE_CELL_RIGHT);
                     drawMap(world, view);
                 }
-                drawInfo(world, view);
+                drawCellInfo(world, view);
                 move(view -> cur_r, view -> cur_c);
             break;
 
@@ -339,7 +388,7 @@ void viewProcess(World * world, View * view, Message * message)
                     player -> graph_map = getNeighbour(player -> graph_map, EDGE_CELL_LEFT);
                     drawMap(world, view);
                 }
-                drawInfo(world, view);
+                drawCellInfo(world, view);
                 move(view -> cur_r, view -> cur_c);
             break;
         }

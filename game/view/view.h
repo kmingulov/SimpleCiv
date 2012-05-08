@@ -42,25 +42,31 @@ View * createView(World * world);
 void destroyView(View * view);
 
 /*
-    Put char into cell by her row and column (uses move and addch functions.)
+    Put char string into the middle/right of row. Syntax is similar to printf
+    function.
 */
-void maddch(int row, int column, int letter);
+void putInMiddle(int start_r, int start_c, int length, const char * format, ...);
+void putInRight(int start_r, int start_c, int length, const char * format, ...);
 
 /*
-    Put char string into the middle/right of row.
+    Draws basic view (for map).
 */
-void putInMiddle(int start_r, int start_c, int length, char * string);
-void putInRight(int start_r, int start_c, int length, char * string);
+void drawGeneralView(World * world, View * view);
 
 /*
-    Draws basic view. d is width of side bar.
+    Clears block from (start_r,start_c) to (start_r+r,start_c+c) point.
 */
-void drawView(World * world, View * view);
+void clearBlock(int start_r, int start_c, int r, int c);
 
 /*
-    Draws info.
+    Draws player info.
 */
-void drawInfo(World * world, View * view);
+void drawPlayerInfo(World * world, View * view);
+
+/*
+    Draws cell info.
+*/
+void drawCellInfo(World * world, View * view);
 
 /*
     Draws map.
