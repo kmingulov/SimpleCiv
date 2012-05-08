@@ -13,7 +13,9 @@ Player * createPlayer(char * name, IntArray * available_units, IntArray * availa
     player -> available_units = available_units;
     player -> available_techs = available_techs;
 
-    player -> resources = iaLengthCreate(CELL_RES_COUNT);
+    // +1, to avoid incomprehensible constructs with id -+ 1 (1..CELL_RES_COUNT
+    // are resources really).
+    player -> resources = iaLengthCreate(CELL_RES_COUNT + 1);
 
     player -> cur_r = 0;
     player -> cur_c = 0;

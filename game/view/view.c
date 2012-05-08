@@ -9,6 +9,7 @@
 #include "../../modules/player/player.h"
 #include "../../modules/city/city.h"
 #include "../../modules/unit/unit.h"
+#include "../../modules/technology/technology.h"
 #include "../world/definitions.h"
 
 
@@ -93,6 +94,8 @@ void putInRight(int start_r, int start_c, int length, const char * format, ...)
 
 void drawGeneralView(World * world, View * view)
 {
+    erase();
+
     // Copying rows, columns and sidebar.
     int r = view -> rows;
     int c = view -> columns;
@@ -138,6 +141,97 @@ void drawGeneralView(World * world, View * view)
     attroff(COLOR_PAIR(0));
 }
 
+void drawTechView(World * world, View * view)
+{
+    erase();
+
+    // Copying rows, columns and sidebar.
+    int r = view -> rows;
+    int c = view -> columns;
+    int s = view -> sidebar;
+
+    // Drawing main lines.
+    for(int i = 1; i < c; i++)
+    {
+        mvaddch(0, i, ACS_HLINE);
+        mvaddch(r - 1, i, ACS_HLINE);
+    }
+    for(int i = 1; i < r - 1; i++)
+    {
+        mvaddch(i, 0, ACS_VLINE);
+        mvaddch(i, c - 1, ACS_VLINE);
+    }
+    mvaddch(0, 0, ACS_ULCORNER);
+    mvaddch(r - 1, 0, ACS_LLCORNER);
+    mvaddch(0, c - 1, ACS_URCORNER);
+    mvaddch(r - 1, c - 1, ACS_LRCORNER);
+
+    // Drawing player name and other info.
+    Player * player = (Player *) world -> graph_players -> data;
+    attron(A_BOLD); mvprintw(2, 3, "%s's researches", player -> name); attroff(A_BOLD);
+    mvprintw(3, 3, "%d gold, %d gold spents on reasearches every turn", player -> gold, 1);
+
+    // Drawing available technologies.
+    attron(A_BOLD); mvprintw(5, 3, "Available for researching:"); attroff(A_BOLD);
+    int line = 6; int count = 0;
+    for(int i = 0; i < player -> available_techs -> length; i++)
+    {
+        int value = iaGetByIndex(player -> available_techs, i);
+        if(value == TECH_AVAILABLE)
+        {
+            Technology * t = (Technology *) ((Node *) daGetByIndex(world -> techs_info, i)) -> data;
+            // Checking for resources.
+            if(t -> requires_resources == NULL)
+            {
+                // Nothing requires. Great.
+                count++;
+                mvprintw(line++, 3, "[ ] %s", t -> name);
+            }
+            else
+            {
+                // Checking for each resource.
+                char okay = 1;
+                for(int j = 0; j < t -> requires_resources -> length; j++)
+                {
+                    // Getting resource id.
+                    int id = iaGetByIndex(t -> requires_resources, j);
+                    // Does player have this resources?
+                    if(iaGetByIndex(player -> resources, id) == 0)
+                    {
+                        // Sad but true.
+                        okay = 0;
+                        break;
+                    }
+                }
+                // You're lucky man.
+                if(okay == 1)
+                {
+                    count++;
+                    mvprintw(line++, 3, "[ ] %s", t -> name);
+                }
+            }
+        }
+    }
+
+    if(count == 0)
+    {
+        mvprintw(line++, 3, "No technologies");
+    }
+
+    // Drawing researched technologies.
+    line++;
+    attron(A_BOLD); mvprintw(line++, 3, "Already researched:"); attroff(A_BOLD);
+    for(int i = 0; i < player -> available_techs -> length; i++)
+    {
+        int value = iaGetByIndex(player -> available_techs, i);
+        if(value == TECH_RESEARCHED)
+        {
+            Technology * t = (Technology *) ((Node *) daGetByIndex(world -> techs_info, i)) -> data;
+            mvprintw(line++, 3, "%s", t -> name);
+        }
+    }
+}
+
 void clearBlock(int start_r, int start_c, int r, int c)
 {
     for(int i = start_r; i < start_r + r; i++)
@@ -163,11 +257,11 @@ void drawPlayerInfo(World * world, View * view)
     attron(A_BOLD); putInMiddle(SIDEBAR_PLAYER_BLOCK + 1, s + 1, len, "%s", player -> name); attroff(A_BOLD);
     mvprintw(SIDEBAR_PLAYER_BLOCK + 2, s + 1, "Gold");
     putInRight(SIDEBAR_PLAYER_BLOCK + 2, s + 1, len, "%d", player -> gold);
-    const char res_names[][10] = {"Bronze", "Iron", "Coal", "Gunpowder", "Horses"};
-    for(int i = 0; i < 5; i++)
+    const char res_names[][10] = {"", "Bronze", "Iron", "Coal", "Gunpowder", "Horses"};
+    for(int i = 1; i <= CELL_RES_COUNT - 1; i++)
     {
-        mvprintw(SIDEBAR_PLAYER_BLOCK + 3 + i, s + 1, res_names[i]);
-        putInRight(SIDEBAR_PLAYER_BLOCK + 3 + i, s + 1, len, "%d", iaGetByIndex(player -> resources, i));
+        mvprintw(SIDEBAR_PLAYER_BLOCK + 2 + i, s + 1, res_names[i]);
+        putInRight(SIDEBAR_PLAYER_BLOCK + 2 + i, s + 1, len, "%d", iaGetByIndex(player -> resources, i));
     }
 }
 
@@ -218,13 +312,6 @@ void drawCellInfo(World * world, View * view)
         mvprintw(SIDEBAR_CELL_BLOCK + 6, s + 2, "People");
         putInRight(SIDEBAR_CELL_BLOCK + 6, s + 2, len - 2, "%d", c -> population);
     }
-    else
-    {
-        mvprintw(SIDEBAR_CELL_BLOCK + 3, s + 1, "             ");
-        mvprintw(SIDEBAR_CELL_BLOCK + 4, s + 1, "             ");
-        mvprintw(SIDEBAR_CELL_BLOCK + 5, s + 1, "             ");
-        mvprintw(SIDEBAR_CELL_BLOCK + 6, s + 1, "             ");
-    }
 
     // Unit.
     Node * unit = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
@@ -239,14 +326,6 @@ void drawCellInfo(World * world, View * view)
         putInRight(SIDEBAR_CELL_BLOCK + 10, s + 2, len - 2, "%d/%d", u -> health, u_info -> max_health);
         mvprintw(SIDEBAR_CELL_BLOCK + 11, s + 2, "Moves");
         putInRight(SIDEBAR_CELL_BLOCK + 11, s + 2, len - 2, "%d/%d", u -> moves, u_info -> max_moves);
-    }
-    else
-    {
-        mvprintw(SIDEBAR_CELL_BLOCK + 7, s + 1, "             ");
-        mvprintw(SIDEBAR_CELL_BLOCK + 8, s + 1, "             ");
-        mvprintw(SIDEBAR_CELL_BLOCK + 9, s + 1, "             ");
-        mvprintw(SIDEBAR_CELL_BLOCK + 10, s + 1, "             ");
-        mvprintw(SIDEBAR_CELL_BLOCK + 11, s + 1, "             ");
     }
 
     // Other info.

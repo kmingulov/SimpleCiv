@@ -52,7 +52,7 @@
         </provides>
 
         <requires>
-            <resources>0</resources>
+            <resources>1</resources>
         </requires>
     </technology>
 
@@ -66,7 +66,7 @@
         </provides>
 
         <requires>
-            <resources>1</resources>
+            <resources>2</resources>
         </requires>
     </technology>
 
@@ -80,7 +80,7 @@
         </provides>
 
         <requires>
-            <resources>4</resources>
+            <resources>5</resources>
         </requires>
     </technology>
 
@@ -122,7 +122,7 @@
         </provides>
 
         <requires>
-            <resources></resources>
+            <resources>3</resources>
         </requires>
     </technology>
 
@@ -136,7 +136,7 @@
         </provides>
 
         <requires>
-            <resources>3</resources>
+            <resources>4</resources>
         </requires>
     </technology>
 
@@ -188,7 +188,7 @@
 
         <provides>
             <units></units>
-            <technologies>14</technologies>
+            <technologies>14,15</technologies>
         </provides>
 
         <requires>
@@ -249,6 +249,20 @@
 
         <requires>
             <resources>6</resources>
+        </requires>
+    </technology>
+
+    <technology>
+        <id>18</id>
+        <name>Desire for knowledge</name>
+
+        <provides>
+            <units></units>
+            <technologies>0,2,1,10</technologies>
+        </provides>
+
+        <requires>
+            <resources></resources>
         </requires>
     </technology>
 </technologies>

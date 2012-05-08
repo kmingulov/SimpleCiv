@@ -31,7 +31,7 @@ City * createCity(World * world, char * name, unsigned int r, unsigned int c, Pl
         unsigned char res = c -> resources;
         if(res != CELL_RES_NONE)
         {
-            array -> data[res - 1] += 1;
+            array -> data[res] += 1;
         }
     }
 
