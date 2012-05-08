@@ -78,6 +78,16 @@ void generateMap(Node * map, int max_r, int max_c)
         }
         current = getNeighbour(current, EDGE_CELL_BOTTOM);
     }
+
+    // Putting mushrooms on the map.
+    int r;
+    int c;
+    do
+    {
+        r = rand () % max_r;
+        c = rand () % max_c;
+    } while( ((Cell *) getCell(current, r, c) -> data) -> territory == CELL_TYPE_WATER );
+    ((Cell *) getCell(current, r, c) -> data) -> resources = CELL_RES_MUSHROOMS;    
 }
 
 /*

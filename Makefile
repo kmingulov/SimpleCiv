@@ -75,4 +75,4 @@ main.o: main.c
 	gcc $(CFLAGS) main.c
 
 clean:
-	rm -f *.o test
+	rm -f *.o project

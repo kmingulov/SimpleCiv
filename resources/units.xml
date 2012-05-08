@@ -83,16 +83,24 @@
     <unit>
         <id>10</id>
         <name>Steamboat</name>
-        <health>10</health>
-        <damage>3</damage>
-        <moves>5</moves>
+        <health>15</health>
+        <damage>4</damage>
+        <moves>7</moves>
     </unit>
 
     <unit>
         <id>11</id>
         <name>Ship</name>
         <health>15</health>
-        <damage>4</damage>
-        <moves>7</moves>
+        <damage>3</damage>
+        <moves>5</moves>
+    </unit>
+
+    <unit>
+        <id>12</id>
+        <name>Mushrooms squad</name>
+        <health>20</health>
+        <damage>10</damage>
+        <moves>6</moves>
     </unit>
 </units>

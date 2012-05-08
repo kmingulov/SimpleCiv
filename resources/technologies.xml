@@ -20,7 +20,7 @@
 
         <provides>
             <units></units>
-            <technologies>5</technologies>
+            <technologies>5,17</technologies>
         </provides>
 
         <requires>
@@ -103,7 +103,7 @@
         <name>Engineering</name>
 
         <provides>
-            <units></units>
+            <units>11</units>
             <technologies>8</technologies>
         </provides>
 
@@ -118,7 +118,7 @@
 
         <provides>
             <units>10</units>
-            <technologies>17</technologies>
+            <technologies></technologies>
         </provides>
 
         <requires>
@@ -240,15 +240,15 @@
 
     <technology>
         <id>17</id>
-        <name>Combustion</name>
+        <name>Lord of mushrooms :O</name>
 
         <provides>
-            <units>11</units>
+            <units>12</units>
             <technologies></technologies>
         </provides>
 
         <requires>
-            <resources>2</resources>
+            <resources>6</resources>
         </requires>
     </technology>
 </technologies>
