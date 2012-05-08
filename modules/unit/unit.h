@@ -73,6 +73,6 @@ void developUnit(void * data, DynArray * info);
     Move unit
 */
 
-void moveUnit(Node * current_cell);
+void moveUnit(Node * current_cell, int direction);
 
 #endif

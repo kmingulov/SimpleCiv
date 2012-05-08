@@ -117,21 +117,22 @@ void developUnit(void * data, DynArray * info)
     unit -> moves = unit_info-> max_moves;
 }
 
-void moveUnit(Node * current_cell)
+void moveUnit(Node * current_cell, int dir)
 {
-    Node * unit = getNeighbour(current_cell,EDGE_CELL_UNIT);
-
-    int edge;
-    for (int i = 0; i < current_cell -> edges -> length; i++)
+    int id;
+    Edge * edge;
+    for(int i = 0; i < current_cell -> edges -> length; i++)
     {
-        if (unit == current_cell -> edges -> data[i])
+        edge = current_cell -> edges -> data[i];
+        if(edge -> type == EDGE_CELL_UNIT)
         {
-            edge = i;
+            id = i;
             break;
         }
     }
-
-
+    daRemoveByPointer(current_cell -> edges, edge, NULL);
+    daPrepend(getNeighbour(current_cell, EDGE_CELL_TOP) -> edges, edge);
+    free(edge);
 }
 
 

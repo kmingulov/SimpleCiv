@@ -41,6 +41,17 @@ Message * controlProcess(World * world, View * view, Control * control, int key)
             }
         }
 
+        if(control -> state == CONTROL_MOVE_UNIT)
+        {
+            switch (key)
+            {
+                case KEY_UP   : moveUnit(view->current_cell, EDGE_CELL_TOP); break;
+                case KEY_DOWN : moveUnit(view->current_cell, EDGE_CELL_BOTTOM); break;
+                case KEY_RIGHT: moveUnit(view->current_cell, EDGE_CELL_RIGHT); break;
+                case KEY_LEFT : moveUnit(view->current_cell, EDGE_CELL_LEFT); break;
+            }
+        }
+
         // TODO Move unit state.
         // TODO Choose technology state (only up/down arrow keys).
     }
