@@ -69,4 +69,10 @@ void unitsFight(DynArray * units_info, Unit * u1, Unit * u2);
 
 void developUnit(void * data, DynArray * info);
 
+/*
+    Move unit
+*/
+
+void moveUnit(Node * current_cell);
+
 #endif
