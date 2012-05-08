@@ -13,6 +13,8 @@ Player * createPlayer(char * name, IntArray * available_units, IntArray * availa
     player -> available_units = available_units;
     player -> available_techs = available_techs;
 
+    player -> resources = iaLengthCreate(CELL_RES_COUNT);
+
     player -> cur_r = 0;
     player -> cur_c = 0;
 
@@ -24,8 +26,6 @@ Player * createPlayer(char * name, IntArray * available_units, IntArray * availa
 
     player -> cities = listCreate();
     player -> units = listCreate();
-
-    player -> resources = iaLengthCreate(CELL_RES_COUNT);
 
     return player;
 }
