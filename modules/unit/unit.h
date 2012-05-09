@@ -71,9 +71,9 @@ void unitsFight(DynArray * units_info, Unit * u1, Unit * u2);
 void developUnit(void * data, DynArray * info);
 
 /*
-    Move unit
+    Moves unit. Returns 0 if failed.
 */
 
-void moveUnit(Node * current_cell, int direction);
+int moveUnit(Node * current_cell, int dir, DynArray * units_info);
 
 #endif

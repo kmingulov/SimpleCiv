@@ -117,8 +117,10 @@ void developUnit(void * data, DynArray * info)
     unit -> moves = unit_info-> max_moves;
 }
 
-void moveUnit(Node * current_cell, int dir)
+int moveUnit(Node * current_cell, int dir, DynArray * units_info)
 {
+    // TODO Check if one the units die.
+
     Edge * edge;
     for(int i = 0; i < current_cell -> edges -> length; i++)
     {
@@ -128,6 +130,38 @@ void moveUnit(Node * current_cell, int dir)
             break;
         }
     }
+
+    Unit * unit = (Unit *) edge -> target -> data;
+
+    if(unit -> moves == 0)
+    {
+        return 0;
+    }
+
+    Node * destination = getNeighbour(current_cell, dir);
+
+    // Cannot go to the water.
+    if( ((Cell *) destination -> data) -> territory == CELL_TYPE_WATER )
+    {
+        return 0;
+    }
+
+    // Oh, there is another unit…
+    Node * neighbour = getNeighbour(destination, EDGE_CELL_UNIT);
+    if( neighbour != NULL )
+    {
+        Unit * neigh = (Unit *) neighbour -> data;
+        // Fight!
+        if(neigh -> owner != unit -> owner)
+        {
+            unitsFight(units_info, unit, neigh);
+        }
+        return 0;
+    }
+
+    unit -> moves--;
     daRemoveByPointer(current_cell -> edges, edge, NULL);
-    daPrepend(getNeighbour(current_cell, EDGE_CELL_TOP) -> edges, edge);
+    daPrepend(destination -> edges, edge);
+
+    return 1;
 }

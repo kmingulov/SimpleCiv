@@ -187,7 +187,7 @@ void drawTechView(World * world, View * view)
     // Drawing player name and other info.
     Player * player = (Player *) world -> graph_players -> data;
     attron(A_BOLD); mvprintw(2, 3, "%s's researches", player -> name); attroff(A_BOLD);
-    mvprintw(3, 3, "%d gold, %d gold spents on reasearches every turn", player -> gold, 1);
+    mvprintw(3, 3, "%d gold, %d gold spents on reasearches every turn", player -> gold, player -> research -> delta);
 
     // Drawing available technologies.
     attron(A_BOLD); mvprintw(5, 3, "Available for researching:"); attroff(A_BOLD);
@@ -203,7 +203,7 @@ void drawTechView(World * world, View * view)
             {
                 // Nothing requires. Great.
                 count++;
-                mvprintw(line++, 3, "[ ] %s", t -> name);
+                mvprintw(line++, 3, "[ ] %s (%d turns)", t -> name, t -> turns);
             }
             else
             {
@@ -225,7 +225,7 @@ void drawTechView(World * world, View * view)
                 if(okay == 1)
                 {
                     count++;
-                    mvprintw(line++, 3, "[ ] %s", t -> name);
+                    mvprintw(line++, 3, "[ ] %s (%d turns)", t -> name, t -> turns);
                 }
             }
         }
@@ -275,13 +275,28 @@ void drawPlayerInfo(World * world, View * view)
 
     // Player info.
     attron(A_BOLD); putInMiddle(SIDEBAR_PLAYER_BLOCK + 1, s + 1, len, "%s", player -> name); attroff(A_BOLD);
-    mvprintw(SIDEBAR_PLAYER_BLOCK + 2, s + 1, "Gold");
-    putInRight(SIDEBAR_PLAYER_BLOCK + 2, s + 1, len, "%d", player -> gold);
+    // Researching.
+    if(player -> research -> id == -1)
+    {
+        mvprintw(SIDEBAR_PLAYER_BLOCK + 2, s + 1, "No researches");
+    }
+    else
+    {
+        // Getting technology.
+        Node * n = (Node *) daGetByIndex(world -> techs_info, player -> research -> id);
+        Technology * t = (Technology *) n -> data;
+        // Printing it.
+        putInLeft(SIDEBAR_PLAYER_BLOCK + 2, s + 1, len, "%d/%d %s", player -> research -> turns, t -> turns, t -> name);
+    }
+    // Gold.
+    mvprintw(SIDEBAR_PLAYER_BLOCK + 3, s + 1, "Gold");
+    putInRight(SIDEBAR_PLAYER_BLOCK + 3, s + 1, len, "%d-%d", player -> gold, player -> research -> delta);
+    // Resources.
     const char res_names[][10] = {"", "Bronze", "Iron", "Coal", "Gunpowder", "Horses"};
     for(int i = 1; i <= CELL_RES_COUNT - 1; i++)
     {
-        mvprintw(SIDEBAR_PLAYER_BLOCK + 2 + i, s + 1, res_names[i]);
-        putInRight(SIDEBAR_PLAYER_BLOCK + 2 + i, s + 1, len, "%d", iaGetByIndex(player -> resources, i));
+        mvprintw(SIDEBAR_PLAYER_BLOCK + 3 + i, s + 1, res_names[i]);
+        putInRight(SIDEBAR_PLAYER_BLOCK + 3 + i, s + 1, len, "%d", iaGetByIndex(player -> resources, i));
     }
 }
 
@@ -353,9 +368,38 @@ void drawCellInfo(World * world, View * view)
     putInMiddle(r - 2, s + 1, len, "(%d,%d)", view -> map_r, view -> map_c);
 }
 
+void drawNode(World * world, Node * current)
+{
+    if(getNeighbour(current, EDGE_CELL_CITY) != NULL)
+    {
+        addch('M');
+    }
+    else if(getNeighbour(current, EDGE_CELL_UNIT) != NULL)
+    {
+        // Getting unit's char.
+        Unit * unit = (Unit *) getNeighbour(current, EDGE_CELL_UNIT) -> data;
+        UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, unit -> unit_id);
+        addch(u_info -> c);
+    }
+    else
+    {
+        unsigned char type = ((Cell *) current -> data) -> territory;
+        attron(COLOR_PAIR(type));
+        switch ( type )
+        {
+            case CELL_TYPE_WATER    : addch('.'); break;
+            case CELL_TYPE_GRASS    : addch('_'); break;
+            case CELL_TYPE_HILL     : addch('-'); break;
+            case CELL_TYPE_TREE     : addch('T'); break;
+            case CELL_TYPE_MOUNTAIN : addch('^'); break;
+            default                 : addch('E'); break;
+        }
+        attroff(COLOR_PAIR(type));
+    }
+}
+
 void drawMap(World * world, View * view)
 {
-
     int start_row = 1,    end_row = view -> rows - 2;
     int start_column = 1, end_column = view -> sidebar - 1;
 
@@ -367,43 +411,13 @@ void drawMap(World * world, View * view)
         for(int j = start_column; j <= end_column; j++)
         {
             move(i, j);
-
-            if(getNeighbour(current, EDGE_CELL_CITY) != NULL)
-            {
-                addch('M');
-            }
-            else if(getNeighbour(current, EDGE_CELL_UNIT) != NULL)
-            {
-                // Getting unit's char.
-                Unit * unit = (Unit *) getNeighbour(current, EDGE_CELL_UNIT) -> data;
-                UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, unit -> unit_id);
-                addch(u_info -> c);
-            }
-            else
-            {
-                unsigned char type = ((Cell *) current -> data) -> territory;
-                attron(COLOR_PAIR(type));
-
-                switch ( type )
-                {
-                    case CELL_TYPE_WATER    : addch('.'); break;
-                    case CELL_TYPE_GRASS    : addch('_'); break;
-                    case CELL_TYPE_HILL     : addch('-'); break;
-                    case CELL_TYPE_TREE     : addch('T'); break;
-                    case CELL_TYPE_MOUNTAIN : addch('^'); break;
-                    default                 : addch('E'); break;
-                }
-                attroff(COLOR_PAIR(type));
-            }
-
-
+            drawNode(world, current);
             current = getNeighbour(current, EDGE_CELL_RIGHT);
         }
         line = getNeighbour(line, EDGE_CELL_BOTTOM);
         current = line;
     }
     move(view->cur_r,view->cur_c);
-
 }
 
 int viewProcess(World * world, View * view, List * list)
@@ -412,9 +426,11 @@ int viewProcess(World * world, View * view, List * list)
 
     if(list != NULL)
     {
+        ListElement * le = list -> head;
         for (int i = 0; i < list -> length; i++)
         {
-            Message * message = listGetByN(list, i);
+            int * data;
+            Message * message = (Message *) le -> data;
             switch(message -> type)
             {
                 case VIEW_ESCAPE:
@@ -433,6 +449,17 @@ int viewProcess(World * world, View * view, List * list)
                 case VIEW_REDRAW_MAP:
                     drawMap(world, view);
                 break;
+
+                // TODO Doesn't work. Fix!
+                /*case VIEW_REDRAW_CELL:
+                    // data[0] is r, data[1] is c.
+                    data = (int *) message -> data;
+                    mvprintw(0, 0, "%d %d", data[0], data[1]);
+                    move(data[0], data[1]);
+                    drawNode(world, getCell(player -> graph_map, data[0], data[1]));
+                    move(view -> cur_r, view -> cur_c);
+                    //drawMap(world, view);
+                break;*/
 
                 case VIEW_REDRAW_TECH_DIALOG:
                     drawTechView(world, view);
@@ -503,6 +530,7 @@ int viewProcess(World * world, View * view, List * list)
                     move(view -> cur_r, view -> cur_c);
                 break;
             }
+            le = le -> next;
         }
         listDestroy(list, &destroyMessage);
     }
