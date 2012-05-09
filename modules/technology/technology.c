@@ -64,6 +64,20 @@ void destroyTechnology(void * data)
     free(t);
 }
 
+TechnologyResearch * createResearch(int id)
+{
+    TechnologyResearch * tr = malloc(sizeof(TechnologyResearch));
+    tr -> id = id;
+    tr -> turns = 0;
+    tr -> delta = 0;
+    return tr;
+}
+
+void destroyResearch(TechnologyResearch * tr)
+{
+    free(tr);
+}
+
 Node * createEdgesInTechnologyTree(DynArray * techs_data)
 {
     // Passing each technology.
@@ -124,6 +138,12 @@ IntArray * createTechnologyStatus(DynArray * techs_info)
 
 void updateTechnologyStatus(IntArray * techs_status, Node * tech)
 {
+    // Getting technology.
+    Technology * t = (Technology *) tech -> data;
+
+    // Marking technology as researched.
+    iaSetByIndex(techs_status, t -> id, TECH_RESEARCHED);
+
     DynArray * edges = tech -> edges;
     for(int i = 0; i < edges -> length; i++)
     {

@@ -3,6 +3,7 @@
     <technology>
         <id>0</id>
         <name>Wood working</name>
+        <turns>4</turns>
 
         <provides>
             <units>0</units>
@@ -17,6 +18,7 @@
     <technology>
         <id>1</id>
         <name>Cultivation</name>
+        <turns>4</turns>
 
         <provides>
             <units></units>
@@ -31,6 +33,7 @@
     <technology>
         <id>2</id>
         <name>Stone working</name>
+        <turns>5</turns>
 
         <provides>
             <units>1</units>
@@ -45,6 +48,7 @@
     <technology>
         <id>3</id>
         <name>Bronze working</name>
+        <turns>5</turns>
 
         <provides>
             <units>2</units>
@@ -59,6 +63,7 @@
     <technology>
         <id>4</id>
         <name>Iron working</name>
+        <turns>6</turns>
 
         <provides>
             <units>3</units>
@@ -73,6 +78,7 @@
     <technology>
         <id>5</id>
         <name>Animal domestication</name>
+        <turns>4</turns>
 
         <provides>
             <units>4</units>
@@ -87,6 +93,7 @@
     <technology>
         <id>6</id>
         <name>The wheel</name>
+        <turns>4</turns>
 
         <provides>
             <units></units>
@@ -101,6 +108,7 @@
     <technology>
         <id>7</id>
         <name>Engineering</name>
+        <turns>5</turns>
 
         <provides>
             <units>11</units>
@@ -115,6 +123,7 @@
     <technology>
         <id>8</id>
         <name>Steam engine</name>
+        <turns>6</turns>
 
         <provides>
             <units>10</units>
@@ -129,6 +138,7 @@
     <technology>
         <id>9</id>
         <name>Gunpowder</name>
+        <turns>7</turns>
 
         <provides>
             <units>5</units>
@@ -143,6 +153,7 @@
     <technology>
         <id>10</id>
         <name>Alphabet</name>
+        <turns>3</turns>
 
         <provides>
             <units></units>
@@ -157,6 +168,7 @@
     <technology>
         <id>11</id>
         <name>Map</name>
+        <turns>3</turns>
 
         <provides>
             <units>6</units>
@@ -171,6 +183,7 @@
     <technology>
         <id>12</id>
         <name>Metallurgy</name>
+        <turns>8</turns>
 
         <provides>
             <units>7</units>
@@ -185,6 +198,7 @@
     <technology>
         <id>13</id>
         <name>Tactics</name>
+        <turns>7</turns>
 
         <provides>
             <units></units>
@@ -199,6 +213,7 @@
     <technology>
         <id>14</id>
         <name>Mobile warfare</name>
+        <turns>8</turns>
 
         <provides>
             <units>9</units>
@@ -213,6 +228,7 @@
     <technology>
         <id>15</id>
         <name>Leadership</name>
+        <turns>7</turns>
 
         <provides>
             <units>8</units>
@@ -227,6 +243,7 @@
     <technology>
         <id>16</id>
         <name>Knowledge</name>
+        <turns>7</turns>
 
         <provides>
             <units></units>
@@ -241,6 +258,7 @@
     <technology>
         <id>17</id>
         <name>Lord of mushrooms :O</name>
+        <turns>10</turns>
 
         <provides>
             <units>12</units>
@@ -255,6 +273,7 @@
     <technology>
         <id>18</id>
         <name>Desire for knowledge</name>
+        <turns>2</turns>
 
         <provides>
             <units></units>

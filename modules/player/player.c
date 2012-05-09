@@ -13,8 +13,10 @@ Player * createPlayer(char * name, IntArray * available_units, IntArray * availa
     player -> available_units = available_units;
     player -> available_techs = available_techs;
 
+    player -> research = createResearch(0);
+
     // +1, to avoid incomprehensible constructs with id -+ 1 (1..CELL_RES_COUNT
-    // are resources really).
+    // are resources really, 0 is CELL_RES_NONE).
     player -> resources = iaLengthCreate(CELL_RES_COUNT + 1);
 
     player -> cur_r = 0;
@@ -38,6 +40,7 @@ void destroyPlayer(Player * player)
     listDestroy(player -> units, NULL);
     iaDestroy(player -> available_units);
     iaDestroy(player -> available_techs);
+    destroyResearch(player -> research);
     iaDestroy(player -> resources);
     free(player -> name);
     free(player);

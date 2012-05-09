@@ -7,7 +7,7 @@
     Definitions for parser.
 */
 // Count of states.
-#define XML_STATES                  22
+#define XML_STATES                  23
 
 #define XML_NONE                    0
 
@@ -31,11 +31,12 @@
 #define XML_TECH                    15
 #define XML_TECH_ID                 16
 #define XML_TECH_NAME               17
-#define XML_TECH_PROVIDES           18
-#define XML_TECH_PROVIDES_UNITS     19
-#define XML_TECH_PROVIDES_TECHS     20
-#define XML_TECH_REQUIRES           21
-#define XML_TECH_REQUIRES_RESOURCES 22
+#define XML_TECH_TURNS              18
+#define XML_TECH_PROVIDES           19
+#define XML_TECH_PROVIDES_UNITS     20
+#define XML_TECH_PROVIDES_TECHS     21
+#define XML_TECH_REQUIRES           22
+#define XML_TECH_REQUIRES_RESOURCES 23
 
 /*
     Struct for parser data.
