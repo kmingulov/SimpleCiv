@@ -418,7 +418,7 @@ int viewProcess(World * world, View * view, List * list)
             switch(message -> type)
             {
                 case VIEW_ESCAPE:
-                    destroyMessage(message);
+                    listDestroy(list, &destroyMessage);
                     return 0;
                 break;
 
