@@ -2,10 +2,6 @@ SimpleCiv
 =========
 **SimpleCiv** is *really* simple clone of Civilization game.
 
-Concept
--------
-You can find concept of this project in "docs" directory.
-
 Requirements
 ------------
 For compiling:
@@ -13,6 +9,9 @@ For compiling:
 * ncurses-dev
 * expat-dev
 * make
+For execution:
+* ncurses
+* expat
 
 Installation
 ------------
@@ -30,8 +29,26 @@ Use valgrind to find memory leaks and other unpleasant bugs (with memory):
 
 You need to know, what ncurses have a lot of memory "leaks". You can read more about this [here](http://invisible-island.net/ncurses/ncurses.faq.html#config_leaks).
 
-Tests
------
-You can find tests for modules in tests directory. Compile them by simple `make`.
+Concept
+-------
+You can find concept of this project in "docs" directory.
 
-Tests use some of the modules and test *all* their functions (if possible with asserts).
+Keyboard control
+----------------
+**Map window**
+* *Arrow keys* — move map/unit.
+* *Enter* — end turn.
+* *Space* — choose unit to move or open city dialog to hire units.
+* *c* — create city (choosed settler is needed).
+* *t* — open researching technologies dialog.
+* *Esc* — quit game.
+
+**Technologies dialog**
+* *Up/down arrow keys* — choose technology.
+* *Enter* — start researching (will terminate current researching).
+* *Esc* — return to map.
+
+**Hiring units dialog**
+* *Up/down arrow keys* — choose unit.
+* *Enter* — start hiring (will terminate current hiring).
+* *Esc* — return to map.
