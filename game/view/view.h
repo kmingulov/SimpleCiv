@@ -82,8 +82,8 @@ void drawCellInfo(World * world, View * view);
 void drawMap(World * world, View * view);
 
 /*
-    Event handling.
+    Event handling. Returns 0 if game need to terminate, else 1.
 */
-void viewProcess(World * world, View * view, Message * message);
+int viewProcess(World * world, View * view, Message * message);
 
 #endif

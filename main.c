@@ -26,18 +26,17 @@ int main()
     int key = 0;
     while(true)
     {
+
         // Process view. Redraw some elements. Depends on action = control's
         // decision what view need to redraw.
-        viewProcess(world, view, message);
+        if(viewProcess(world, view, message) == 0)
+        {
+            // Good bye.
+            break;
+        }
 
         // Reading key.
         key = getch();
-
-        // Good bye.
-        if(key == KEY_ESCAPE)
-        {
-            break;
-        }
 
         // Process control. Does something with world. Depends on key.
         message = controlProcess(world, view, control, key);

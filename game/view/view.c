@@ -191,7 +191,7 @@ void drawTechView(World * world, View * view)
 
     // Drawing available technologies.
     attron(A_BOLD); mvprintw(5, 3, "Available for researching:"); attroff(A_BOLD);
-    int line = 6; int count = 0;
+    int line = 6; int start_r = line; int count = 0;
     for(int i = 0; i < player -> available_techs -> length; i++)
     {
         int value = iaGetByIndex(player -> available_techs, i);
@@ -248,6 +248,8 @@ void drawTechView(World * world, View * view)
             mvprintw(line++, 3, "%s", t -> name);
         }
     }
+
+    move(start_r, 4);
 }
 
 void clearBlock(int start_r, int start_c, int r, int c)
@@ -404,7 +406,7 @@ void drawMap(World * world, View * view)
 
 }
 
-void viewProcess(World * world, View * view, Message * message)
+int viewProcess(World * world, View * view, Message * message)
 {
     Player * player = (Player *) world -> graph_players -> data;
 
@@ -412,6 +414,11 @@ void viewProcess(World * world, View * view, Message * message)
     {
         switch(message -> type)
         {
+            case VIEW_ESCAPE:
+                destroyMessage(message);
+                return 0;
+            break;
+
             case VIEW_REDRAW_ALL:
                 drawGeneralView(world, view);
                 drawPlayerInfo(world, view);
@@ -422,6 +429,10 @@ void viewProcess(World * world, View * view, Message * message)
 
             case VIEW_REDRAW_MAP:
                 drawMap(world, view);
+            break;
+
+            case VIEW_REDRAW_TECH_DIALOG:
+                drawTechView(world, view);
             break;
 
             case VIEW_MOVE_CURSOR_TOP:
@@ -492,4 +503,7 @@ void viewProcess(World * world, View * view, Message * message)
 
         destroyMessage(message);
     }
+
+    // No need in terminating.
+    return 1;
 }

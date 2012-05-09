@@ -9,6 +9,7 @@ For compiling:
 * ncurses-dev
 * expat-dev
 * make
+
 For execution:
 * ncurses
 * expat
@@ -41,14 +42,14 @@ Keyboard control
 * *Space* — choose unit to move or open city dialog to hire units.
 * *c* — create city (choosed settler is needed).
 * *t* — open researching technologies dialog.
-* *Esc* — quit game.
+* *q* — quit game.
 
 **Technologies dialog**
 * *Up/down arrow keys* — choose technology.
 * *Enter* — start researching (will terminate current researching).
-* *Esc* — return to map.
+* *q* — return to map.
 
 **Hiring units dialog**
 * *Up/down arrow keys* — choose unit.
 * *Enter* — start hiring (will terminate current hiring).
-* *Esc* — return to map.
+* *q* — return to map.

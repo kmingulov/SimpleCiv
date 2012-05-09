@@ -52,7 +52,6 @@ Message * controlProcess(World * world, View * view, Control * control, int key)
             }
         }
 
-        // TODO Move unit state.
         // TODO Choose technology state (only up/down arrow keys).
     }
 
@@ -93,17 +92,48 @@ Message * controlProcess(World * world, View * view, Control * control, int key)
         return createMessage(VIEW_REDRAW_ALL, NULL);
     }
 
-    if (key == KEY_SPACE)
+    // Switching between CONTROL_MOVE_UNIT and CONTROL_MOVE_CURSOR states.
+    // TODO Add city state.
+    if(key == KEY_SPACE)
     {
-        if (getNeighbour(view -> current_cell, EDGE_CELL_UNIT) != NULL )
+        if(getNeighbour(view -> current_cell, EDGE_CELL_UNIT) != NULL)
         {
-            if (control -> state == CONTROL_MOVE_UNIT)
+            if(control -> state == CONTROL_MOVE_UNIT)
+            {
                 control -> state = CONTROL_MOVE_CURSOR;
+                return NULL;
+            }
             else
+            {
                 control -> state = CONTROL_MOVE_UNIT;
+                return NULL;
+            }
+        }
+    }
+
+    // Turning technology state.
+    if((char) key == 'T' || (char) key == 't')
+    {
+        if(control -> state == CONTROL_MOVE_CURSOR)
+        {
+            control -> state = CONTROL_CHOOSE_TECH;
+            return createMessage(VIEW_REDRAW_TECH_DIALOG, NULL);
+        }
+    }
+
+    // Trying to escape?
+    if((char) key == 'Q' || (char) key == 'q')
+    {
+        if(control -> state == CONTROL_MOVE_CURSOR || control -> state == CONTROL_MOVE_UNIT)
+        {
+            return createMessage(VIEW_ESCAPE, NULL);
         }
 
-
+        if(control -> state == CONTROL_CHOOSE_TECH)
+        {
+            control -> state = CONTROL_MOVE_CURSOR;
+            return createMessage(VIEW_REDRAW_ALL, NULL);
+        }
     }
 
     return NULL;
