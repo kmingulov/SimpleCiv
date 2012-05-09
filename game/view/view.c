@@ -506,7 +506,7 @@ int viewProcess(World * world, View * view, List * list)
         }
 
         //~ destroyMessage(message);
-        listDestroy(list, &free);
+        listDestroy(list, &destroyMessage);
 
     }
 

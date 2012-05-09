@@ -5,6 +5,7 @@
 #include "game/view/view.h"
 #include "game/control/control.h"
 
+#include "modules/list/list.h"
 #include "game/message/message.h"
 
 int main()
@@ -23,12 +24,14 @@ int main()
 
 
     Message * message = createMessage(VIEW_REDRAW_ALL, NULL);
+    List * list = listCreate();
+    listPrepend(list,message);
     int key = 0;
     while(true)
     {
         // Process view. Redraw some elements. Depends on action = control's
         // decision what view need to redraw.
-        if(viewProcess(world, view, message) == 0)
+        if(viewProcess(world, view, list) == 0)
         {
             // Good bye.
             break;
@@ -45,6 +48,7 @@ int main()
 
     // Destroing everything.
     destroyControl(control);
+    listDestroy(list,&destroyMessage);
     destroyView(view);
     destroyWorld(world);
 
