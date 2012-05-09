@@ -2,6 +2,7 @@
 #define PLAYERS
 
 #include "../list/list.h"
+#include "../technology/technology.h"
 #include "../graph/graph.h"
 #include "../int_array/int_array.h"
 
@@ -28,6 +29,9 @@ typedef struct Player
     // Arrays of available units and technologies.
     IntArray * available_units;
     IntArray * available_techs;
+
+    // Current player's researching.
+    TechnologyResearch * research;
 
     // Array of player's resources.
     IntArray * resources;

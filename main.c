@@ -26,7 +26,6 @@ int main()
     int key = 0;
     while(true)
     {
-
         // Process view. Redraw some elements. Depends on action = control's
         // decision what view need to redraw.
         if(viewProcess(world, view, message) == 0)

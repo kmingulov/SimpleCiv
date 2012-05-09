@@ -28,6 +28,6 @@
     Interface definitions.
 */
 #define SIDEBAR_PLAYER_BLOCK    2
-#define SIDEBAR_CELL_BLOCK      10
+#define SIDEBAR_CELL_BLOCK      11
 
 #endif

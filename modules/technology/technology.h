@@ -15,6 +15,8 @@ typedef struct Technology
 {
 	int id;
     char * name;
+    // How many turns have to spend on researching this technology.
+    int turns;
     IntArray * requires_resources;
     IntArray * provides_units;
 } Technology;
@@ -24,6 +26,15 @@ typedef struct TechnologyParseInfo
     IntArray * provides_technologies;
     Node * tech_in_tree;
 } TechnologyParseInfo;
+
+typedef struct TechnologyResearch
+{
+    int id;
+    // How many turns we researching this technology.
+    int turns;
+    // How many gold it's cost.
+    int delta;
+} TechnologyResearch;
 
 /*
     Creates new variable of type TechnologyParseInfo.
@@ -44,6 +55,16 @@ void destroyTechnologyCommonInfo(void * data);
     Destroys Technology.
 */
 void destroyTechnology(void * data);
+
+/*
+    Creates new research.
+*/
+TechnologyResearch * createResearch(int id);
+
+/*
+    Destroys research.
+*/
+void destroyResearch(TechnologyResearch * tr);
 
 /*
     Creates edges in technology tree.

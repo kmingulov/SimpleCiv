@@ -18,20 +18,20 @@
 */
 const char xml_tags[][13] = {"map", "rows", "columns", "players", "count",
     "names", "cities", "unit", "id", "name", "char", "health", "damage",
-    "moves", "technology", "id", "name", "provides", "units", "technologies",
-    "requires", "resources"};
+    "moves", "technology", "id", "name", "turns", "provides", "units",
+    "technologies", "requires", "resources"};
 
 const int xml_states[] = {XML_MAP, XML_MAP_ROWS, XML_MAP_COLUMNS, XML_PLAYERS,
     XML_PLAYERS_COUNT, XML_PLAYERS_NAMES, XML_PLAYERS_CITIES, XML_UNIT,
     XML_UNIT_ID, XML_UNIT_NAME, XML_UNIT_CHAR, XML_UNIT_HEALTH, XML_UNIT_DAMAGE,
-    XML_UNIT_MOVES, XML_TECH, XML_TECH_ID, XML_TECH_NAME, XML_TECH_PROVIDES,
-    XML_TECH_PROVIDES_UNITS, XML_TECH_PROVIDES_TECHS, XML_TECH_REQUIRES,
-    XML_TECH_REQUIRES_RESOURCES};
+    XML_UNIT_MOVES, XML_TECH, XML_TECH_ID, XML_TECH_NAME, XML_TECH_TURNS,
+    XML_TECH_PROVIDES, XML_TECH_PROVIDES_UNITS, XML_TECH_PROVIDES_TECHS,
+    XML_TECH_REQUIRES, XML_TECH_REQUIRES_RESOURCES};
 
 const int xml_parents[] = {0, XML_MAP, XML_MAP, 0, XML_PLAYERS, XML_PLAYERS,
     XML_PLAYERS, 0, XML_UNIT, XML_UNIT, XML_UNIT, XML_UNIT, XML_UNIT, XML_UNIT,
-    0, XML_TECH, XML_TECH, XML_TECH, XML_TECH_PROVIDES, XML_TECH_PROVIDES,
-    XML_TECH, XML_TECH_REQUIRES};
+    0, XML_TECH, XML_TECH, XML_TECH, XML_TECH, XML_TECH_PROVIDES,
+    XML_TECH_PROVIDES, XML_TECH, XML_TECH_REQUIRES};
 
 void elementStart(void * data, const char * name, const char ** attr)
 {
@@ -142,6 +142,10 @@ void elementContent(void * data, const char * s, int len)
             case XML_TECH_NAME:
                 temp_data = malloc(sizeof(char) * (strlen(temp) + 1));
                 ((Technology *) ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> tech_in_tree -> data) -> name = strcpy(temp_data, temp);
+            break;
+
+            case XML_TECH_TURNS:
+                ((Technology *) ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> tech_in_tree -> data) -> turns = atoi(temp);
             break;
 
             case XML_TECH_PROVIDES_UNITS:
