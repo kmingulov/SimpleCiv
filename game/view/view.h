@@ -15,6 +15,7 @@
 
 #include "definitions.h"
 #include "../../modules/cell/cell.h"
+#include "../../modules/list/list.h"
 #include "../world/world.h"
 #include "../message/message.h"
 
@@ -84,6 +85,6 @@ void drawMap(World * world, View * view);
 /*
     Event handling. Returns 0 if game need to terminate, else 1.
 */
-int viewProcess(World * world, View * view, Message * message);
+int viewProcess(World * world, View * view, List * list);
 
 #endif
