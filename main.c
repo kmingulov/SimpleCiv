@@ -23,15 +23,14 @@ int main()
 
 
 
-    Message * message = createMessage(VIEW_REDRAW_ALL, NULL);
-    List * list = listCreate();
-    listPrepend(list,message);
+    List * queue = listCreate();
+    listPrepend(queue, createMessage(VIEW_REDRAW_ALL, NULL));
     int key = 0;
     while(true)
     {
         // Process view. Redraw some elements. Depends on action = control's
         // decision what view need to redraw.
-        if(viewProcess(world, view, list) == 0)
+        if(viewProcess(world, view, queue) == 0)
         {
             // Good bye.
             break;
@@ -41,14 +40,13 @@ int main()
         key = getch();
 
         // Process control. Does something with world. Depends on key.
-        message = controlProcess(world, view, control, key);
+        queue = controlProcess(world, view, control, key);
     }
 
 
 
     // Destroing everything.
     destroyControl(control);
-    listDestroy(list,&destroyMessage);
     destroyView(view);
     destroyWorld(world);
 

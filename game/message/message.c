@@ -10,8 +10,10 @@ Message * createMessage(unsigned char type, void * data)
     return message;
 }
 
-void destroyMessage(Message * message)
+void destroyMessage(void * data)
 {
+    Message * message = (Message *) data;
+
     if(message -> data != NULL)
     {
         free(message -> data);

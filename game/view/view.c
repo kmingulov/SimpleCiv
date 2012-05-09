@@ -414,7 +414,7 @@ int viewProcess(World * world, View * view, List * list)
     {
         for (int i = 0; i < list -> length; i++)
         {
-            Message * message = listGetByN(list,i);
+            Message * message = listGetByN(list, i);
             switch(message -> type)
             {
                 case VIEW_ESCAPE:
@@ -504,10 +504,7 @@ int viewProcess(World * world, View * view, List * list)
                 break;
             }
         }
-
-        //~ destroyMessage(message);
         listDestroy(list, &destroyMessage);
-
     }
 
     // No need in terminating.

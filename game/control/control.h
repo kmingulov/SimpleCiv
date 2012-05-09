@@ -6,6 +6,7 @@
 #include "../../modules/player/player.h"
 #include "../../modules/unit/unit.h"
 #include "../../modules/city/city.h"
+#include "../../modules/list/list.h"
 
 typedef struct Control
 {

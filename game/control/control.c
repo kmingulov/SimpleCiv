@@ -26,9 +26,8 @@ void destroyControl(Control * control)
 
 List * controlProcess(World * world, View * view, Control * control, int key)
 {
-
-
     List * list = listCreate();
+
     // Arrow keys.
     if(key == KEY_UP || key == KEY_DOWN || key == KEY_RIGHT || key == KEY_LEFT)
     {
@@ -38,23 +37,22 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             switch (key)
             {
                 case KEY_UP   :
-                    //~ listAddMessage(listmessage,createMessage(VIEW_MOVE_CURSOR_TOP,    NULL))
-                    listPrepend(list,createMessage(VIEW_MOVE_CURSOR_TOP,    NULL));
-                    return(list);
-                    break;
+                    listPrepend(list, createMessage(VIEW_MOVE_CURSOR_TOP, NULL));
+                break;
+
                 case KEY_DOWN :
-                    listPrepend(list,createMessage(VIEW_MOVE_CURSOR_BOTTOM,    NULL));
-                    return(list);
-                    break;
+                    listPrepend(list, createMessage(VIEW_MOVE_CURSOR_BOTTOM, NULL));
+                break;
+
                 case KEY_RIGHT:
-                    listPrepend(list,createMessage(VIEW_MOVE_CURSOR_RIGHT,    NULL));
-                    return(list);
-                    break;
+                    listPrepend(list, createMessage(VIEW_MOVE_CURSOR_RIGHT, NULL));
+                break;
+
                 case KEY_LEFT :
-                    listPrepend(list,createMessage(VIEW_MOVE_CURSOR_LEFT,    NULL));
-                    return(list);
-                    break;
+                    listPrepend(list, createMessage(VIEW_MOVE_CURSOR_LEFT, NULL));
+                break;
             }
+            return list;
         }
 
         if(control -> state == CONTROL_MOVE_UNIT)
@@ -66,6 +64,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                 case KEY_RIGHT: moveUnit(view->current_cell, EDGE_CELL_RIGHT); break;
                 case KEY_LEFT : moveUnit(view->current_cell, EDGE_CELL_LEFT); break;
             }
+            // TODO add queue
         }
 
         // TODO Choose technology state (only up/down arrow keys).
@@ -105,10 +104,10 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         // This fix doesn't work O_O. So I added player -> current_cell.
         //view -> current_cell = getCell(player -> graph_map, view -> map_r, view -> map_c);
         // Send redrawing message.
-        listPrepend(list,createMessage(VIEW_REDRAW_ALL, NULL));
-        return(list);
+        listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+        return list;
     }
-//~ //~
+
     // Switching between CONTROL_MOVE_UNIT and CONTROL_MOVE_CURSOR states.
     // TODO Add city state.
     if(key == KEY_SPACE)
@@ -127,15 +126,15 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             }
         }
     }
-//~ //~
+
     // Turning technology state.
     if((char) key == 'T' || (char) key == 't')
     {
         if(control -> state == CONTROL_MOVE_CURSOR)
         {
             control -> state = CONTROL_CHOOSE_TECH;
-            listPrepend(list,createMessage(VIEW_REDRAW_TECH_DIALOG, NULL));
-            return(list);
+            listPrepend(list, createMessage(VIEW_REDRAW_TECH_DIALOG, NULL));
+            return list;
         }
     }
 
@@ -144,17 +143,18 @@ List * controlProcess(World * world, View * view, Control * control, int key)
     {
         if(control -> state == CONTROL_MOVE_CURSOR || control -> state == CONTROL_MOVE_UNIT)
         {
-            listPrepend(list,createMessage(VIEW_ESCAPE, NULL));
-            return(list);
+            listPrepend(list, createMessage(VIEW_ESCAPE, NULL));
+            return list;
         }
 
         if(control -> state == CONTROL_CHOOSE_TECH)
         {
             control -> state = CONTROL_MOVE_CURSOR;
-            listPrepend(list,createMessage(VIEW_REDRAW_ALL, NULL));
-            return(list);
+            listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+            return list;
         }
     }
+
     listDestroy(list, &destroyMessage);
     return NULL;
 }
