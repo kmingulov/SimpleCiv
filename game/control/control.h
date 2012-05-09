@@ -12,10 +12,6 @@ typedef struct Control
 {
     // State of the control.
     unsigned char state;
-
-    // Current unit and city.
-    City * cur_city;
-    Unit * cur_unit;
 } Control;
 
 /*

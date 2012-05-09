@@ -43,9 +43,7 @@ int main()
     assert( listGetByN(l, 2) == head -> next -> next -> data);
     assert( listGetByN(l, 2) == head -> prev -> data);
 
-    assert( listDeleteByPointer(l, data, &free) == 1 );
-
-    listDestroy(l, &free);
+    listDestroy(l, &free);    
 
     return 0;
 }

@@ -80,20 +80,44 @@ int listDeleteByPointer(List * list, void * data, void (* function)(void * data)
 {
     ListElement * current = list -> head;
 
+    if(current -> data == data)
+    {
+        ListElement * prev = current -> prev;
+        ListElement * next = current -> next;
+
+        prev -> next = next;
+        next -> prev = prev;
+
+        if(function != NULL)
+        {
+            function(current -> data);
+        }
+        free(current);
+
+        list -> length--;
+        list -> head = next;
+
+        return 1;
+    }
+
     for(int i = 0; i < list -> length; i++)
     {
         if(current -> data == data)
         {
+            ListElement * prev = current -> prev;
+            ListElement * next = current -> next;
+
+            prev -> next = next;
+            next -> prev = prev;
+
             if(function != NULL)
             {
-                function(data);
+                function(current -> data);
             }
-            ListElement * previous = current -> prev;
-            ListElement * next = current -> next;
-            previous -> next = next;
-            next -> prev = previous;
             free(current);
+
             list -> length--;
+
             return 1;
         }
         current = current -> next;

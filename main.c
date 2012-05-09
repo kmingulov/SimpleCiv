@@ -4,8 +4,6 @@
 #include "game/world/world.h"
 #include "game/view/view.h"
 #include "game/control/control.h"
-
-#include "modules/list/list.h"
 #include "game/message/message.h"
 
 int main()
@@ -20,8 +18,6 @@ int main()
         printf("An error has occurred. Terminating.\n");
         return 1;
     }
-
-
 
     List * queue = listCreate();
     listPrepend(queue, createMessage(VIEW_REDRAW_ALL, NULL));
@@ -43,14 +39,10 @@ int main()
         queue = controlProcess(world, view, control, key);
     }
 
-
-
     // Destroing everything.
     destroyControl(control);
     destroyView(view);
     destroyWorld(world);
-
-
 
     return 0;
 }

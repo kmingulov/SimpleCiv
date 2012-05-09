@@ -446,6 +446,12 @@ int viewProcess(World * world, View * view, List * list)
                     move(view -> cur_r, view -> cur_c);
                 break;
 
+                case VIEW_REDRAW_INFO:
+                    drawPlayerInfo(world, view);
+                    drawCellInfo(world, view);
+                    move(view -> cur_r, view -> cur_c);
+                break;
+
                 case VIEW_REDRAW_MAP:
                     drawMap(world, view);
                 break;

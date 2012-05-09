@@ -14,8 +14,6 @@ Control * createControl()
 {
     Control * control = malloc(sizeof(Control));
     control -> state = CONTROL_MOVE_CURSOR;
-    control -> cur_unit = NULL;
-    control -> cur_city = NULL;
     return control;
 }
 
@@ -87,7 +85,8 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                 if(key == keys[i][0])
                 {
                     // Succefully moved unit.
-                    if(moveUnit(view -> current_cell, keys[i][1], world -> units_info) != 0)
+                    int res = moveUnit(world, view -> current_cell, keys[i][1]);
+                    if(res == 1)
                     {
                         List * list = listCreate();
                         // Redrawing two cells. TODO Doesn't work. Fix!
@@ -98,6 +97,12 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                         listPrepend(list, createMessage(VIEW_REDRAW_MAP, NULL));
                         // Moving cursor.
                         listPrepend(list, createMessage(keys[i][2], NULL));
+                        return list;
+                    }
+                    else if(res == 2)
+                    {
+                        List * list = listCreate();
+                        listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
                         return list;
                     }
                     return NULL;
@@ -123,8 +128,6 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             player -> current_cell = view -> current_cell;
             // Nulling all.
             control -> state = CONTROL_MOVE_CURSOR;
-            control -> cur_unit = NULL;
-            control -> cur_city = NULL;
             // Processing player's units and cities.
             listForEach(player -> cities, &developCity);
             ListElement * le = player -> units -> head;

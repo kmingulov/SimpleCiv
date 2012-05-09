@@ -61,7 +61,7 @@ Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char u
 /*
     Figth between two units.
 */
-void unitsFight(DynArray * units_info, Unit * u1, Unit * u2);
+void unitsFight(World * world, Unit ** unit1, Unit ** unit2);
 
 
 /*
@@ -71,9 +71,10 @@ void unitsFight(DynArray * units_info, Unit * u1, Unit * u2);
 void developUnit(void * data, DynArray * info);
 
 /*
-    Moves unit. Returns 0 if failed.
+    Moves unit. Returns 0 if failed, 1 if moved succefully, 2 if there was a
+    fight.
 */
 
-int moveUnit(Node * current_cell, int dir, DynArray * units_info);
+int moveUnit(World * world, Node * current_cell, int direction);
 
 #endif

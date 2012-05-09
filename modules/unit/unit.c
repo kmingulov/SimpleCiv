@@ -82,23 +82,63 @@ Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char u
     return unit;
 }
 
-void unitsFight(DynArray * units_info, Unit * unit1, Unit * unit2)
+void destroyUnit(World * world, Unit * unit)
 {
+    // TODO Awful. Maybe rewrite?
+    Player * player = unit -> owner;
+
+    // Removing unit from map.
+    int r = unit -> r; int c = unit -> c;
+    Node * n = getCell(world -> graph_map, r, c);
+    Edge * edge;
+    for(int i = 0; i < n -> edges -> length; i++)
+    {
+        edge = n -> edges -> data[i];
+        if(edge -> type == EDGE_CELL_UNIT)
+        {
+            break;
+        }
+    }
+    // Removing node with unit.
+    destroyNode(edge -> target);
+    // Removing pointer to him from map.
+    daRemoveByPointer(n -> edges, edge, &free);
+
+    // Removing pointer to him from owner's list.
+    listDeleteByPointer(player -> units, unit, NULL);
+}
+
+void unitsFight(World * world, Unit ** unit1, Unit ** unit2)
+{
+    DynArray * units_info = world -> units_info;
+
     // Getting units' info.
-    UnitCommonInfo * u1 = (UnitCommonInfo *) daGetByIndex(units_info, unit1 -> unit_id);
-    UnitCommonInfo * u2 = (UnitCommonInfo *) daGetByIndex(units_info, unit2 -> unit_id);
+    UnitCommonInfo * u1 = (UnitCommonInfo *) daGetByIndex(units_info, (* unit1) -> unit_id);
+    UnitCommonInfo * u2 = (UnitCommonInfo *) daGetByIndex(units_info, (* unit2) -> unit_id);
 
     // Calculating max damage.
-    double damage1 = (double) unit1 -> health / u1 -> max_health * u1 -> max_damage;
-    double damage2 = (double) unit2 -> health / u2 -> max_health * u2 -> max_damage;
+    double damage1 = (double) (* unit1) -> health / u1 -> max_health * u1 -> max_damage;
+    double damage2 = (double) (* unit2) -> health / u2 -> max_health * u2 -> max_damage;
 
     // Random damage between 70% and 100% of damage1/damage2.
     damage1 *= ((double) (rand() % 7 + 3.0f)) / 10.0f;
     damage2 *= ((double) (rand() % 7 + 3.0f)) / 10.0f;
 
     // Fight!
-    unit1 -> health -= ceil(damage2);
-    unit2 -> health -= ceil(damage1);
+    (* unit1) -> health -= ceil(damage2);
+    (* unit2) -> health -= ceil(damage1);
+
+    // Checking there're alive or not.
+    if( (* unit1) -> health <= 0 )
+    {
+        destroyUnit(world, * unit1);
+        * unit1 = NULL;
+    }
+    if( (* unit2) -> health <= 0 )
+    {
+        destroyUnit(world, * unit2);
+        * unit2 = NULL;
+    }
 }
 
 void developUnit(void * data, DynArray * info)
@@ -117,10 +157,9 @@ void developUnit(void * data, DynArray * info)
     unit -> moves = unit_info-> max_moves;
 }
 
-int moveUnit(Node * current_cell, int dir, DynArray * units_info)
+int moveUnit(World * world, Node * current_cell, int direction)
 {
-    // TODO Check if one the units die.
-
+    // Getting edge to unit.
     Edge * edge;
     for(int i = 0; i < current_cell -> edges -> length; i++)
     {
@@ -131,35 +170,44 @@ int moveUnit(Node * current_cell, int dir, DynArray * units_info)
         }
     }
 
+    // Unit cannot go any more.
     Unit * unit = (Unit *) edge -> target -> data;
-
     if(unit -> moves == 0)
     {
         return 0;
     }
 
-    Node * destination = getNeighbour(current_cell, dir);
-
     // Cannot go to the water.
+    Node * destination = getNeighbour(current_cell, direction);
     if( ((Cell *) destination -> data) -> territory == CELL_TYPE_WATER )
     {
         return 0;
     }
 
-    // Oh, there is another unit…
+    // There is another unit?
     Node * neighbour = getNeighbour(destination, EDGE_CELL_UNIT);
-    if( neighbour != NULL )
+    if(neighbour != NULL)
     {
-        Unit * neigh = (Unit *) neighbour -> data;
+        Unit * another_unit = (Unit *) neighbour -> data;
         // Fight!
-        if(neigh -> owner != unit -> owner)
+        if(another_unit -> owner != unit -> owner)
         {
-            unitsFight(units_info, unit, neigh);
+            unit -> moves = 0;
+            unitsFight(world, &unit, &another_unit);
+            return 2;
         }
         return 0;
     }
 
+    // Motion.
     unit -> moves--;
+    switch(direction)
+    {
+        case EDGE_CELL_TOP:    unit -> r--; break;
+        case EDGE_CELL_BOTTOM: unit -> r++; break;
+        case EDGE_CELL_RIGHT:  unit -> c++; break;
+        case EDGE_CELL_LEFT:   unit -> c--; break;
+    }
     daRemoveByPointer(current_cell -> edges, edge, NULL);
     daPrepend(destination -> edges, edge);
 
