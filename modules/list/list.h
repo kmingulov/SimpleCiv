@@ -40,6 +40,12 @@ void listPrepend(List * list, void * data);
 void * listGetByN(List * list, int n);
 
 /*
+    Removes element in list by pointer.
+    Returns 0 if failed, 1 if deleted succesfully.
+*/
+int listDeleteByPointer(List * list, void * data, void (* function)(void * data));
+
+/*
     Executes function for each list element.
 */
 void listForEach(List * list, void (* function)(void * data));

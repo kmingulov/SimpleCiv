@@ -15,11 +15,13 @@ int main()
 
     assert(listGetByN(l, 0) == NULL);
 
+    int * data = NULL;
+
     for(int i = 0; i < 3; i++)
     {
-        int * d = malloc(sizeof(int));
-        * d = i;
-        listPrepend(l, d);
+        data = malloc(sizeof(int));
+        * data = i;
+        listPrepend(l, data);
     }
 
     listForEach(l, &foreach);
@@ -40,6 +42,8 @@ int main()
     assert( listGetByN(l, 1) == head -> prev -> prev -> data);
     assert( listGetByN(l, 2) == head -> next -> next -> data);
     assert( listGetByN(l, 2) == head -> prev -> data);
+
+    assert( listDeleteByPointer(l, data, &free) == 1 );
 
     listDestroy(l, &free);
 
