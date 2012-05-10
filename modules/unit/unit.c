@@ -69,6 +69,11 @@ Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char u
     unit -> unit_id = unit_id;
     unit -> health = info -> max_health;
     unit -> moves = info -> max_moves;
+    if (ADMIN_MODE)
+    {
+        unit -> moves = unit -> moves * 100 ;
+    }
+
 
     // Adding owner info.
     unit -> owner = player;
