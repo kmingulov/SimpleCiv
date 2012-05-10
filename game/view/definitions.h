@@ -23,6 +23,9 @@
 #define VIEW_MOVE_CURSOR_TOP    7
 #define VIEW_MOVE_CURSOR_BOTTOM 8
 
+#define VIEW_MOVE_TECH_CURSOR_TOP    10
+#define VIEW_MOVE_TECH_CURSOR_BOTTOM 11
+
 #define VIEW_ESCAPE             9
 
 /*

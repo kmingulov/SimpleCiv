@@ -111,6 +111,22 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         }
 
         // TODO Choose technology state (only up/down arrow keys).
+
+        if(control -> state == CONTROL_CHOOSE_TECH)
+        {
+            List * list = listCreate();
+            switch (key)
+            {
+                case KEY_UP   :
+                    listPrepend(list, createMessage(VIEW_MOVE_TECH_CURSOR_TOP, NULL));
+                break;
+
+                case KEY_DOWN :
+                    listPrepend(list, createMessage(VIEW_MOVE_TECH_CURSOR_BOTTOM, NULL));
+                break;
+            }
+            return list;
+        }
     }
 
     // Enter (end of the turn).
@@ -207,13 +223,21 @@ List * controlProcess(World * world, View * view, Control * control, int key)
     // Turning technology state.
     if((char) key == 'T' || (char) key == 't')
     {
-        if(control -> state == CONTROL_MOVE_CURSOR)
+        if(control -> state == CONTROL_MOVE_CURSOR || control -> state == CONTROL_MOVE_UNIT )
         {
             control -> state = CONTROL_CHOOSE_TECH;
             List * list = listCreate();
             listPrepend(list, createMessage(VIEW_REDRAW_TECH_DIALOG, NULL));
             return list;
         }
+        else
+        {
+            control -> state = CONTROL_MOVE_CURSOR;
+            List * list = listCreate();
+            listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+            return list;
+        }
+
     }
 
     // Trying to escape?
@@ -225,14 +249,14 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             listPrepend(list, createMessage(VIEW_ESCAPE, NULL));
             return list;
         }
-
-        if(control -> state == CONTROL_CHOOSE_TECH)
-        {
-            control -> state = CONTROL_MOVE_CURSOR;
-            List * list = listCreate();
-            listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
-            return list;
-        }
+//~
+        //~ if(control -> state == CONTROL_CHOOSE_TECH)
+        //~ {
+            //~ control -> state = CONTROL_MOVE_CURSOR;
+            //~ List * list = listCreate();
+            //~ listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+            //~ return list;
+        //~ }
     }
 
     return NULL;

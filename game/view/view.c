@@ -466,10 +466,6 @@ int viewProcess(World * world, View * view, List * list)
                     //drawMap(world, view);
                 break;*/
 
-                case VIEW_REDRAW_TECH_DIALOG:
-                    drawTechView(world, view);
-                break;
-
                 case VIEW_MOVE_CURSOR_TOP:
                     view -> current_cell = getNeighbour(view -> current_cell, EDGE_CELL_TOP);
                     view -> map_r--; view -> map_r = view -> map_r < 0 ? view -> map_r + world -> properties -> map_r : view -> map_r;
@@ -534,6 +530,21 @@ int viewProcess(World * world, View * view, List * list)
                     drawCellInfo(world, view);
                     move(view -> cur_r, view -> cur_c);
                 break;
+
+                case VIEW_REDRAW_TECH_DIALOG:
+                    drawTechView(world, view);
+                break;
+
+                case VIEW_MOVE_TECH_CURSOR_TOP:
+
+                break;
+
+                case VIEW_MOVE_TECH_CURSOR_BOTTOM:
+
+                break;
+
+
+
             }
             le = le -> next;
         }
