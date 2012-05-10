@@ -109,13 +109,13 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         if(control -> state == CONTROL_CHOOSE_TECH)
         {
             List * list = listCreate();
-            switch (key)
+            switch(key)
             {
-                case KEY_UP   :
+                case KEY_UP  :
                     listPrepend(list, createMessage(VIEW_MOVE_TECH_CURSOR_TOP, NULL));
                 break;
 
-                case KEY_DOWN :
+                case KEY_DOWN:
                     listPrepend(list, createMessage(VIEW_MOVE_TECH_CURSOR_BOTTOM, NULL));
                 break;
             }
@@ -125,9 +125,38 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         // TODO Add choosing unit state.
     }
 
-    // Enter (end of the turn).
+    // Enter.
     if(key == KEY_ENTER)
     {
+        // Start research.
+        if(control -> state == CONTROL_CHOOSE_TECH)
+        {
+            Player * player = (Player *) world -> graph_players -> data;
+            int current = view -> chooser -> current;
+            // Change research.
+            if(current == -1)
+            {
+                player -> research -> id = -1;
+                player -> research -> turns = 0;
+                player -> research -> delta = 0;
+            }
+            else
+            {
+                int t_id = iaGetByIndex(view -> chooser -> ids, current);
+                Technology * t = (Technology *) ((Node *) daGetByIndex(world -> techs_info, t_id)) -> data;
+                player -> research -> id = t_id;
+                player -> research -> turns = 0;
+                player -> research -> delta = 1.5f * t -> turns;
+            }
+            // Go back to the map.
+            control -> state = CONTROL_MOVE_CURSOR;
+            destroyChooser(view -> chooser);
+            view -> chooser = NULL;
+            List * list = listCreate();
+            listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+            return list;
+        }
+
         // End of the turn.
         if(control -> state == CONTROL_MOVE_CURSOR || control -> state == CONTROL_MOVE_UNIT)
         {
@@ -161,9 +190,10 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                 {
                     // Updating tech table.
                     updateTechnologyStatus(player -> available_techs, n);
-                    // Updatint research info.
+                    // Updating research info.
                     player -> research -> id = -1;
                     player -> research -> turns = 0;
+                    player -> research -> delta = 0;
                 }
             }
             // Next player.
@@ -185,46 +215,39 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         }
     }
 
-    // translate to hindi
+    // Space event.
     if(key == KEY_SPACE)
     {
-        Node * n = getNeighbour( view -> current_cell, EDGE_CELL_CITY );
-        if(n == NULL)
-        {
-            // Cannot open dialog for not your unit.
-            Node * n = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
-            if (n != NULL)
-            {
-                Unit * unit = (Unit *) n -> data;
-                Player * player = (Player *) world -> graph_players -> data;
-                if(player != unit -> owner)
-                {
-                    return NULL;
-                }
+        Node * node = NULL;
 
-                if(getNeighbour(view -> current_cell, EDGE_CELL_UNIT) != NULL)
-                {
-                    if(control -> state == CONTROL_MOVE_UNIT)
-                    {
-                        control -> state = CONTROL_MOVE_CURSOR;
-                        return NULL;
-                    }
-                    else
-                    {
-                        control -> state = CONTROL_MOVE_UNIT;
-                        return NULL;
-                    }
-                }
-            }
-            else
+        node = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
+        if(node != NULL)
+        {
+            // Cannot move not your unit.
+            Unit * unit = (Unit *) node -> data;
+            Player * player = (Player *) world -> graph_players -> data;
+            if(player != unit -> owner)
             {
                 return NULL;
             }
+
+            if(control -> state == CONTROL_MOVE_UNIT)
+            {
+                control -> state = CONTROL_MOVE_CURSOR;
+                return NULL;
+            }
+            else
+            {
+                control -> state = CONTROL_MOVE_UNIT;
+                return NULL;
+            }
         }
-        else
+
+        node = getNeighbour(view -> current_cell, EDGE_CELL_CITY);
+        if(node != NULL)
         {
             // Cannot open dialog for not your city.
-            City * city = (City *) n -> data;
+            City * city = (City *) node -> data;
             Player * player = (Player *) world -> graph_players -> data;
             if(player != city -> owner)
             {
@@ -251,9 +274,13 @@ List * controlProcess(World * world, View * view, Control * control, int key)
     // Turning technology state.
     if((char) key == 'T' || (char) key == 't')
     {
-        if(control -> state != CONTROL_CHOOSE_TECH )
+        if(control -> state != CONTROL_CHOOSE_TECH)
         {
+            // Switch state.
             control -> state = CONTROL_CHOOSE_TECH;
+            // Create chooser.
+            view -> chooser = createTechChooser(world);
+            // Send message.
             List * list = listCreate();
             listPrepend(list, createMessage(VIEW_REDRAW_TECH_DIALOG, NULL));
             return list;
@@ -261,6 +288,8 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         else
         {
             control -> state = CONTROL_MOVE_CURSOR;
+            destroyChooser(view -> chooser);
+            view -> chooser = NULL;
             List * list = listCreate();
             listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
             return list;
@@ -280,6 +309,8 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         if(control -> state == CONTROL_CHOOSE_TECH || control -> state == CONTROL_CHOOSE_UNIT)
         {
             control -> state = CONTROL_MOVE_CURSOR;
+            destroyChooser(view -> chooser);
+            view -> chooser = NULL;
             List * list = listCreate();
             listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
             return list;

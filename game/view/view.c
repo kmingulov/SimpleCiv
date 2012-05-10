@@ -40,6 +40,8 @@ View * createView(World * world)
     result -> map_c = result -> cur_c - 1;
     result -> current_cell = getCell(world -> graph_map, result -> map_r, result -> map_c);
 
+    result -> chooser = NULL;
+
     return result;
 }
 
@@ -47,6 +49,69 @@ void destroyView(View * view)
 {
     endwin();
     free(view);
+}
+
+ViewChooser * createTechChooser(World * world)
+{
+    ViewChooser * chooser = malloc(sizeof(ViewChooser));
+
+    chooser -> ids = iaCreate();
+    chooser -> current = -1;
+
+    Player * player = (Player *) world -> graph_players -> data;
+
+    int count = 0;
+    for(int i = 0; i < player -> available_techs -> length; i++)
+    {
+        int value = iaGetByIndex(player -> available_techs, i);
+        if(value == TECH_AVAILABLE)
+        {
+            Technology * t = (Technology *) ((Node *) daGetByIndex(world -> techs_info, i)) -> data;
+            // Checking for resources.
+            if(t -> requires_resources == NULL)
+            {
+                // Nothing requires. Great.
+                count++;
+                iaPrepend(chooser -> ids, t -> id);
+            }
+            else
+            {
+                // Checking for each resource.
+                char okay = 1;
+                for(int j = 0; j < t -> requires_resources -> length; j++)
+                {
+                    // Getting resource id.
+                    int id = iaGetByIndex(t -> requires_resources, j);
+                    // Does player have this resources?
+                    if(iaGetByIndex(player -> resources, id) == 0)
+                    {
+                        // Sad but true.
+                        okay = 0;
+                        break;
+                    }
+                }
+                // You're lucky man.
+                if(okay == 1)
+                {
+                    count++;
+                    iaPrepend(chooser -> ids, t -> id);
+                }
+            }
+            // It is current research?
+            if(t -> id == player -> research -> id)
+            {
+                chooser -> current = count - 1;
+            }
+        }
+    }
+
+    return chooser;
+}
+
+void destroyChooser(ViewChooser * chooser)
+{
+    iaDestroy(chooser -> ids);
+    free(chooser);
 }
 
 void putInMiddle(int start_r, int start_c, int length, const char * format, ...)
@@ -190,7 +255,7 @@ void drawTechView(World * world, View * view)
     attron(A_BOLD); mvprintw(5, 3, "Current research:"); attroff(A_BOLD);
     if(player -> research -> id == -1)
     {
-        mvprintw(6, 3, "No researches");
+        mvprintw(6, 3, "No research");
     }
     else
     {
@@ -202,50 +267,14 @@ void drawTechView(World * world, View * view)
     }
 
     // Drawing available technologies.
+    IntArray * ids = view -> chooser -> ids;
+    int line = 8;
     attron(A_BOLD); mvprintw(8, 3, "Available for researching:"); attroff(A_BOLD);
-    int line = 8; int start_r = line; int count = 0;
-    for(int i = 0; i < player -> available_techs -> length; i++)
+    mvprintw(line++, 3, "[ ] Do not explore anything");
+    for(int i = 0; i < ids -> length; i++)
     {
-        int value = iaGetByIndex(player -> available_techs, i);
-        if(value == TECH_AVAILABLE)
-        {
-            Technology * t = (Technology *) ((Node *) daGetByIndex(world -> techs_info, i)) -> data;
-            // Checking for resources.
-            if(t -> requires_resources == NULL)
-            {
-                // Nothing requires. Great.
-                count++;
-                mvprintw(line++, 3, "[ ] %s (%d turns)", t -> name, t -> turns);
-            }
-            else
-            {
-                // Checking for each resource.
-                char okay = 1;
-                for(int j = 0; j < t -> requires_resources -> length; j++)
-                {
-                    // Getting resource id.
-                    int id = iaGetByIndex(t -> requires_resources, j);
-                    // Does player have this resources?
-                    if(iaGetByIndex(player -> resources, id) == 0)
-                    {
-                        // Sad but true.
-                        okay = 0;
-                        break;
-                    }
-                }
-                // You're lucky man.
-                if(okay == 1)
-                {
-                    count++;
-                    mvprintw(line++, 3, "[ ] %s (%d turns)", t -> name, t -> turns);
-                }
-            }
-        }
-    }
-
-    if(count == 0)
-    {
-        mvprintw(line++, 3, "[*] No technologies");
+        Technology * t = (Technology *) ((Node *) daGetByIndex(world -> techs_info, iaGetByIndex(ids, i))) -> data;
+        mvprintw(line++, 3, "[ ] %s (%d turns)", t -> name, t -> turns);
     }
 
     // Drawing researched technologies.
@@ -261,10 +290,9 @@ void drawTechView(World * world, View * view)
         }
     }
 
-    move(start_r, 4);
+    mvaddch(9 + view -> chooser -> current, 4, '*');
+    move(9 + view -> chooser -> current, 4);
 }
-
-
 
 void drawCityView(World * world, View * view)
 {
@@ -292,13 +320,12 @@ void drawCityView(World * world, View * view)
 
     // Drawing player name and other info.
     Player * player = (Player *) world -> graph_players -> data;
-    //~ City * city = (City * ) getNeighbour( view -> current_cell, EDGE_CELL_CITY );
-    attron(A_BOLD); mvprintw(2, 3, "%s's city", player -> name/*, city -> name*/); attroff(A_BOLD);
-    mvprintw(3, 3, "%d gold, %d gold spents on units every turn", player -> gold, player -> units);
+    City * city = (City * ) getNeighbour(view -> current_cell, EDGE_CELL_CITY) -> data;
+    attron(A_BOLD); mvprintw(2, 3, "%s's city %s", player -> name, city -> name); attroff(A_BOLD);
 
     // Drawing available units.
-    attron(A_BOLD); mvprintw(5, 3, "Available for hiring:"); attroff(A_BOLD);
-    int line = 6; int start_r = line; int count = 0;
+    attron(A_BOLD); mvprintw(4, 3, "Available for hiring:"); attroff(A_BOLD);
+    int line = 5; int start_r = line; int count = 0;
     for(int i = 0; i < player -> available_units -> length; i++)
     {
         int value = iaGetByIndex(player -> available_units, i);
@@ -618,11 +645,23 @@ int viewProcess(World * world, View * view, List * list)
                 break;
 
                 case VIEW_MOVE_TECH_CURSOR_TOP:
-
+                    if(view -> chooser -> current > -1)
+                    {
+                        addch(' ');
+                        (view -> chooser -> current)--;
+                        mvaddch(view -> chooser -> current + 9, 4, '*');
+                        move(view -> chooser -> current + 9, 4);
+                    }
                 break;
 
                 case VIEW_MOVE_TECH_CURSOR_BOTTOM:
-
+                    if(view -> chooser -> current < view -> chooser -> ids -> length - 1)
+                    {
+                        addch(' ');
+                        (view -> chooser -> current)++;
+                        mvaddch(view -> chooser -> current + 9, 4, '*');
+                        move(view -> chooser -> current + 9, 4);
+                    }
                 break;
 
                 case VIEW_REDRAW_CITY_DIALOG:

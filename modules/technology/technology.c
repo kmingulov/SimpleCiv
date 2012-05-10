@@ -64,10 +64,10 @@ void destroyTechnology(void * data)
     free(t);
 }
 
-TechnologyResearch * createResearch(int id)
+TechnologyResearch * createResearch()
 {
     TechnologyResearch * tr = malloc(sizeof(TechnologyResearch));
-    tr -> id = id;
+    tr -> id = -1;
     tr -> turns = 0;
     tr -> delta = 0;
     return tr;

@@ -13,7 +13,7 @@ Player * createPlayer(char * name, IntArray * available_units, IntArray * availa
     player -> available_units = available_units;
     player -> available_techs = available_techs;
 
-    player -> research = createResearch(0);
+    player -> research = createResearch();
 
     // +1, to avoid incomprehensible constructs with id -+ 1 (1..CELL_RES_COUNT
     // are resources really, 0 is CELL_RES_NONE).

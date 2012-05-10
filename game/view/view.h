@@ -23,6 +23,14 @@
     View struct, which contains general settings of view.
 */
 
+typedef struct ViewChooser
+{
+    // Array of ids.
+    IntArray * ids;
+    // Current id.
+    int current;
+} ViewChooser;
+
 typedef struct View
 {
     // Number of rows and columns and distance between left edge of screen and
@@ -34,6 +42,8 @@ typedef struct View
     int map_r, map_c;
     // Current cell.
     Node * current_cell;
+    // Current chooser.
+    ViewChooser * chooser;
 } View;
 
 /*
@@ -41,6 +51,12 @@ typedef struct View
 */
 View * createView(World * world);
 void destroyView(View * view);
+
+/*
+    Functions of creation and destruction chooser.
+*/
+ViewChooser * createTechChooser(World * world);
+void destroyChooser(ViewChooser * chooser);
 
 /*
     Put char string into the middle/right/left of row. Syntax is similar to

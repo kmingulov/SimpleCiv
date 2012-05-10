@@ -59,7 +59,7 @@ void destroyTechnology(void * data);
 /*
     Creates new research.
 */
-TechnologyResearch * createResearch(int id);
+TechnologyResearch * createResearch();
 
 /*
     Destroys research.
