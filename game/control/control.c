@@ -174,7 +174,8 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             if(player -> cur_c != 0)  view -> cur_c = player -> cur_c; else view -> cur_c = view -> sidebar / 2;
             if(player -> map_r != -1) view -> map_r = player -> map_r; else view -> map_r = view -> rows / 2 - 1;
             if(player -> map_c != -1) view -> map_c = player -> map_c; else view -> map_c = view -> sidebar / 2 - 1;
-            if(player -> current_cell != NULL) view -> current_cell = player -> current_cell; else view -> current_cell = getCell(player -> graph_map, view -> map_r, view -> map_c);
+            if(player -> current_cell != NULL) view -> current_cell = player -> current_cell;
+            else view -> current_cell = getCell(player -> graph_map, view -> map_r, view -> map_c);
             // This fix doesn't work O_O. So I added player -> current_cell.
             //view -> current_cell = getCell(player -> graph_map, view -> map_r, view -> map_c);
             // Send redrawing message.
@@ -265,42 +266,6 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             return list;
         }
     }
-
-
-    // City state.
-    if((char) key == 'C' || (char) key == 'c')  // 'C' or space ?
-    {
-
-        // Cannot open dialog for not your city.
-        Node * n = getNeighbour( view -> current_cell, EDGE_CELL_CITY );
-        if(n == NULL)
-        {
-            return NULL;
-        }
-        City * city = (City *) n -> data;
-        Player * player = (Player *) world -> graph_players -> data;
-        if(player != city -> owner)
-        {
-            return NULL;
-        }
-
-        if(control -> state != CONTROL_CHOOSE_UNIT)
-        {
-            control -> state = CONTROL_CHOOSE_UNIT;
-            List * list = listCreate();
-            listPrepend(list, createMessage(VIEW_REDRAW_CITY_DIALOG, NULL));
-            return list;
-        }
-        else
-        {
-            control -> state = CONTROL_MOVE_CURSOR;
-            List * list = listCreate();
-            listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
-            return list;
-        }
-    }
-
-
 
     // Trying to escape?
     if((char) key == 'Q' || (char) key == 'q')

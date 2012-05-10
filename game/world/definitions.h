@@ -2,7 +2,7 @@
 #define WORLD_DEFINITIONS
 
 
-#define ADMIN_MODE 1
+#define ADMIN_MODE         0
 
 /*
     Defines for nodes' types.
