@@ -429,7 +429,6 @@ int viewProcess(World * world, View * view, List * list)
         ListElement * le = list -> head;
         for (int i = 0; i < list -> length; i++)
         {
-            int * data;
             Message * message = (Message *) le -> data;
             switch(message -> type)
             {

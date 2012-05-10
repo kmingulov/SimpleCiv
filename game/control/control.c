@@ -176,6 +176,19 @@ List * controlProcess(World * world, View * view, Control * control, int key)
     // TODO Add city state.
     if(key == KEY_SPACE)
     {
+        // Cannot move not your unit.
+        Node * n = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
+        if(n == NULL)
+        {
+            return NULL;
+        }
+        Unit * unit = (Unit *) n -> data;
+        Player * player = (Player *) world -> graph_players -> data;
+        if(player != unit -> owner)
+        {
+            return NULL;
+        }
+
         if(getNeighbour(view -> current_cell, EDGE_CELL_UNIT) != NULL)
         {
             if(control -> state == CONTROL_MOVE_UNIT)
