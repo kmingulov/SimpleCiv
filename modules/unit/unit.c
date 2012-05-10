@@ -1,9 +1,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include <ncurses.h>
-#include <stdio.h>
-
 #include "../../game/world/definitions.h"
 #include "../graph/graph.h"
 #include "../technology/technology.h"

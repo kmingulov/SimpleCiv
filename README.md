@@ -2,25 +2,11 @@ SimpleCiv
 =========
 **SimpleCiv** is *really* simple clone of Civilization game.
 
-Requirements
+Compilation
 ------------
-For compiling:
-* gcc
-* ncurses-dev
-* expat-dev
-* make
+In general, simply `make`. For notes about compilation look for [this article](https://github.com/Melkogotto/SimpleCiv/wiki/Compiling-for-Linux) (Linux) or for [this](https://github.com/Melkogotto/SimpleCiv/wiki/Compiling-for-Windows) (Windows).
 
-For execution:
-* ncurses
-* expat
-
-Installation
-------------
-It's too easy:
-
-    $ make
-
-There is no install rule in Makefile. Because of this [picture](http://img99.imageshack.us/img99/3278/makeinstallandkitten.png).
+There is no install rule in Makefile, because of this [picture](http://img99.imageshack.us/img99/3278/makeinstallandkitten.png).
 
 Debug
 -----
