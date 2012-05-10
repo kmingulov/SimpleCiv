@@ -8,4 +8,5 @@
 
 # Executable files.
 project
+project.exe
 tests/*/test

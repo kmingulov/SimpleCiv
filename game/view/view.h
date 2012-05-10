@@ -11,7 +11,7 @@
 // For name game
 #define GAME_NAME "SimpleCiv"
 
-#include <ncurses.h>
+#include <curses.h>
 
 #include "definitions.h"
 #include "../../modules/cell/cell.h"

@@ -1,12 +1,18 @@
 #ifndef VIEW_DEFINITIONS
 #define VIEW_DEFINITIONS
 
+#ifndef true
+    #define true 1
+#endif
+
+#ifndef false
+    #define false 0
+#endif
+
 /*
     Key definitions.
 */
-#undef  KEY_ENTER
-
-#define KEY_ENTER                    10
+#define KEY_ENTER_FIXED              10
 #define KEY_SPACE                    32
 
 /*
