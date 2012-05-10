@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-
 #include "view.h"
 
 #include "../../modules/graph/graph.h"
@@ -11,8 +10,6 @@
 #include "../../modules/unit/unit.h"
 #include "../../modules/technology/technology.h"
 #include "../world/definitions.h"
-
-
 
 View * createView(World * world)
 {
@@ -162,8 +159,7 @@ void drawGeneralView(World * world, View * view)
 
 void drawTechView(World * world, View * view)
 {
-
-        erase();
+    erase();
 
     // Copying rows, columns and sidebar.
     int r = view -> rows;
@@ -190,9 +186,24 @@ void drawTechView(World * world, View * view)
     attron(A_BOLD); mvprintw(2, 3, "%s's researches", player -> name); attroff(A_BOLD);
     mvprintw(3, 3, "%d gold, %d gold spents on reasearches every turn", player -> gold, player -> research -> delta);
 
+    // Drawing research.
+    attron(A_BOLD); mvprintw(5, 3, "Current research:"); attroff(A_BOLD);
+    if(player -> research -> id == -1)
+    {
+        mvprintw(6, 3, "No researches");
+    }
+    else
+    {
+        // Getting technology.
+        Node * n = (Node *) daGetByIndex(world -> techs_info, player -> research -> id);
+        Technology * t = (Technology *) n -> data;
+        // Printing it.
+        mvprintw(6, 3, "%s (%d/%d turns)", t -> name, player -> research -> turns, t -> turns);
+    }
+
     // Drawing available technologies.
-    attron(A_BOLD); mvprintw(5, 3, "Available for researching:"); attroff(A_BOLD);
-    int line = 6; int start_r = line; int count = 0;
+    attron(A_BOLD); mvprintw(8, 3, "Available for researching:"); attroff(A_BOLD);
+    int line = 8; int start_r = line; int count = 0;
     for(int i = 0; i < player -> available_techs -> length; i++)
     {
         int value = iaGetByIndex(player -> available_techs, i);
@@ -234,7 +245,7 @@ void drawTechView(World * world, View * view)
 
     if(count == 0)
     {
-        mvprintw(line++, 3, "No technologies");
+        mvprintw(line++, 3, "[*] No technologies");
     }
 
     // Drawing researched technologies.
@@ -251,15 +262,12 @@ void drawTechView(World * world, View * view)
     }
 
     move(start_r, 4);
-
-
 }
 
 
 
 void drawCityView(World * world, View * view)
 {
-
     erase();
 
     // Copying rows, columns and sidebar.
@@ -553,17 +561,6 @@ int viewProcess(World * world, View * view, List * list)
                 case VIEW_REDRAW_MAP:
                     drawMap(world, view);
                 break;
-
-                // TODO Doesn't work. Fix!
-                /*case VIEW_REDRAW_CELL:
-                    // data[0] is r, data[1] is c.
-                    data = (int *) message -> data;
-                    mvprintw(0, 0, "%d %d", data[0], data[1]);
-                    move(data[0], data[1]);
-                    drawNode(world, getCell(player -> graph_map, data[0], data[1]));
-                    move(view -> cur_r, view -> cur_c);
-                    //drawMap(world, view);
-                break;*/
 
                 case VIEW_MOVE_CURSOR_TOP:
                     view -> current_cell = getNeighbour(view -> current_cell, EDGE_CELL_TOP);

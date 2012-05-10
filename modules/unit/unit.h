@@ -63,18 +63,15 @@ Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char u
 */
 void unitsFight(World * world, Unit ** unit1, Unit ** unit2);
 
-
 /*
     Treats units at the end of a course
 */
-
 void developUnit(void * data, DynArray * info);
 
 /*
     Moves unit. Returns 0 if failed, 1 if moved succefully, 2 if there was a
     fight.
 */
-
 int moveUnit(World * world, Node * current_cell, int direction);
 
 #endif

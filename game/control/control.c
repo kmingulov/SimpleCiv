@@ -89,11 +89,6 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                     if(res == 1)
                     {
                         List * list = listCreate();
-                        // Redrawing two cells. TODO Doesn't work. Fix!
-                        /*int * data = twoIntsInPointer(view -> cur_r, view -> cur_c);
-                        listPrepend(list, createMessage(VIEW_REDRAW_CELL, data));
-                        data = twoIntsInPointer(view -> cur_r + keys[i][3], view -> cur_c + keys[i][4]);
-                        listPrepend(list, createMessage(VIEW_REDRAW_CELL, data));*/
                         listPrepend(list, createMessage(VIEW_REDRAW_MAP, NULL));
                         // Moving cursor.
                         listPrepend(list, createMessage(keys[i][2], NULL));
@@ -110,8 +105,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             }
         }
 
-        // TODO Choose technology state (only up/down arrow keys).
-
+        // Choosing technology state.
         if(control -> state == CONTROL_CHOOSE_TECH)
         {
             List * list = listCreate();
@@ -127,6 +121,8 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             }
             return list;
         }
+
+        // TODO Add choosing unit state.
     }
 
     // Enter (end of the turn).
@@ -244,7 +240,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
     if((char) key == 'C' || (char) key == 'c')  // 'C' or space ?
     {
 
-        // Cannot move not your unit.
+        // Cannot open dialog for not your city.
         Node * n = getNeighbour( view -> current_cell, EDGE_CELL_CITY );
         if(n == NULL)
         {
@@ -257,9 +253,9 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             return NULL;
         }
 
-        if(control -> state != CONTROL_CHOOSE_CITY)
+        if(control -> state != CONTROL_CHOOSE_UNIT)
         {
-            control -> state = CONTROL_CHOOSE_CITY;
+            control -> state = CONTROL_CHOOSE_UNIT;
             List * list = listCreate();
             listPrepend(list, createMessage(VIEW_REDRAW_CITY_DIALOG, NULL));
             return list;
@@ -284,14 +280,14 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             listPrepend(list, createMessage(VIEW_ESCAPE, NULL));
             return list;
         }
-//~
-        //~ if(control -> state == CONTROL_CHOOSE_TECH)
-        //~ {
-            //~ control -> state = CONTROL_MOVE_CURSOR;
-            //~ List * list = listCreate();
-            //~ listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
-            //~ return list;
-        //~ }
+
+        if(control -> state == CONTROL_CHOOSE_TECH || control -> state == CONTROL_CHOOSE_UNIT)
+        {
+            control -> state = CONTROL_MOVE_CURSOR;
+            List * list = listCreate();
+            listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+            return list;
+        }
     }
 
     return NULL;
