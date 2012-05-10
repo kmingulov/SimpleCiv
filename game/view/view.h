@@ -56,6 +56,7 @@ void destroyView(View * view);
     Functions of creation and destruction chooser.
 */
 ViewChooser * createTechChooser(World * world);
+ViewChooser * createUnitChooser(World * world);
 void destroyChooser(ViewChooser * chooser);
 
 /*

@@ -108,6 +108,15 @@ ViewChooser * createTechChooser(World * world)
     return chooser;
 }
 
+ViewChooser * createUnitChooser(World * world)
+{
+    ViewChooser * chooser = malloc(sizeof(ViewChooser));
+
+    chooser -> ids = iaCreate();
+
+    return chooser;
+}
+
 void destroyChooser(ViewChooser * chooser)
 {
     iaDestroy(chooser -> ids);

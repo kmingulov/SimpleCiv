@@ -257,15 +257,10 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             if(control -> state != CONTROL_CHOOSE_UNIT)
             {
                 control -> state = CONTROL_CHOOSE_UNIT;
+                // Create chooser.
+                view -> chooser = createUnitChooser(world);
                 List * list = listCreate();
                 listPrepend(list, createMessage(VIEW_REDRAW_CITY_DIALOG, NULL));
-                return list;
-            }
-            else
-            {
-                control -> state = CONTROL_MOVE_CURSOR;
-                List * list = listCreate();
-                listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
                 return list;
             }
         }
@@ -283,15 +278,6 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             // Send message.
             List * list = listCreate();
             listPrepend(list, createMessage(VIEW_REDRAW_TECH_DIALOG, NULL));
-            return list;
-        }
-        else
-        {
-            control -> state = CONTROL_MOVE_CURSOR;
-            destroyChooser(view -> chooser);
-            view -> chooser = NULL;
-            List * list = listCreate();
-            listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
             return list;
         }
     }
