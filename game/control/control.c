@@ -223,7 +223,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
     // Turning technology state.
     if((char) key == 'T' || (char) key == 't')
     {
-        if(control -> state == CONTROL_MOVE_CURSOR || control -> state == CONTROL_MOVE_UNIT )
+        if(control -> state != CONTROL_CHOOSE_TECH )
         {
             control -> state = CONTROL_CHOOSE_TECH;
             List * list = listCreate();
@@ -237,8 +237,43 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
             return list;
         }
-
     }
+
+
+    // City state.
+    if((char) key == 'C' || (char) key == 'c')  // 'C' or space ?
+    {
+
+        // Cannot move not your unit.
+        Node * n = getNeighbour( view -> current_cell, EDGE_CELL_CITY );
+        if(n == NULL)
+        {
+            return NULL;
+        }
+        City * city = (City *) n -> data;
+        Player * player = (Player *) world -> graph_players -> data;
+        if(player != city -> owner)
+        {
+            return NULL;
+        }
+
+        if(control -> state != CONTROL_CHOOSE_CITY)
+        {
+            control -> state = CONTROL_CHOOSE_CITY;
+            List * list = listCreate();
+            listPrepend(list, createMessage(VIEW_REDRAW_CITY_DIALOG, NULL));
+            return list;
+        }
+        else
+        {
+            control -> state = CONTROL_MOVE_CURSOR;
+            List * list = listCreate();
+            listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+            return list;
+        }
+    }
+
+
 
     // Trying to escape?
     if((char) key == 'Q' || (char) key == 'q')

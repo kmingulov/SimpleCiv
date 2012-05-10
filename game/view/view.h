@@ -63,6 +63,12 @@ void drawGeneralView(World * world, View * view);
 void drawTechView(World * world, View * view);
 
 /*
+    Draws tech view.
+*/
+void drawCityView(World * world, View * view);
+
+
+/*
     Clears block from (start_r,start_c) to (start_r+r,start_c+c) point.
 */
 void clearBlock(int start_r, int start_c, int r, int c);

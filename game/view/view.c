@@ -162,7 +162,8 @@ void drawGeneralView(World * world, View * view)
 
 void drawTechView(World * world, View * view)
 {
-    erase();
+
+        erase();
 
     // Copying rows, columns and sidebar.
     int r = view -> rows;
@@ -246,6 +247,104 @@ void drawTechView(World * world, View * view)
         {
             Technology * t = (Technology *) ((Node *) daGetByIndex(world -> techs_info, i)) -> data;
             mvprintw(line++, 3, "%s", t -> name);
+        }
+    }
+
+    move(start_r, 4);
+
+
+}
+
+
+
+void drawCityView(World * world, View * view)
+{
+
+    erase();
+
+    // Copying rows, columns and sidebar.
+    int r = view -> rows;
+    int c = view -> columns;
+
+    // Drawing main lines.
+    for(int i = 1; i < c; i++)
+    {
+        mvaddch(0, i, ACS_HLINE);
+        mvaddch(r - 1, i, ACS_HLINE);
+    }
+    for(int i = 1; i < r - 1; i++)
+    {
+        mvaddch(i, 0, ACS_VLINE);
+        mvaddch(i, c - 1, ACS_VLINE);
+    }
+    mvaddch(0, 0, ACS_ULCORNER);
+    mvaddch(r - 1, 0, ACS_LLCORNER);
+    mvaddch(0, c - 1, ACS_URCORNER);
+    mvaddch(r - 1, c - 1, ACS_LRCORNER);
+
+    // Drawing player name and other info.
+    Player * player = (Player *) world -> graph_players -> data;
+    //~ City * city = (City * ) getNeighbour( view -> current_cell, EDGE_CELL_CITY );
+    attron(A_BOLD); mvprintw(2, 3, "%s's city", player -> name/*, city -> name*/); attroff(A_BOLD);
+    mvprintw(3, 3, "%d gold, %d gold spents on units every turn", player -> gold, player -> units);
+
+    // Drawing available units.
+    attron(A_BOLD); mvprintw(5, 3, "Available for hiring:"); attroff(A_BOLD);
+    int line = 6; int start_r = line; int count = 0;
+    for(int i = 0; i < player -> available_units -> length; i++)
+    {
+        int value = iaGetByIndex(player -> available_units, i);
+        if(value == UNIT_AVAILABLE)
+        {
+            //~ Unit * u = (Unit *) ((Node *) daGetByIndex(world -> units_info, i)) -> data;
+            //~ // Checking for hiring.
+            //~ if(u -> requires_resources == NULL)
+            //~ {
+                //~ // Nothing requires. Great.
+                //~ count++;
+                //~ mvprintw(line++, 3, "[ ] %s (%d turns)", u -> name, u -> turns);
+            //~ }
+            //~ else
+            //~ {
+                //~ // Checking for each resource.
+                //~ char okay = 1;
+                //~ for(int j = 0; j < u -> requires_resources -> length; j++)
+                //~ {
+                    //~ // Getting resource id.
+                    //~ int id = iaGetByIndex(u -> requires_resources, j);
+                    //~ // Does player have this resources?
+                    //~ if(iaGetByIndex(player -> resources, id) == 0)
+                    //~ {
+                        //~ // Sad but true.
+                        //~ okay = 0;
+                        //~ break;
+                    //~ }
+                //~ }
+                //~ // You're lucky man.
+                //~ if(okay == 1)
+                //~ {
+                    //~ count++;
+                    //~ mvprintw(line++, 3, "[ ] %s (%d turns)", u -> name, u -> turns);
+                //~ }
+            //~ }
+        }
+    }
+
+    if(count == 0)
+    {
+        mvprintw(line++, 3, "No units");
+    }
+
+    // Drawing researched technologies.
+    line++;
+    attron(A_BOLD); mvprintw(line++, 3, "Already units:"); attroff(A_BOLD);
+    for(int i = 0; i < player -> available_units -> length; i++)
+    {
+        int value = iaGetByIndex(player -> available_units, i);
+        if(value == UNIT_AVAILABLE)
+        {
+            //~ Unit * u = (Technology *) ((Node *) daGetByIndex(world -> units_info, i)) -> data;
+            //~ mvprintw(line++, 3, "%s", u -> name);
         }
     }
 
@@ -541,6 +640,10 @@ int viewProcess(World * world, View * view, List * list)
 
                 case VIEW_MOVE_TECH_CURSOR_BOTTOM:
 
+                break;
+
+                case VIEW_REDRAW_CITY_DIALOG:
+                    drawCityView(world, view);
                 break;
 
 
