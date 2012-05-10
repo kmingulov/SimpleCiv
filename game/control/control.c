@@ -184,34 +184,65 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         }
     }
 
-    // Switching between CONTROL_MOVE_UNIT and CONTROL_MOVE_CURSOR states.
-    // TODO Add city state.
+    // translate to hindi
     if(key == KEY_SPACE)
     {
-        // Cannot move not your unit.
-        Node * n = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
+        Node * n = getNeighbour( view -> current_cell, EDGE_CELL_CITY );
         if(n == NULL)
         {
-            return NULL;
-        }
-        Unit * unit = (Unit *) n -> data;
-        Player * player = (Player *) world -> graph_players -> data;
-        if(player != unit -> owner)
-        {
-            return NULL;
-        }
-
-        if(getNeighbour(view -> current_cell, EDGE_CELL_UNIT) != NULL)
-        {
-            if(control -> state == CONTROL_MOVE_UNIT)
+            // Cannot open dialog for not your unit.
+            Node * n = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
+            if (n != NULL)
             {
-                control -> state = CONTROL_MOVE_CURSOR;
-                return NULL;
+                Unit * unit = (Unit *) n -> data;
+                Player * player = (Player *) world -> graph_players -> data;
+                if(player != unit -> owner)
+                {
+                    return NULL;
+                }
+
+                if(getNeighbour(view -> current_cell, EDGE_CELL_UNIT) != NULL)
+                {
+                    if(control -> state == CONTROL_MOVE_UNIT)
+                    {
+                        control -> state = CONTROL_MOVE_CURSOR;
+                        return NULL;
+                    }
+                    else
+                    {
+                        control -> state = CONTROL_MOVE_UNIT;
+                        return NULL;
+                    }
+                }
             }
             else
             {
-                control -> state = CONTROL_MOVE_UNIT;
                 return NULL;
+            }
+        }
+        else
+        {
+            // Cannot open dialog for not your city.
+            City * city = (City *) n -> data;
+            Player * player = (Player *) world -> graph_players -> data;
+            if(player != city -> owner)
+            {
+                return NULL;
+            }
+
+            if(control -> state != CONTROL_CHOOSE_UNIT)
+            {
+                control -> state = CONTROL_CHOOSE_UNIT;
+                List * list = listCreate();
+                listPrepend(list, createMessage(VIEW_REDRAW_CITY_DIALOG, NULL));
+                return list;
+            }
+            else
+            {
+                control -> state = CONTROL_MOVE_CURSOR;
+                List * list = listCreate();
+                listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+                return list;
             }
         }
     }

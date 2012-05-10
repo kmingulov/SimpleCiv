@@ -342,20 +342,6 @@ void drawCityView(World * world, View * view)
     {
         mvprintw(line++, 3, "No units");
     }
-
-    // Drawing researched technologies.
-    line++;
-    attron(A_BOLD); mvprintw(line++, 3, "Already units:"); attroff(A_BOLD);
-    for(int i = 0; i < player -> available_units -> length; i++)
-    {
-        int value = iaGetByIndex(player -> available_units, i);
-        if(value == UNIT_AVAILABLE)
-        {
-            //~ Unit * u = (Technology *) ((Node *) daGetByIndex(world -> units_info, i)) -> data;
-            //~ mvprintw(line++, 3, "%s", u -> name);
-        }
-    }
-
     move(start_r, 4);
 }
 

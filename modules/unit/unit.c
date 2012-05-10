@@ -147,12 +147,15 @@ void developUnit(void * data, DynArray * info)
 
     UnitCommonInfo * unit_info = (UnitCommonInfo *) daGetByIndex(info, unit -> unit_id);
 
-    if
-    (
-        unit -> moves == unit_info -> max_moves &&
-        unit -> health +1 <= unit_info -> max_health
-    )
-        unit -> health = unit -> health +1;
+    if( unit -> moves == unit_info -> max_moves)
+    {
+        if (unit -> health +0.1*unit_info -> max_health <= unit_info -> max_health)
+        {
+            unit -> health = unit -> health + 0.1*unit_info -> max_health;
+        }
+        else
+            unit -> health = unit_info -> max_health;
+    }
 
     unit -> moves = unit_info-> max_moves;
 }
