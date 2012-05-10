@@ -129,7 +129,14 @@ void elementContent(void * data, const char * s, int len)
             break;
 
             case XML_UNIT_MOVES:
-                ((UnitCommonInfo *) daGetLast(p_data -> data)) -> max_moves = atoi(temp);
+                if(ADMIN_MODE)
+                {
+                    ((UnitCommonInfo *) daGetLast(p_data -> data)) -> max_moves = 1000;
+                }
+                else
+                {
+                    ((UnitCommonInfo *) daGetLast(p_data -> data)) -> max_moves = atoi(temp);
+                }
             break;
 
             case XML_TECH_ID:
