@@ -1,8 +1,17 @@
 # object files to compile
 OBJ = list.o dyn_array.o int_array.o graph.o cell.o landscape.o string_functions.o expat_handlers.o xml.o unit.o city.o player.o technology.o view.o world.o message.o control.o main.o
 
-# compiler
-CC = gcc
+ifeq ($(win32), 1)
+	CC = i686-w64-mingw32-gcc
+	LFLIB = -lexpat -lpdcurses -lm
+	BIN = simpleciv.exe
+	TARGET = -Dwin32
+else
+	CC = gcc
+	LFLIB = -lexpat -lncurses -lm
+	BIN = simpleciv
+	TARGET =
+endif
 
 # debug flag
 DEBUG = -g
@@ -11,16 +20,13 @@ DEBUG = -g
 FLAGS = -std=c99 -Wall -pedantic
 
 # flags for compilation object files
-CFLAGS = $(FLAGS) -c $(DEBUG)
-
-# libs
-LFLIB = -lexpat -lncurses -lm
+CFLAGS = $(FLAGS) -c $(DEBUG) $(TARGET)
 
 # flags for linking
 LFLAGS = $(FLAGS) $(DEBUG)
 
-project: $(OBJ)
-	$(CC) $(LFLAGS) -o project $(OBJ) $(LFLIB)
+simpleciv: $(OBJ)
+	$(CC) $(LFLAGS) -o $(BIN) $(OBJ) $(LFLIB)
 
 technology.o: modules/technology/technology.c
 	$(CC) $(CFLAGS) modules/technology/technology.c
@@ -77,4 +83,4 @@ main.o: main.c
 	$(CC) $(CFLAGS) main.c
 
 clean:
-	rm -f *.o project tests/*/*.o tests/*/test
+	rm -f *.o simpleciv simpleciv.exe tests/*/*.o tests/*/test

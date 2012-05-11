@@ -125,7 +125,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
     }
 
     // Enter.
-    if((char) key == KEY_ENTER_FIXED)
+    if(key == KEY_ENTER_FIXED)
     {
         // Start research.
         if(control -> state == CONTROL_CHOOSE_TECH)

@@ -7,6 +7,6 @@
 *.gch
 
 # Executable files.
-project
-project.exe
+simpleciv
+simpleciv.exe
 tests/*/test
