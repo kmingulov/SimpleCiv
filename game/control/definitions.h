@@ -5,5 +5,6 @@
 #define CONTROL_MOVE_UNIT   1
 #define CONTROL_CHOOSE_TECH 2
 #define CONTROL_CHOOSE_UNIT 3
+#define CONTROL_HELP        4
 
 #endif

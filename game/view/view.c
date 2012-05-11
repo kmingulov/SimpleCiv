@@ -144,10 +144,66 @@ void drawGeneralView(World * world, View * view)
     drawBox(0, 0, r, c);
     drawVertLine(0, r, s);
     drawHorizLine(s, c - s, SIDEBAR_CELL_BLOCK);
-    drawHorizLine(s, c - s, r - 3);\
+    drawHorizLine(s, c - s, r - 3);
 
     // Some static strings.
     putInMiddle(r - 4, s + 1, c - s - 2, "Press h for help");
+}
+
+void drawHelpView(World * world, View * view)
+{
+    erase();
+
+    // Drawing main interface.
+    drawBox(0, 0, view -> rows, view -> columns);
+
+    // Drawing help info.
+    int line = 2; int column = 20;
+
+    // Map window.
+    attron(A_BOLD); mvprintw(line++, 3, "Map:"); attroff(A_BOLD);
+    mvprintw(line,   3,      "Arrow keys");
+    mvprintw(line++, column, "Move unit/cursor.");
+    mvprintw(line,   3,      "Enter");
+    mvprintw(line++, column, "End turn.");
+    mvprintw(line,   3,      "Space");
+    mvprintw(line++, column, "Choose unit to move or open city hiring dialog.");
+    mvprintw(line,   3,      "c");
+    mvprintw(line++, column, "Create city (if settler is selected).");
+    mvprintw(line,   3,      "t");
+    mvprintw(line++, column, "Open research dialog.");
+    mvprintw(line,   3,      "h");
+    mvprintw(line++, column, "Show this help.");
+    mvprintw(line,   3,      "q");
+    mvprintw(line++, column, "Quit game.");
+
+    // Hiring dialog.
+    line++;
+    attron(A_BOLD); mvprintw(line++, 3, "Hiring dialog:"); attroff(A_BOLD);
+    mvprintw(line,   3,      "Up/down keys");
+    mvprintw(line++, column, "Choose unit.");
+    mvprintw(line,   3,      "Enter");
+    mvprintw(line++, column, "Start hiring (will terminate current hiring).");
+    mvprintw(line,   3,      "q");
+    mvprintw(line++, column, "Quit to map.");
+
+    // Research dialog.
+    line++;
+    attron(A_BOLD); mvprintw(line++, 3, "Research dialog:"); attroff(A_BOLD);
+    mvprintw(line,   3,      "Up/down keys");
+    mvprintw(line++, column, "Choose technology.");
+    mvprintw(line,   3,      "Enter");
+    mvprintw(line++, column, "Start research (will terminate current research).");
+    mvprintw(line,   3,      "q");
+    mvprintw(line++, column, "Quit to map.");
+
+    // One hint.
+    line++;
+    mvprintw(line,   3,      "Press q to hide this help.");
+
+    // That's all.
+    line++;
+    move(line, 3);
 }
 
 void drawTechView(World * world, View * view)
@@ -565,8 +621,9 @@ int viewProcess(World * world, View * view, List * list)
                     drawCityView(world, view);
                 break;
 
-
-
+                case VIEW_REDRAW_HELP:
+                    drawHelpView(world, view);
+                break;
             }
             le = le -> next;
         }

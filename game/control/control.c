@@ -295,6 +295,14 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             return list;
         }
 
+        if(control -> state == CONTROL_HELP)
+        {
+            control -> state = CONTROL_MOVE_CURSOR;
+            List * list = listCreate();
+            listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+            return list;
+        }
+
         if(control -> state == CONTROL_CHOOSE_TECH || control -> state == CONTROL_CHOOSE_UNIT)
         {
             control -> state = CONTROL_MOVE_CURSOR;
@@ -302,6 +310,18 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             view -> chooser = NULL;
             List * list = listCreate();
             listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+            return list;
+        }
+    }
+
+    // Showing help.
+    if((char) key == 'H' || (char) key == 'h')
+    {
+        if(control -> state == CONTROL_MOVE_CURSOR || control -> state == CONTROL_MOVE_UNIT)
+        {
+            control -> state = CONTROL_HELP;
+            List * list = listCreate();
+            listPrepend(list, createMessage(VIEW_REDRAW_HELP, NULL));
             return list;
         }
     }
