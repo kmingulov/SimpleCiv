@@ -15,6 +15,7 @@ UnitCommonInfo * createUnitCommonInfo()
     unit -> max_health = 0;
     unit -> max_damage = 0;
     unit -> max_moves = 0;
+    unit -> gold_drop = 0;
 
     return unit;
 }
@@ -128,11 +129,17 @@ void unitsFight(World * world, Unit ** unit1, Unit ** unit2)
     // Checking there're alive or not.
     if( (* unit1) -> health <= 0 )
     {
+        // Player2 getting drop.
+        (* unit2) -> owner -> gold += u2 -> gold_drop;
+        // Destroing unit.
         destroyUnit(world, * unit1);
         * unit1 = NULL;
     }
     if( (* unit2) -> health <= 0 )
     {
+        // Player1 getting drop.
+        (* unit1) -> owner -> gold += u1 -> gold_drop;
+        // Destroing unit.
         destroyUnit(world, * unit2);
         * unit2 = NULL;
     }

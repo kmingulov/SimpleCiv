@@ -1,8 +1,7 @@
 #ifndef WORLD_DEFINITIONS
 #define WORLD_DEFINITIONS
 
-
-#define ADMIN_MODE         0
+#define ADMIN_MODE         1
 
 /*
     Defines for nodes' types.
