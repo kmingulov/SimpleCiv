@@ -6,8 +6,8 @@
     </map>
 
     <players>
-        <count>5</count>
-        <names>Player1,Player2,Player3,Player4,Player5</names>
-        <cities>City1,City2,City3,City4,City5</cities>
+        <count>2</count>
+        <names>Player1,Player2</names>
+        <cities>City1,City2</cities>
     </players>
 </config>

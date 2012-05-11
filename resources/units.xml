@@ -7,8 +7,8 @@
         <health>700</health>
         <damage>100</damage>
         <moves>5</moves>
-        <hiring-time>1</hiring-time>
-        <gold-drop>0</gold-drop>
+        <hiring_turns>1</hiring_turns>
+        <gold_drop>0</gold_drop>
     </unit>
 
     <unit>
@@ -18,8 +18,8 @@
         <health>1000</health>
         <damage>100</damage>
         <moves>3</moves>
-        <hiring-time>1</hiring-time>
-        <gold-drop>0</gold-drop>
+        <hiring_turns>1</hiring_turns>
+        <gold_drop>0</gold_drop>
     </unit>
 
     <unit>
@@ -29,8 +29,8 @@
         <health>1000</health>
         <damage>300</damage>
         <moves>4</moves>
-        <hiring-time>2</hiring-time>
-        <gold-drop>0</gold-drop>
+        <hiring_turns>2</hiring_turns>
+        <gold_drop>0</gold_drop>
     </unit>
 
     <unit>
@@ -40,8 +40,8 @@
         <health>1000</health>
         <damage>400</damage>
         <moves>4</moves>
-        <hiring-time>4</hiring-time>
-        <gold-drop>0</gold-drop>
+        <hiring_turns>4</hiring_turns>
+        <gold_drop>0</gold_drop>
     </unit>
 
     <unit>
@@ -51,8 +51,8 @@
         <health>1500</health>
         <damage>300</damage>
         <moves>7</moves>
-        <hiring-time>3</hiring-time>
-        <gold-drop>0</gold-drop>
+        <hiring_turns>3</hiring_turns>
+        <gold_drop>0</gold_drop>
     </unit>
 
     <unit>
@@ -62,8 +62,8 @@
         <health>2000</health>
         <damage>500</damage>
         <moves>6</moves>
-        <hiring-time>6</hiring-time>
-        <gold-drop>0</gold-drop>
+        <hiring_turns>6</hiring_turns>
+        <gold_drop>0</gold_drop>
     </unit>
 
     <unit>
@@ -73,8 +73,8 @@
         <health>1000</health>
         <damage>100</damage>
         <moves>7</moves>
-        <hiring-time>2</hiring-time>
-        <gold-drop>0</gold-drop>
+        <hiring_turns>2</hiring_turns>
+        <gold_drop>0</gold_drop>
     </unit>
 
     <unit>
@@ -84,8 +84,8 @@
         <health>1500</health>
         <damage>600</damage>
         <moves>3</moves>
-        <hiring-time>7</hiring-time>
-        <gold-drop>0</gold-drop>
+        <hiring_turns>7</hiring_turns>
+        <gold_drop>0</gold_drop>
     </unit>
 
     <unit>
@@ -95,8 +95,8 @@
         <health>1000</health>
         <damage>800</damage>
         <moves>6</moves>
-        <hiring-time>5</hiring-time>
-        <gold-drop>0</gold-drop>
+        <hiring_turns>5</hiring_turns>
+        <gold_drop>0</gold_drop>
     </unit>
 
     <unit>
@@ -106,8 +106,8 @@
         <health>2000</health>
         <damage>800</damage>
         <moves>5</moves>
-        <hiring-time>10</hiring-time>
-        <gold-drop>0</gold-drop>
+        <hiring_turns>10</hiring_turns>
+        <gold_drop>0</gold_drop>
     </unit>
 
     <unit>
@@ -117,8 +117,8 @@
         <health>1500</health>
         <damage>400</damage>
         <moves>7</moves>
-        <hiring-time>10</hiring-time>
-        <gold-drop>0</gold-drop>
+        <hiring_turns>10</hiring_turns>
+        <gold_drop>0</gold_drop>
     </unit>
 
     <unit>
@@ -128,8 +128,8 @@
         <health>1500</health>
         <damage>300</damage>
         <moves>5</moves>
-        <hiring-time>9</hiring-time>
-        <gold-drop>0</gold-drop>
+        <hiring_turns>9</hiring_turns>
+        <gold_drop>0</gold_drop>
     </unit>
 
     <unit>
@@ -139,8 +139,8 @@
         <health>2000</health>
         <damage>1000</damage>
         <moves>6</moves>
-        <hiring-time>20</hiring-time>
-        <gold-drop>0</gold-drop>
+        <hiring_turns>20</hiring_turns>
+        <gold_drop>0</gold_drop>
     </unit>
 
     <unit>
@@ -150,7 +150,7 @@
         <health>1000</health>
         <damage>0</damage>
         <moves>5</moves>
-        <hiring-time>0</hiring-time>
-        <gold-drop>500</gold-drop>
+        <hiring_turns>0</hiring_turns>
+        <gold_drop>500</gold_drop>
     </unit>
 </units>

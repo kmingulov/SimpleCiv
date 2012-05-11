@@ -15,6 +15,7 @@ UnitCommonInfo * createUnitCommonInfo()
     unit -> max_health = 0;
     unit -> max_damage = 0;
     unit -> max_moves = 0;
+    unit -> hiring_turns = 0;
     unit -> gold_drop = 0;
 
     return unit;

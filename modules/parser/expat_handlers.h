@@ -27,16 +27,18 @@
 #define XML_UNIT_HEALTH             12
 #define XML_UNIT_DAMAGE             13
 #define XML_UNIT_MOVES              14
+#define XML_UNIT_HIRING_TURNS       15
+#define XML_UNIT_GOLD_DROP          16
 
-#define XML_TECH                    15
-#define XML_TECH_ID                 16
-#define XML_TECH_NAME               17
-#define XML_TECH_TURNS              18
-#define XML_TECH_PROVIDES           19
-#define XML_TECH_PROVIDES_UNITS     20
-#define XML_TECH_PROVIDES_TECHS     21
-#define XML_TECH_REQUIRES           22
-#define XML_TECH_REQUIRES_RESOURCES 23
+#define XML_TECH                    17
+#define XML_TECH_ID                 18
+#define XML_TECH_NAME               19
+#define XML_TECH_TURNS              20
+#define XML_TECH_PROVIDES           21
+#define XML_TECH_PROVIDES_UNITS     22
+#define XML_TECH_PROVIDES_TECHS     23
+#define XML_TECH_REQUIRES           24
+#define XML_TECH_REQUIRES_RESOURCES 25
 
 /*
     Struct for parser data.
