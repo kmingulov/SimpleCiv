@@ -118,8 +118,8 @@ void unitsFight(World * world, Unit ** unit1, Unit ** unit2)
     double damage2 = (double) (* unit2) -> health / u2 -> max_health * u2 -> max_damage;
 
     // Random damage between 70% and 100% of damage1/damage2.
-    damage1 *= ((double) (rand() % 7 + 3.0f)) / 10.0f;
-    damage2 *= ((double) (rand() % 7 + 3.0f)) / 10.0f;
+    damage1 *= ((double) (rand() % 7 + 4.0f)) / 10.0f;
+    damage2 *= ((double) (rand() % 7 + 4.0f)) / 10.0f;
 
     // Fight!
     (* unit1) -> health -= ceil(damage2);
@@ -210,6 +210,25 @@ int moveUnit(World * world, Node * current_cell, int direction)
         case EDGE_CELL_RIGHT:  unit -> c++; break;
         case EDGE_CELL_LEFT:   unit -> c--; break;
     }
+
+    if(unit -> r >= world -> properties -> map_r)
+    {
+        unit -> r %= world -> properties -> map_r;
+    }
+    else if(unit -> r < 0)
+    {
+        unit -> r += world -> properties -> map_r;
+    }
+
+    if(unit -> c >= world -> properties -> map_c)
+    {
+        unit -> c %= world -> properties -> map_c;
+    }
+    else if(unit -> c < 0)
+    {
+        unit -> c += world -> properties -> map_c;
+    }
+
     daRemoveByPointer(current_cell -> edges, edge, NULL);
     daPrepend(destination -> edges, edge);
 

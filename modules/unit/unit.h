@@ -32,8 +32,8 @@ typedef struct Unit
 {
     unsigned char unit_id;   // Unit id in units' info table.
     Player * owner;          // Owner of this unit.
-    unsigned int r, c;       // X and Y coordinates.
-    unsigned int health;     // Current health.
+    int r, c;                // X and Y coordinates.
+    int health;              // Current health.
     unsigned int moves;      // Available moves.
 } Unit;
 

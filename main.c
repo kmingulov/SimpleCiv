@@ -42,21 +42,20 @@ int main()
 
     List * queue = listCreate();
     listPrepend(queue, createMessage(VIEW_REDRAW_ALL, NULL));
-    int key = 0;
     while(true)
     {
-        // Process view. Redraw some elements. Depends on action = control's
-        // decision what view need to redraw.
+        // Process the view. Redraws some elements. Depends on action: control
+        // decides what view needs to redraw.
         if(viewProcess(world, view, queue) == 0)
         {
             // Good bye.
             break;
         }
 
-        // Reading key.
-        key = getch();
+        int key = getch();
 
-        // Process control. Does something with world. Depends on key.
+        // Processes the control. Does something with the world. Depends on the
+        // key.
         queue = controlProcess(world, view, control, key);
     }
 

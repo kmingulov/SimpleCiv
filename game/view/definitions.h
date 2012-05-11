@@ -12,7 +12,12 @@
 /*
     Key definitions.
 */
-#define KEY_ENTER_FIXED              10
+#ifdef WIN32
+    #define KEY_ENTER_FIXED          '\r'
+#else
+    #define KEY_ENTER_FIXED          '\n'
+#endif
+
 #define KEY_SPACE                    32
 
 /*
