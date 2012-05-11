@@ -1,8 +1,4 @@
-#include <string.h>
 #include <stdlib.h>
-#include <math.h>
-
-#include "view.h"
 
 #include "../../modules/graph/graph.h"
 #include "../../modules/player/player.h"
@@ -10,6 +6,7 @@
 #include "../../modules/unit/unit.h"
 #include "../../modules/technology/technology.h"
 #include "../world/definitions.h"
+#include "view.h"
 
 View * createView(World * world)
 {
@@ -22,6 +19,8 @@ View * createView(World * world)
     cbreak();
     keypad(stdscr, TRUE);
     start_color();
+    attroff(A_BOLD);;
+    attron(COLOR_PAIR(0));
 
     // Color pairs. 0 — default, 1-5 — territories' colors.
     init_pair(0, COLOR_WHITE, COLOR_BLACK);
@@ -34,10 +33,18 @@ View * createView(World * world)
     getmaxyx(stdscr, result -> rows, result -> columns);
 
     result -> sidebar = 0.8 * result -> columns;
+
+    // Min size of sidepanel is 20 chars.
+    if(result -> sidebar > result -> columns - 20)
+    {
+        result -> sidebar = result -> columns - 20;
+    }
+
     result -> cur_r = result -> rows / 2;
     result -> cur_c = result -> sidebar / 2;
     result -> map_r = result -> cur_r - 1;
     result -> map_c = result -> cur_c - 1;
+
     result -> current_cell = getCell(world -> graph_map, result -> map_r, result -> map_c);
 
     result -> chooser = NULL;
@@ -124,65 +131,6 @@ void destroyChooser(ViewChooser * chooser)
     free(chooser);
 }
 
-void putInMiddle(int start_r, int start_c, int length, const char * format, ...)
-{
-    // Preparing buffer string.
-    va_list args;
-    char buffer[1024];
-
-    va_start(args, format);
-
-    vsnprintf(buffer, sizeof(buffer) - 1, format, args);
-
-    // Printing a piece of string.
-    int delta = length - strlen(buffer);
-
-    char * s = malloc(sizeof(char) * length);
-    strcpy(s, buffer);
-
-    if(delta < 0)
-    {
-        s[length] = '\0';
-        delta = 0;
-    }
-
-    delta = floor((float) delta / 2);
-    mvprintw(start_r, start_c + delta, s);
-    free(s);
-}
-
-void putInLeft(int start_r, int start_c, int length, const char * format, ...)
-{
-    va_list args;
-    char buffer[1024];
-
-    va_start(args, format);
-
-    vsnprintf(buffer, sizeof(buffer) - 1, format, args);
-
-    if(strlen(buffer) > length)
-    {
-        buffer[length] = '\0';
-    }
-
-    mvprintw(start_r, start_c, buffer);
-
-    refresh();
-}
-
-void putInRight(int start_r, int start_c, int length, const char * format, ...)
-{
-    va_list args;
-    char buffer[1024];
-
-    va_start(args, format);
-
-    vsnprintf(buffer, sizeof(buffer) - 1, format, args);
-    mvprintw(start_r, start_c + length - strlen(buffer), buffer);
-
-    refresh();
-}
-
 void drawGeneralView(World * world, View * view)
 {
     erase();
@@ -192,69 +140,22 @@ void drawGeneralView(World * world, View * view)
     int c = view -> columns;
     int s = view -> sidebar;
 
-    attron(COLOR_PAIR(0));
+    // Drawing main interface.
+    drawBox(0, 0, r, c);
+    drawVertLine(0, r, s);
+    drawHorizLine(s, c - s, SIDEBAR_CELL_BLOCK);
+    drawHorizLine(s, c - s, r - 3);\
 
-    // Drawing main lines.
-    for(int i = 1; i < c; i++)
-    {
-        mvaddch(0, i, ACS_HLINE);
-        mvaddch(r - 1, i, ACS_HLINE);
-        if(i > s && i < c - 1)
-        {
-            mvaddch(SIDEBAR_PLAYER_BLOCK, i, ACS_HLINE);
-            mvaddch(SIDEBAR_CELL_BLOCK, i, ACS_HLINE);
-            mvaddch(r - 3, i, ACS_HLINE);
-        }
-    }
-
-    for(int i = 1; i < r - 1; i++)
-    {
-        mvaddch(i, s, ACS_VLINE);
-        mvaddch(i, 0, ACS_VLINE);
-        mvaddch(i, c - 1, ACS_VLINE);
-    }
-
-    // Corners.
-    mvaddch(0, 0, ACS_ULCORNER);
-    mvaddch(r - 1, 0, ACS_LLCORNER);
-    mvaddch(0, c - 1, ACS_URCORNER);
-    mvaddch(r - 1, c - 1, ACS_LRCORNER);
-    mvaddch(0, s, ACS_TTEE);
-    mvaddch(r - 1, s, ACS_BTEE);
-
-    mvaddch(SIDEBAR_PLAYER_BLOCK, s, ACS_LTEE); mvaddch(SIDEBAR_PLAYER_BLOCK, c - 1, ACS_RTEE);
-    mvaddch(SIDEBAR_CELL_BLOCK, s, ACS_LTEE); mvaddch(SIDEBAR_CELL_BLOCK, c - 1, ACS_RTEE);
-    mvaddch(r - 3, s, ACS_LTEE); mvaddch(r - 3, c - 1, ACS_RTEE);
-
-    // Project name.
-    attron(A_BOLD); putInMiddle(1, s + 1, c - s - 2, GAME_NAME); attroff(A_BOLD);
-
-    attroff(COLOR_PAIR(0));
+    // Some static strings.
+    putInMiddle(r - 4, s + 1, c - s - 2, "Press h for help");
 }
 
 void drawTechView(World * world, View * view)
 {
     erase();
 
-    // Copying rows, columns and sidebar.
-    int r = view -> rows;
-    int c = view -> columns;
-
-    // Drawing main lines.
-    for(int i = 1; i < c; i++)
-    {
-        mvaddch(0, i, ACS_HLINE);
-        mvaddch(r - 1, i, ACS_HLINE);
-    }
-    for(int i = 1; i < r - 1; i++)
-    {
-        mvaddch(i, 0, ACS_VLINE);
-        mvaddch(i, c - 1, ACS_VLINE);
-    }
-    mvaddch(0, 0, ACS_ULCORNER);
-    mvaddch(r - 1, 0, ACS_LLCORNER);
-    mvaddch(0, c - 1, ACS_URCORNER);
-    mvaddch(r - 1, c - 1, ACS_LRCORNER);
+    // Drawing interface.
+    drawBox(0, 0, view -> rows, view -> columns);
 
     // Drawing player name and other info.
     int line = 2;
@@ -322,25 +223,8 @@ void drawCityView(World * world, View * view)
 {
     erase();
 
-    // Copying rows, columns and sidebar.
-    int r = view -> rows;
-    int c = view -> columns;
-
-    // Drawing main lines.
-    for(int i = 1; i < c; i++)
-    {
-        mvaddch(0, i, ACS_HLINE);
-        mvaddch(r - 1, i, ACS_HLINE);
-    }
-    for(int i = 1; i < r - 1; i++)
-    {
-        mvaddch(i, 0, ACS_VLINE);
-        mvaddch(i, c - 1, ACS_VLINE);
-    }
-    mvaddch(0, 0, ACS_ULCORNER);
-    mvaddch(r - 1, 0, ACS_LLCORNER);
-    mvaddch(0, c - 1, ACS_URCORNER);
-    mvaddch(r - 1, c - 1, ACS_LRCORNER);
+    // Drawing interface.
+    drawBox(0, 0, view -> rows, view -> columns);
 
     // Drawing player name and other info.
     Player * player = (Player *) world -> graph_players -> data;
@@ -394,17 +278,6 @@ void drawCityView(World * world, View * view)
         mvprintw(line++, 3, "No units");
     }
     move(start_r, 4);
-}
-
-void clearBlock(int start_r, int start_c, int r, int c)
-{
-    for(int i = start_r; i < start_r + r; i++)
-    {
-        for(int j = start_c; j< start_c + c; j++)
-        {
-            mvaddch(i, j, ' ');
-        }
-    }
 }
 
 void drawPlayerInfo(World * world, View * view)

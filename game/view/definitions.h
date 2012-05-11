@@ -15,7 +15,7 @@
 #ifdef win32
     #define KEY_ENTER_FIXED          (int) '\r'
 #else
-    #define KEY_ENTER_FIXED          10
+    #define KEY_ENTER_FIXED          (int) '\n'
 #endif
 
 #define KEY_SPACE                    32
@@ -42,7 +42,7 @@
 /*
     Interface definitions.
 */
-#define SIDEBAR_PLAYER_BLOCK         2
-#define SIDEBAR_CELL_BLOCK           11
+#define SIDEBAR_PLAYER_BLOCK         0
+#define SIDEBAR_CELL_BLOCK           9
 
 #endif

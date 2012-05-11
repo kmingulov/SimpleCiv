@@ -1,6 +1,7 @@
 # object files to compile
-OBJ = list.o dyn_array.o int_array.o graph.o cell.o landscape.o string_functions.o expat_handlers.o xml.o unit.o city.o player.o technology.o view.o world.o message.o control.o main.o
+OBJ = list.o dyn_array.o int_array.o graph.o cell.o landscape.o string_functions.o expat_handlers.o xml.o unit.o city.o player.o technology.o draw_functions.o view.o world.o message.o control.o main.o
 
+# compilation target
 ifeq ($(win32), 1)
 	CC = i686-w64-mingw32-gcc
 	LFLIB = -lexpat -lpdcurses -lm
@@ -66,6 +67,9 @@ xml.o: modules/parser/xml.c
 
 player.o: modules/player/player.c
 	$(CC) $(CFLAGS) -lexpat modules/player/player.c
+
+draw_functions.o: game/view/draw_functions.c
+	$(CC) $(CFLAGS) game/view/draw_functions.c
 
 view.o: game/view/view.c
 	$(CC) $(CFLAGS) game/view/view.c
