@@ -142,10 +142,14 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             else
             {
                 int t_id = iaGetByIndex(view -> chooser -> ids, current);
-                Technology * t = (Technology *) ((Node *) daGetByIndex(world -> techs_info, t_id)) -> data;
-                player -> research -> id = t_id;
-                player -> research -> turns = 0;
-                player -> research -> delta = 1.5f * t -> turns;
+                // If there're equal, player doesn't change anything.
+                if(t_id != player -> research -> id)
+                {
+                    Technology * t = (Technology *) ((Node *) daGetByIndex(world -> techs_info, t_id)) -> data;
+                    player -> research -> id = t_id;
+                    player -> research -> turns = 0;
+                    player -> research -> delta = 1.5f * t -> turns;
+                }
             }
             // Go back to the map.
             control -> state = CONTROL_MOVE_CURSOR;
@@ -168,16 +172,8 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             player -> current_cell = view -> current_cell;
             // Nulling all.
             control -> state = CONTROL_MOVE_CURSOR;
-            // Processing player's units and cities.
-            listForEach(player -> cities, &developCity);
-            ListElement * le = player -> units -> head;
-            for(int i = 0; i < player -> units -> length; i++)
-            {
-                developUnit(le -> data, world -> units_info);
-                le = le -> next;
-            }
-            // Processing player's research.
-            if(player -> research -> id != -1)
+            // Processing player's research. Also player need to have enough money.
+            if(player -> research -> id != -1 && player -> gold > player -> research -> delta)
             {
                 player -> research -> turns++;
                 player -> gold -= player -> research -> delta;
@@ -194,6 +190,14 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                     player -> research -> turns = 0;
                     player -> research -> delta = 0;
                 }
+            }
+            // Processing player's units and cities.
+            listForEach(player -> cities, &developCity);
+            ListElement * le = player -> units -> head;
+            for(int i = 0; i < player -> units -> length; i++)
+            {
+                developUnit(le -> data, world -> units_info);
+                le = le -> next;
             }
             // Next player.
             world -> graph_players = getNeighbour(world -> graph_players, EDGE_NEXT_PLAYER);

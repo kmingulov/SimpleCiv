@@ -29,6 +29,8 @@ typedef struct ViewChooser
     IntArray * ids;
     // Current id.
     int current;
+    // First row of the list with items.
+    int start_r;
 } ViewChooser;
 
 typedef struct View

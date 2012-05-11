@@ -144,17 +144,19 @@ void developUnit(void * data, DynArray * info)
 
     UnitCommonInfo * unit_info = (UnitCommonInfo *) daGetByIndex(info, unit -> unit_id);
 
-    if( unit -> moves == unit_info -> max_moves)
+    if(unit -> moves == unit_info -> max_moves)
     {
-        if (unit -> health +0.1*unit_info -> max_health <= unit_info -> max_health)
+        if(unit -> health + 0.1f * unit_info -> max_health < unit_info -> max_health)
         {
-            unit -> health = unit -> health + 0.1*unit_info -> max_health;
+            unit -> health = unit -> health + 0.1f * unit_info -> max_health;
         }
         else
+        {
             unit -> health = unit_info -> max_health;
+        }
     }
 
-    unit -> moves = unit_info-> max_moves;
+    unit -> moves = unit_info -> max_moves;
 }
 
 int moveUnit(World * world, Node * current_cell, int direction)

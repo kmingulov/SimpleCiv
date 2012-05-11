@@ -8,7 +8,7 @@ Player * createPlayer(char * name, IntArray * available_units, IntArray * availa
     Player * player = malloc(sizeof(Player));
 
     player -> name = name;
-    player -> gold = 100;
+    player -> gold = 0;
 
     player -> available_units = available_units;
     player -> available_techs = available_techs;

@@ -1,6 +1,20 @@
 SimpleCiv
 =========
-**SimpleCiv** is *really* simple clone of Civilization game.
+**SimpleCiv** is *really* simple clone of Civilization game. It's free software (released under GNU GPL v2 license), written in pure C, using ncurses and expat libraries *(unfortunely, we don't use all power of ncurses)*.
+
+Features:
+* technology tree and researchs, as in original Civilization, but with several exception: you don't know, what the technologies are in the end of this tree; you can't research some technology, if you don't have special nature resource.
+* hiring units and fighting between them
+* multiplayer («hot seat»)
+
+Or, in the nutshell, differents with Civilization:
+* no buildings
+* no unit's experience or city's levels
+* no diplamacy
+* no AI
+* different technology tree implementation
+
+**SimpleCiv** is really simple :)
 
 Compilation
 ------------

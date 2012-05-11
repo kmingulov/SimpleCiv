@@ -57,6 +57,7 @@ ViewChooser * createTechChooser(World * world)
 
     chooser -> ids = iaCreate();
     chooser -> current = -1;
+    chooser -> start_r = -1;
 
     Player * player = (Player *) world -> graph_players -> data;
 
@@ -256,15 +257,19 @@ void drawTechView(World * world, View * view)
     mvaddch(r - 1, c - 1, ACS_LRCORNER);
 
     // Drawing player name and other info.
+    int line = 2;
     Player * player = (Player *) world -> graph_players -> data;
-    attron(A_BOLD); mvprintw(2, 3, "%s's researches", player -> name); attroff(A_BOLD);
-    mvprintw(3, 3, "%d gold, %d gold spents on reasearches every turn", player -> gold, player -> research -> delta);
+    attron(A_BOLD); mvprintw(line++, 3, "%s's researches", player -> name); attroff(A_BOLD);
+    mvprintw(line++, 3, "%d gold, %d gold spents on reasearches every turn", player -> gold, player -> research -> delta);
+
+    // Drawing space.
+    line++;
 
     // Drawing research.
-    attron(A_BOLD); mvprintw(5, 3, "Current research:"); attroff(A_BOLD);
+    attron(A_BOLD); mvprintw(line++, 3, "Current research:"); attroff(A_BOLD);
     if(player -> research -> id == -1)
     {
-        mvprintw(6, 3, "No research");
+        mvprintw(line++, 3, "No research");
     }
     else
     {
@@ -272,14 +277,24 @@ void drawTechView(World * world, View * view)
         Node * n = (Node *) daGetByIndex(world -> techs_info, player -> research -> id);
         Technology * t = (Technology *) n -> data;
         // Printing it.
-        mvprintw(6, 3, "%s (%d/%d turns)", t -> name, player -> research -> turns, t -> turns);
+        mvprintw(line++, 3, "%s (%d/%d turns)", t -> name, player -> research -> turns, t -> turns);
+        // If player doesn't have enought money…
+        if(player -> gold < player -> research -> delta)
+        {
+            mvprintw(line++, 3, "(Your research is suspended: you don't have enough gold!)");
+        }
     }
 
+    // Drawing space.
+    line++;
+
     // Drawing available technologies.
-    IntArray * ids = view -> chooser -> ids;
-    int line = 8;
-    attron(A_BOLD); mvprintw(8, 3, "Available for researching:"); attroff(A_BOLD);
+    attron(A_BOLD); mvprintw(line++, 3, "Available for researching:"); attroff(A_BOLD);
+    // Remembering start_r line.
+    view -> chooser -> start_r = line;
     mvprintw(line++, 3, "[ ] Do not explore anything");
+    // Getting ids.
+    IntArray * ids = view -> chooser -> ids;
     for(int i = 0; i < ids -> length; i++)
     {
         Technology * t = (Technology *) ((Node *) daGetByIndex(world -> techs_info, iaGetByIndex(ids, i))) -> data;
@@ -299,8 +314,8 @@ void drawTechView(World * world, View * view)
         }
     }
 
-    mvaddch(9 + view -> chooser -> current, 4, '*');
-    move(9 + view -> chooser -> current, 4);
+    mvaddch(view -> chooser -> start_r + view -> chooser -> current + 1, 4, '*');
+    move(view -> chooser -> start_r + view -> chooser -> current + 1, 4);
 }
 
 void drawCityView(World * world, View * view)
@@ -658,8 +673,8 @@ int viewProcess(World * world, View * view, List * list)
                     {
                         addch(' ');
                         (view -> chooser -> current)--;
-                        mvaddch(view -> chooser -> current + 9, 4, '*');
-                        move(view -> chooser -> current + 9, 4);
+                        mvaddch(view -> chooser -> start_r + view -> chooser -> current + 1, 4, '*');
+                        move(view -> chooser -> start_r + view -> chooser -> current + 1, 4);
                     }
                 break;
 
@@ -668,8 +683,8 @@ int viewProcess(World * world, View * view, List * list)
                     {
                         addch(' ');
                         (view -> chooser -> current)++;
-                        mvaddch(view -> chooser -> current + 9, 4, '*');
-                        move(view -> chooser -> current + 9, 4);
+                        mvaddch(view -> chooser -> start_r + view -> chooser -> current + 1, 4, '*');
+                        move(view -> chooser -> start_r + view -> chooser -> current + 1, 4);
                     }
                 break;
 
