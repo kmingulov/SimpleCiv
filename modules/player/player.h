@@ -8,8 +8,9 @@
 
 typedef struct Player
 {
-    // Name of player, used only for gamer's convenience.
+    // Name and color of player, used only for gamer's convenience.
     char * name;
+    char colour;
 
     // Gold.
     int gold;

@@ -8,6 +8,22 @@
 #include "../world/definitions.h"
 #include "view.h"
 
+void initColours()
+{
+    init_pair(0, COLOR_WHITE, COLOR_BLACK);
+    init_pair(CELL_TYPE_WATER, COLOR_BLUE,  COLOR_BLACK);
+    init_pair(CELL_TYPE_GRASS, COLOR_GREEN, COLOR_BLACK);
+    init_pair(CELL_TYPE_HILL, COLOR_WHITE, COLOR_BLACK);
+    init_pair(CELL_TYPE_TREE, COLOR_GREEN, COLOR_BLACK);
+    init_pair(CELL_TYPE_MOUNTAIN, COLOR_WHITE, COLOR_BLACK);
+
+    init_pair(PLAYER_COLOURS_START + 0, 1, 0);
+    init_pair(PLAYER_COLOURS_START + 1, 3, 0);
+    init_pair(PLAYER_COLOURS_START + 2, 5, 0);
+    init_pair(PLAYER_COLOURS_START + 3, 6, 0);
+    init_pair(PLAYER_COLOURS_START + 4, 7, 0);
+}
+
 View * createView(World * world)
 {
     View * result = malloc(sizeof(View));
@@ -23,12 +39,7 @@ View * createView(World * world)
     attron(COLOR_PAIR(0));
 
     // Color pairs. 0 — default, 1-5 — territories' colors.
-    init_pair(0, COLOR_WHITE, COLOR_BLACK);
-    init_pair(CELL_TYPE_WATER, COLOR_BLUE,  COLOR_BLACK);
-    init_pair(CELL_TYPE_GRASS, COLOR_GREEN, COLOR_BLACK);
-    init_pair(CELL_TYPE_HILL, COLOR_WHITE, COLOR_BLACK);
-    init_pair(CELL_TYPE_TREE, COLOR_GREEN, COLOR_BLACK);
-    init_pair(CELL_TYPE_MOUNTAIN, COLOR_WHITE, COLOR_BLACK);
+    initColours();
 
     getmaxyx(stdscr, result -> rows, result -> columns);
 
@@ -416,7 +427,9 @@ void drawCellInfo(World * world, View * view)
         City * c = (City *) city -> data;
         attron(A_BOLD); mvprintw(SIDEBAR_CELL_BLOCK + 3, s + 1, "City:  "); attroff(A_BOLD);
         putInLeft(SIDEBAR_CELL_BLOCK + 4, s + 2, len - 2, c -> name);
+        attron(COLOR_PAIR(PLAYER_COLOURS_START + c -> owner -> colour));
         putInLeft(SIDEBAR_CELL_BLOCK + 5, s + 2, len - 2, c -> owner -> name);
+        attroff(COLOR_PAIR(PLAYER_COLOURS_START + c -> owner -> colour));
         mvprintw(SIDEBAR_CELL_BLOCK + 6, s + 2, "People");
         putInRight(SIDEBAR_CELL_BLOCK + 6, s + 2, len - 2, "%d", c -> population);
     }
@@ -429,7 +442,9 @@ void drawCellInfo(World * world, View * view)
         UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, u -> unit_id);
         attron(A_BOLD); mvprintw(SIDEBAR_CELL_BLOCK + 7, s + 1, "Unit:  "); attroff(A_BOLD);
         putInLeft(SIDEBAR_CELL_BLOCK + 8, s + 2, len - 2, u_info -> name);
+        attron(COLOR_PAIR(PLAYER_COLOURS_START + u -> owner -> colour));
         putInLeft(SIDEBAR_CELL_BLOCK + 9, s + 2, len - 2, u -> owner -> name);
+        attroff(COLOR_PAIR(PLAYER_COLOURS_START + u -> owner -> colour));
         mvprintw(SIDEBAR_CELL_BLOCK + 10, s + 2, "HP");
         putInRight(SIDEBAR_CELL_BLOCK + 10, s + 2, len - 2, "%d/%d", u -> health, u_info -> max_health);
         mvprintw(SIDEBAR_CELL_BLOCK + 11, s + 2, "Moves");
@@ -445,14 +460,23 @@ void drawNode(World * world, Node * current)
 {
     if(getNeighbour(current, EDGE_CELL_CITY) != NULL)
     {
+        City * city = (City *) getNeighbour(current, EDGE_CELL_CITY) -> data;
+        attron(COLOR_PAIR(PLAYER_COLOURS_START + city -> owner -> colour));
+        attron(A_BOLD);
         addch('M');
+        attroff(A_BOLD);
+        attroff(COLOR_PAIR(PLAYER_COLOURS_START + city -> owner -> colour));
     }
     else if(getNeighbour(current, EDGE_CELL_UNIT) != NULL)
     {
         // Getting unit's char.
         Unit * unit = (Unit *) getNeighbour(current, EDGE_CELL_UNIT) -> data;
         UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, unit -> unit_id);
+        attron(COLOR_PAIR(PLAYER_COLOURS_START + unit -> owner -> colour));
+        attron(A_BOLD);
         addch(u_info -> c);
+        attroff(A_BOLD);
+        attroff(COLOR_PAIR(PLAYER_COLOURS_START + unit -> owner -> colour));
     }
     else
     {

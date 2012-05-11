@@ -9,6 +9,11 @@
 #include "../../modules/cell/cell.h"
 
 /*
+    Definition for players colors.
+*/
+#define PLAYER_COLOURS_COUNT         5
+
+/*
     Struct of world properties.
 */
 typedef struct WorldProperties

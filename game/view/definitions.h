@@ -21,6 +21,11 @@
 #define KEY_SPACE                    32
 
 /*
+    Definition for init_pair() function.
+*/
+#define PLAYER_COLOURS_START         30
+
+/*
     View process definitions.
 */
 #define VIEW_REDRAW_ALL              0

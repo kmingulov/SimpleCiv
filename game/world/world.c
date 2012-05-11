@@ -97,6 +97,8 @@ World * createWorld()
         char * name = (char *) daGetByIndex(world -> properties -> player_names, i);
         char * city_name = (char *) daGetByIndex(world -> properties -> player_cities, i);
         Player * player = createPlayer(name, iaCopy(units_status), iaCopy(techs_status));
+        // Adding player colour.
+        player -> colour = i % PLAYER_COLOURS_COUNT;
         // Creating default city.
         // createCity() function returns NULL, if nothing created. Trying create
         // city!
