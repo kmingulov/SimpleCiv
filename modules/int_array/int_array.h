@@ -54,4 +54,10 @@ int iaGetByIndex(IntArray * array, int index);
 */
 void iaSetByIndex(IntArray * array, int index, int value);
 
+/*
+    Returns first found positions of value in the array.
+    Returns -1 if nothing found.
+*/
+int iaSearchForData(IntArray * array, int value);
+
 #endif

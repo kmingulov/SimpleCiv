@@ -194,16 +194,28 @@ int moveUnit(World * world, Node * current_cell, int direction)
         }
     }
 
-    // Unit cannot go any more.
     Unit * unit = (Unit *) edge -> target -> data;
+    UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, unit -> unit_id);
+    Node * destination = getNeighbour(current_cell, direction);
+
+    // Unit cannot go any more.
     if(unit -> moves == 0)
     {
         return 0;
     }
 
+    // Unit is a ship?
+    if(iaSearchForData(u_info -> privileges, UNIT_PRVL_CAN_FLOAT) != -1)
+    {
+        // Cannot go to the land, if there is no city.
+        if( ((Cell *) destination -> data) -> territory != CELL_TYPE_WATER && getNeighbour(destination, EDGE_CELL_CITY) == NULL )
+        {
+            return 0;
+        }
+    }
+
     // Cannot go to the water.
-    Node * destination = getNeighbour(current_cell, direction);
-    if( ((Cell *) destination -> data) -> territory == CELL_TYPE_WATER )
+    if( ((Cell *) destination -> data) -> territory == CELL_TYPE_WATER && iaSearchForData(u_info -> privileges, UNIT_PRVL_CAN_FLOAT) == -1 )
     {
         return 0;
     }

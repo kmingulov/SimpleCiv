@@ -83,3 +83,16 @@ void iaSetByIndex(IntArray * array, int index, int value)
 {
     array -> data[index] = value;
 }
+
+int iaSearchForData(IntArray * array, int value)
+{
+    for(int i = 0; i < array -> length; i++)
+    {
+        if(iaGetByIndex(array, i) == value)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}

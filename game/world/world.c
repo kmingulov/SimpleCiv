@@ -107,8 +107,8 @@ World * createWorld()
         {
             city = createCity(world, city_name, rand() % world -> properties -> map_r, rand() % world -> properties -> map_c, player);
         }
-        createUnit(world,city -> r - 1, city -> c, 0, player);
-        createUnit(world,city -> r, city -> c + 1, 14, player);
+        createUnit(world, city -> r - 1, city -> c, 0, player);
+        createUnit(world, city -> r, city -> c + 1, 14, player);
         player -> graph_map = world -> graph_map;
         temp = addNode(temp, EDGE_NEXT_PLAYER, NODE_PLAYER, player);
         // Remembering head.
