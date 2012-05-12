@@ -25,6 +25,8 @@ typedef struct UnitCommonInfo
     unsigned int max_moves;
     unsigned int hiring_turns;
     unsigned int gold_drop;
+    IntArray * priviligies;
+    IntArray * resources;
 } UnitCommonInfo;
 
 /*

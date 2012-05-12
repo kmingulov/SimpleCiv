@@ -18,26 +18,27 @@
 */
 const char xml_tags[][13] = {"map", "rows", "columns", "players", "count",
     "names", "cities", "unit", "id", "name", "char", "health", "damage",
-    "moves", "hiring_turns", "gold_drop", "technology", "id", "name", "turns",
-    "provides", "units", "technologies", "requires", "resources"};
+    "moves", "hiring_turns", "gold_drop", "priviligies", "resources",
+    "technology", "id", "name", "turns", "provides", "units", "technologies",
+    "requires", "resources"};
 
 const int xml_states[] = {XML_MAP, XML_MAP_ROWS, XML_MAP_COLUMNS, XML_PLAYERS,
     XML_PLAYERS_COUNT, XML_PLAYERS_NAMES, XML_PLAYERS_CITIES, XML_UNIT,
     XML_UNIT_ID, XML_UNIT_NAME, XML_UNIT_CHAR, XML_UNIT_HEALTH, XML_UNIT_DAMAGE,
-    XML_UNIT_MOVES, XML_UNIT_HIRING_TURNS, XML_UNIT_GOLD_DROP, XML_TECH,
-    XML_TECH_ID, XML_TECH_NAME, XML_TECH_TURNS, XML_TECH_PROVIDES,
-    XML_TECH_PROVIDES_UNITS, XML_TECH_PROVIDES_TECHS, XML_TECH_REQUIRES,
-    XML_TECH_REQUIRES_RESOURCES};
+    XML_UNIT_MOVES, XML_UNIT_HIRING_TURNS, XML_UNIT_GOLD_DROP,
+    XML_UNIT_PRIVILIGIES, XML_UNIT_RESOURCES, XML_TECH, XML_TECH_ID,
+    XML_TECH_NAME, XML_TECH_TURNS, XML_TECH_PROVIDES, XML_TECH_PROVIDES_UNITS,
+    XML_TECH_PROVIDES_TECHS, XML_TECH_REQUIRES, XML_TECH_REQUIRES_RESOURCES};
 
 const int xml_parents[] = {XML_NONE, XML_MAP, XML_MAP, XML_NONE, XML_PLAYERS,
     XML_PLAYERS, XML_PLAYERS, XML_NONE, XML_UNIT, XML_UNIT, XML_UNIT, XML_UNIT,
-    XML_UNIT, XML_UNIT, XML_UNIT, XML_UNIT, XML_NONE, XML_TECH, XML_TECH,
-    XML_TECH, XML_TECH, XML_TECH_PROVIDES, XML_TECH_PROVIDES, XML_TECH,
-    XML_TECH_REQUIRES};
+    XML_UNIT, XML_UNIT, XML_UNIT, XML_UNIT, XML_UNIT, XML_UNIT, XML_NONE,
+    XML_TECH, XML_TECH, XML_TECH, XML_TECH, XML_TECH_PROVIDES,
+    XML_TECH_PROVIDES, XML_TECH, XML_TECH_REQUIRES};
 
 /*
     Auxiliary arrays for resources convertation from their names to their
-    defined (int game/world/definitions.h) constants.
+    defined (in game/world/definitions.h) constants.
 */
 const char res_names[][10] = {"bronze", "iron", "coal", "gunpowder", "horses",
     "mushrooms"};
@@ -58,6 +59,32 @@ int resourcesConvertation(char * str)
     return 0;
 }
 
+/*
+    Auxiliary arrays for priviligies convertations from their names to their
+    definied (in game/world/definitions.h) constants.
+*/
+const char prvl_names[][10] = {"build_city", "build_mine", "can_float",
+    "chop_trees"};
+
+const int prvl_values[] = {UNIT_PRVL_BUILD_CITY, UNIT_PRVL_BUILD_MINE,
+    UNIT_PRVL_CAN_FLOAT, UNIT_PRVL_CHOP_TREES};
+
+int priviligiesConvertation(char * str)
+{
+    for(int i = 0; i < UNIT_PRVL_COUNT; i++)
+    {
+        if(strcmp(str, prvl_names[i]) == 0)
+        {
+            return prvl_values[i];
+        }
+    }
+
+    return 0;
+}
+
+/*
+    Parsing functions (expat handlers).
+*/
 void elementStart(void * data, const char * name, const char ** attr)
 {
     XMLParserData * p_data = (XMLParserData *) data;
@@ -170,6 +197,14 @@ void elementContent(void * data, const char * s, int len)
 
             case XML_UNIT_GOLD_DROP:
                 ((UnitCommonInfo *) daGetLast(p_data -> data)) -> gold_drop = atoi(temp);
+            break;
+
+            case XML_UNIT_PRIVILIGIES:
+                ((UnitCommonInfo *) daGetLast(p_data -> data)) -> priviligies = strSplitAndConvert(',', temp, &priviligiesConvertation);
+            break;
+
+            case XML_UNIT_RESOURCES:
+                ((UnitCommonInfo *) daGetLast(p_data -> data)) -> priviligies = strSplitAndConvert(',', temp, &resourcesConvertation);
             break;
 
             case XML_TECH_ID:

@@ -10,6 +10,7 @@
         <hiring_turns>1</hiring_turns>
         <gold_drop>0</gold_drop>
         <privileges></privileges>
+        <resources></resources>
     </unit>
 
     <unit>
@@ -22,6 +23,7 @@
         <hiring_turns>1</hiring_turns>
         <gold_drop>0</gold_drop>
         <privileges></privileges>
+        <resources></resources>
     </unit>
 
     <unit>
@@ -204,5 +206,18 @@
         <gold_drop>0</gold_drop>
         <privileges>build_mine</privileges>
         <resources>iron</resources>
+    </unit>
+
+    <unit>
+        <id>16</id>
+        <name>Settler</name>
+        <char>s</char>
+        <health>500</health>
+        <damage>0</damage>
+        <moves>3</moves>
+        <hiring_turns>3</hiring_turns>
+        <gold_drop>0</gold_drop>
+        <privileges>build_city</privileges>
+        <resources></resources>
     </unit>
 </units>

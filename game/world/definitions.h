@@ -72,4 +72,14 @@
 #define CELL_RES_HORSES    5
 #define CELL_RES_MUSHROOMS 6
 
+/*
+    Units priviligies.
+*/
+#define UNIT_PRVL_COUNT      4
+#define UNIT_PRVL_NONE       0
+#define UNIT_PRVL_BUILD_CITY 1
+#define UNIT_PRVL_BUILD_MINE 2
+#define UNIT_PRVL_CAN_FLOAT  3
+#define UNIT_PRVL_CHOP_TREES 4
+
 #endif
