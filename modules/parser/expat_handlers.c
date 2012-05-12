@@ -35,6 +35,29 @@ const int xml_parents[] = {XML_NONE, XML_MAP, XML_MAP, XML_NONE, XML_PLAYERS,
     XML_TECH, XML_TECH, XML_TECH_PROVIDES, XML_TECH_PROVIDES, XML_TECH,
     XML_TECH_REQUIRES};
 
+/*
+    Auxiliary arrays for resources convertation from their names to their
+    defined (int game/world/definitions.h) constants.
+*/
+const char res_names[][10] = {"bronze", "iron", "coal", "gunpowder", "horses",
+    "mushrooms"};
+
+const int res_values[] = {CELL_RES_BRONZE, CELL_RES_IRON, CELL_RES_COAL,
+    CELL_RES_GUNPOWDER, CELL_RES_HORSES, CELL_RES_MUSHROOMS};
+
+int resourcesConvertation(char * str)
+{
+    for(int i = 0; i < CELL_RES_COUNT; i++)
+    {
+        if(strcmp(str, res_names[i]) == 0)
+        {
+            return res_values[i];
+        }
+    }
+
+    return 0;
+}
+
 void elementStart(void * data, const char * name, const char ** attr)
 {
     XMLParserData * p_data = (XMLParserData *) data;
@@ -174,7 +197,7 @@ void elementContent(void * data, const char * s, int len)
             break;
 
             case XML_TECH_REQUIRES_RESOURCES:
-                ((Technology *) ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> tech_in_tree -> data) -> requires_resources = strSplitToInts(',', temp);
+                ((Technology *) ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> tech_in_tree -> data) -> requires_resources = strSplitAndConvert(',', temp, &resourcesConvertation);
             break;
         }
     }

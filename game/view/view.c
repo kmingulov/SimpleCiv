@@ -358,7 +358,11 @@ void drawPlayerInfo(World * world, View * view)
     Player * player = (Player *) world -> graph_players -> data;
 
     // Player info.
-    attron(A_BOLD); putInMiddle(SIDEBAR_PLAYER_BLOCK + 1, s + 1, len, "%s", player -> name); attroff(A_BOLD);
+    attron(COLOR_PAIR(PLAYER_COLOURS_START + player -> colour));
+    attron(A_BOLD);
+    putInMiddle(SIDEBAR_PLAYER_BLOCK + 1, s + 1, len, "%s", player -> name);
+    attroff(A_BOLD);
+    attroff(COLOR_PAIR(PLAYER_COLOURS_START + player -> colour));
     // Researching.
     if(player -> research -> id == -1)
     {

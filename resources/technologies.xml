@@ -56,7 +56,7 @@
         </provides>
 
         <requires>
-            <resources>1</resources>
+            <resources>bronze</resources>
         </requires>
     </technology>
 
@@ -71,7 +71,7 @@
         </provides>
 
         <requires>
-            <resources>2</resources>
+            <resources>iron</resources>
         </requires>
     </technology>
 
@@ -86,7 +86,7 @@
         </provides>
 
         <requires>
-            <resources>5</resources>
+            <resources>horses</resources>
         </requires>
     </technology>
 
@@ -131,7 +131,7 @@
         </provides>
 
         <requires>
-            <resources>3</resources>
+            <resources>coal</resources>
         </requires>
     </technology>
 
@@ -146,7 +146,7 @@
         </provides>
 
         <requires>
-            <resources>4</resources>
+            <resources>gunpowder</resources>
         </requires>
     </technology>
 
@@ -266,7 +266,7 @@
         </provides>
 
         <requires>
-            <resources>6</resources>
+            <resources>mushrooms</resources>
         </requires>
     </technology>
 

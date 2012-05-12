@@ -7,7 +7,7 @@
     Definitions for parser.
 */
 // Count of states.
-#define XML_STATES                  23
+#define XML_STATES                  25
 
 #define XML_NONE                    0
 
