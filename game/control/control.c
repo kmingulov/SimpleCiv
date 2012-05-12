@@ -152,6 +152,40 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             return list;
         }
 
+        // Start hiring.
+        if(control -> state == CONTROL_CHOOSE_UNIT)
+        {
+            Node * n = getNeighbour(view -> current_cell, EDGE_CELL_CITY);
+            City * city = (City *) n -> data;
+            int current = view -> chooser -> current;
+            // Change research.
+            if(current == -1)
+            {
+                city -> hiring -> id = -1;
+                city -> hiring -> turns = 0;
+                city -> hiring -> delta = 0;
+            }
+            else
+            {
+                int u_id = iaGetByIndex(view -> chooser -> ids, current);
+                // If there're equal, player doesn't change anything.
+                if(u_id != city -> hiring -> id)
+                {
+                    UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, u_id);
+                    city -> hiring -> id = u_id;
+                    city -> hiring -> turns = 0;
+                    city -> hiring -> delta = 1.5f * u_info -> hiring_turns;
+                }
+            }
+            // Go back to the map.
+            control -> state = CONTROL_MOVE_CURSOR;
+            destroyChooser(view -> chooser);
+            view -> chooser = NULL;
+            List * list = listCreate();
+            listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+            return list;
+        }
+
         // End of the turn.
         if(control -> state == CONTROL_MOVE_CURSOR || control -> state == CONTROL_MOVE_UNIT)
         {
@@ -186,8 +220,13 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                 }
             }
             // Processing player's units and cities.
-            listForEach(player -> cities, &developCity);
-            ListElement * le = player -> units -> head;
+            ListElement * le = player -> cities -> head;
+            for(int i = 0; i < player -> cities -> length; i++)
+            {
+                developCity(world, le -> data);
+                le = le -> next;
+            }
+            le = player -> units -> head;
             for(int i = 0; i < player -> units -> length; i++)
             {
                 developUnit(le -> data, world -> units_info);
