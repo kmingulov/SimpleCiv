@@ -163,18 +163,32 @@ void unitsFight(World * world, Unit ** unit1, Unit ** unit2)
 void developUnit(void * data, DynArray * info)
 {
     Unit * unit = (Unit *) data;
-
     UnitCommonInfo * unit_info = (UnitCommonInfo *) daGetByIndex(info, unit -> unit_id);
 
-    if(unit -> moves == unit_info -> max_moves)
+    // Unit needs money.
+    if(unit -> owner -> gold <= 3)
     {
-        if(unit -> health + 0.1f * unit_info -> max_health < unit_info -> max_health)
+        // No money, no honey.
+        unit -> health -= ceil(0.1f * unit_info -> max_health);
+        if(unit -> health < 0)
         {
-            unit -> health = unit -> health + 0.1f * unit_info -> max_health;
+            // But he can't die from hunger.
+            unit -> health = ceil((float) 0.1f * unit_info -> max_health);
         }
-        else
+    }
+    else
+    {
+        unit -> owner -> gold -= 3;
+        if(unit -> moves == unit_info -> max_moves)
         {
-            unit -> health = unit_info -> max_health;
+            if(unit -> health + 0.1f * unit_info -> max_health < unit_info -> max_health)
+            {
+                unit -> health = unit -> health + 0.1f * unit_info -> max_health;
+            }
+            else
+            {
+                unit -> health = unit_info -> max_health;
+            }
         }
     }
 
@@ -215,7 +229,7 @@ int moveUnit(World * world, Node * current_cell, int direction)
     }
 
     // Cannot go to the water.
-    if( ((Cell *) destination -> data) -> territory == CELL_TYPE_WATER && iaSearchForData(u_info -> privileges, UNIT_PRVL_CAN_FLOAT) == -1 )
+    if(((Cell *) destination -> data) -> territory == CELL_TYPE_WATER)
     {
         // Not a ship.
         if(u_info -> privileges == NULL || iaSearchForData(u_info -> privileges, UNIT_PRVL_CAN_FLOAT) == -1)
