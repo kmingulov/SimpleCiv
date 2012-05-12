@@ -205,7 +205,7 @@ int moveUnit(World * world, Node * current_cell, int direction)
     }
 
     // Unit is a ship?
-    if(iaSearchForData(u_info -> privileges, UNIT_PRVL_CAN_FLOAT) != -1)
+    if(u_info -> privileges != NULL && iaSearchForData(u_info -> privileges, UNIT_PRVL_CAN_FLOAT) != -1)
     {
         // Cannot go to the land, if there is no city.
         if( ((Cell *) destination -> data) -> territory != CELL_TYPE_WATER && getNeighbour(destination, EDGE_CELL_CITY) == NULL )
@@ -217,7 +217,11 @@ int moveUnit(World * world, Node * current_cell, int direction)
     // Cannot go to the water.
     if( ((Cell *) destination -> data) -> territory == CELL_TYPE_WATER && iaSearchForData(u_info -> privileges, UNIT_PRVL_CAN_FLOAT) == -1 )
     {
-        return 0;
+        // Not a ship.
+        if(u_info -> privileges == NULL || iaSearchForData(u_info -> privileges, UNIT_PRVL_CAN_FLOAT) == -1)
+        {
+            return 0;
+        }
     }
 
     // There is another unit?

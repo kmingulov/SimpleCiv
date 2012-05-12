@@ -40,7 +40,11 @@ Keyboard control
 * *Arrow keys* — move map/unit.
 * *Enter* — end turn.
 * *Space* — choose unit to move or open city dialog to hire units.
+* *i* — show unit info.
+* *h* — show help.
 * *c* — create city (choosed settler is needed).
+* *f* — chop the forest (choosed lumberjack and forest on the cell are needed).
+* *m* — build the mine (choosed miner and bronze/iron/coal on the cell are needed).
 * *t* — open researching technologies dialog.
 * *q* — quit game.
 
