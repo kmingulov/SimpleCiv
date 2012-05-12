@@ -43,6 +43,7 @@ City * createCity(World * world, char * name, unsigned int r, unsigned int c, Pl
     city -> name = name;
     city -> population = rand() % 100 + 100;
     city -> age = 0;
+    city -> hiring = createHiring();
 
     // Owner info.
     city -> owner = player;

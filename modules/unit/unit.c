@@ -95,6 +95,17 @@ Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char u
     return unit;
 }
 
+UnitHiring * createHiring()
+{
+    UnitHiring * res = malloc(sizeof(UnitHiring));
+
+    res -> id = 0;
+    res -> turns = 0;
+    res -> delta = 2;
+
+    return res;
+}
+
 void destroyUnit(World * world, Unit * unit)
 {
     // TODO Awful. Maybe rewrite?

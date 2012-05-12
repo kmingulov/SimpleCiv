@@ -77,6 +77,7 @@ void destroyUnitsAndCities(Node * parent, Node * child, Edge * edge)
     else if(edge -> type == EDGE_CELL_CITY)
     {
         free( ((City *) child -> data) -> name );
+        free( ((City *) child -> data) -> hiring );
         destroyNode(child);
     }
 }

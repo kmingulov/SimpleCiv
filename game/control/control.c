@@ -261,7 +261,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             {
                 control -> state = CONTROL_CHOOSE_UNIT;
                 // Create chooser.
-                view -> chooser = createUnitChooser(world);
+                view -> chooser = createUnitChooser(world, view);
                 List * list = listCreate();
                 listPrepend(list, createMessage(VIEW_REDRAW_CITY_DIALOG, NULL));
                 return list;

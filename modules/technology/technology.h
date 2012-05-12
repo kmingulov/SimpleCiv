@@ -30,7 +30,7 @@ typedef struct TechnologyParseInfo
 typedef struct TechnologyResearch
 {
     int id;
-    // How many turns we researching this technology.
+    // How many turns we exploring this technology.
     int turns;
     // How many gold it's cost.
     int delta;

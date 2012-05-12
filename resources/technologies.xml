@@ -6,7 +6,7 @@
         <turns>4</turns>
 
         <provides>
-            <units>0</units>
+            <units>0,14</units>
             <technologies>2,6</technologies>
         </provides>
 
@@ -66,7 +66,7 @@
         <turns>6</turns>
 
         <provides>
-            <units>3</units>
+            <units>3,15</units>
             <technologies>5,9</technologies>
         </provides>
 
@@ -276,7 +276,7 @@
         <turns>2</turns>
 
         <provides>
-            <units></units>
+            <units>16</units>
             <technologies>0,2,1,10</technologies>
         </provides>
 

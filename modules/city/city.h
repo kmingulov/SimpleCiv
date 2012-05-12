@@ -4,6 +4,7 @@
 #include "../../game/world/world.h"
 
 #include "../player/player.h"
+#include "../unit/unit.h"
 
 typedef struct City
 {
@@ -19,6 +20,9 @@ typedef struct City
 
     // Age.
     unsigned int age;
+
+    // Current hiring in the city.
+    UnitHiring * hiring;
 } City;
 
 /*

@@ -42,6 +42,18 @@ typedef struct Unit
 } Unit;
 
 /*
+    Struct of hiring (for cities).
+*/
+typedef struct UnitHiring
+{
+    int id;
+    // How many turns we researching this technology.
+    int turns;
+    // How many does it cost.
+    int delta;
+} UnitHiring;
+
+/*
     Creates UnitCommonInfo.
 */
 UnitCommonInfo * createUnitCommonInfo();
@@ -61,6 +73,11 @@ IntArray * createUnitStatus(IntArray * techs_status, DynArray * techs_info, DynA
     owner is player.
 */
 Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char unit_id, Player * player);
+
+/*
+    Creates hiring.
+*/
+UnitHiring * createHiring();
 
 /*
     Figth between two units.

@@ -1,6 +1,7 @@
 #include <stdlib.h>
 
 #include "../../game/world/definitions.h"
+#include "../city/city.h"
 #include "player.h"
 
 Player * createPlayer(char * name, IntArray * available_units, IntArray * available_techs)

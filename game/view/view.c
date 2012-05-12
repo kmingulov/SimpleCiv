@@ -139,11 +139,33 @@ ViewChooser * createTechChooser(World * world)
     return chooser;
 }
 
-ViewChooser * createUnitChooser(World * world)
+ViewChooser * createUnitChooser(World * world, View * view)
 {
     ViewChooser * chooser = malloc(sizeof(ViewChooser));
 
     chooser -> ids = iaCreate();
+    chooser -> current = -1;
+    chooser -> start_r = -1;
+
+    Player * player = (Player *) world -> graph_players -> data;
+    Node * n = getNeighbour(view -> current_cell, EDGE_CELL_CITY);
+    City * city = (City *) n -> data;
+
+    int count = 0;
+    for(int i = 0; i < player -> available_units -> length; i++)
+    {
+        int value = iaGetByIndex(player -> available_units, i);
+        if(value == UNIT_AVAILABLE)
+        {
+            iaPrepend(chooser -> ids, i);
+            // It is current research?
+            if(i == city -> hiring -> id)
+            {
+                chooser -> current = count;
+            }
+            count++;
+        }
+    }
 
     return chooser;
 }
@@ -353,7 +375,7 @@ void drawTechView(World * world, View * view)
     line++;
 
     // Drawing available technologies.
-    attron(A_BOLD); mvprintw(line++, 3, "Available for researching:"); attroff(A_BOLD);
+    attron(A_BOLD); mvprintw(line++, 3, "Available for research:"); attroff(A_BOLD);
     // Remembering start_r line.
     view -> chooser -> start_r = line;
     mvprintw(line++, 3, "[ ] Do not explore anything");
@@ -393,29 +415,27 @@ void drawCityView(World * world, View * view)
     int line = 2;
     Player * player = (Player *) world -> graph_players -> data;
     City * city = (City * ) getNeighbour(view -> current_cell, EDGE_CELL_CITY) -> data;
-    attron(A_BOLD); mvprintw(2, 3, "%s's city %s", player -> name, city -> name); attroff(A_BOLD);
-    mvprintw(line++, 3, "%d gold, %d gold spents on reasearches every turn", player -> gold, player -> research -> delta);
+    attron(A_BOLD); mvprintw(line++, 3, "%s's city %s", player -> name, city -> name); attroff(A_BOLD);
+    mvprintw(line++, 3, "You have %d gold, %d gold spents on hiring every turn", player -> gold, city -> hiring -> delta);
 
     // Drawing space.
     line++;
 
     // Drawing unit.
-    attron(A_BOLD); mvprintw(line++, 3, "Current unit:"); attroff(A_BOLD);
-    if(player -> research -> id == -1)
+    attron(A_BOLD); mvprintw(line++, 3, "Current hiring:"); attroff(A_BOLD);
+    if(city -> hiring -> id == -1)
     {
-        mvprintw(line++, 3, "No unit");
+        mvprintw(line++, 3, "No hiring");
     }
     else
     {
         // Getting unit.
-        //~ Node * n = (Node *) daGetByIndex(world -> units_info, player -> units -> unit_data);
-        //~ UnitCommonInfo * u = (UnitCommonInfo *) n -> data;
-        //~ // Printing it.
-        //~ mvprintw(line++, 3, "%s (%d/%d turns)", u -> name, player -> units_info -> hiring_turns, u -> hiring_turns);
+        UnitCommonInfo * u_info = daGetByIndex(world -> units_info, city -> hiring -> id);
+        mvprintw(line++, 3, "%s (%d/%d turns)", u_info -> name, city -> hiring -> turns, u_info -> hiring_turns);
         // If player doesn't have enought money…
-        if(player -> gold < player -> research -> delta)
+        if(player -> gold < city -> hiring -> delta)
         {
-            mvprintw(line++, 3, "(Your unit is suspended: you don't have enough gold!)");
+            mvprintw(line++, 3, "(Your hiring is suspended: you don't have enough gold!)");
         }
     }
 
@@ -426,13 +446,14 @@ void drawCityView(World * world, View * view)
     attron(A_BOLD); mvprintw(line++, 3, "Available for hiring:"); attroff(A_BOLD);
     // Remembering start_r line.
     view -> chooser -> start_r = line;
-    mvprintw(line++, 3, "[ ] Do not explore anything");
+    mvprintw(line++, 3, "[ ] Don't hire anyone");
     // Getting ids.
     IntArray * ids = view -> chooser -> ids;
     for(int i = 0; i < ids -> length; i++)
     {
-        UnitCommonInfo * u = (UnitCommonInfo *) ((Node *) daGetByIndex(world -> units_info, iaGetByIndex(ids, i))) -> data;
-        mvprintw(line++, 3, "[ ] %s (%d turns)", u -> name, u -> hiring_turns);
+        int id = iaGetByIndex(ids, i);
+        UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, id);
+        mvprintw(line++, 3, "[ ] %s (%d turns)", u_info -> name, u_info -> hiring_turns);
     }
 
     mvaddch(view -> chooser -> start_r + view -> chooser -> current + 1, 4, '*');
