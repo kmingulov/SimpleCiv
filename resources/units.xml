@@ -9,6 +9,7 @@
         <moves>5</moves>
         <hiring_turns>1</hiring_turns>
         <gold_drop>0</gold_drop>
+        <privileges></privileges>
     </unit>
 
     <unit>
@@ -20,6 +21,7 @@
         <moves>3</moves>
         <hiring_turns>1</hiring_turns>
         <gold_drop>0</gold_drop>
+        <privileges></privileges>
     </unit>
 
     <unit>
@@ -31,6 +33,8 @@
         <moves>4</moves>
         <hiring_turns>2</hiring_turns>
         <gold_drop>0</gold_drop>
+        <privileges></privileges>
+        <resources>bronze</resources>
     </unit>
 
     <unit>
@@ -42,6 +46,8 @@
         <moves>4</moves>
         <hiring_turns>4</hiring_turns>
         <gold_drop>0</gold_drop>
+        <privileges></privileges>
+        <resources>iron</resources>
     </unit>
 
     <unit>
@@ -53,6 +59,8 @@
         <moves>7</moves>
         <hiring_turns>3</hiring_turns>
         <gold_drop>0</gold_drop>
+        <privileges></privileges>
+        <resources>horses,iron</resources>
     </unit>
 
     <unit>
@@ -64,6 +72,8 @@
         <moves>6</moves>
         <hiring_turns>6</hiring_turns>
         <gold_drop>0</gold_drop>
+        <privileges></privileges>
+        <resources>gunpowder,iron</resources>
     </unit>
 
     <unit>
@@ -75,6 +85,8 @@
         <moves>7</moves>
         <hiring_turns>2</hiring_turns>
         <gold_drop>0</gold_drop>
+        <privileges></privileges>
+        <resources></resources>
     </unit>
 
     <unit>
@@ -86,6 +98,8 @@
         <moves>3</moves>
         <hiring_turns>7</hiring_turns>
         <gold_drop>0</gold_drop>
+        <privileges></privileges>
+        <resources>gunpowder,iron</resources>
     </unit>
 
     <unit>
@@ -97,6 +111,8 @@
         <moves>6</moves>
         <hiring_turns>5</hiring_turns>
         <gold_drop>0</gold_drop>
+        <privileges></privileges>
+        <resources></resources>
     </unit>
 
     <unit>
@@ -108,6 +124,8 @@
         <moves>5</moves>
         <hiring_turns>10</hiring_turns>
         <gold_drop>0</gold_drop>
+        <privileges></privileges>
+        <resources>iron</resources>
     </unit>
 
     <unit>
@@ -119,6 +137,8 @@
         <moves>7</moves>
         <hiring_turns>10</hiring_turns>
         <gold_drop>0</gold_drop>
+        <privileges>can_float</privileges>
+        <resources>iron,coal</resources>
     </unit>
 
     <unit>
@@ -130,6 +150,8 @@
         <moves>5</moves>
         <hiring_turns>9</hiring_turns>
         <gold_drop>0</gold_drop>
+        <privileges>can_float</privileges>
+        <resources></resources>
     </unit>
 
     <unit>
@@ -141,16 +163,46 @@
         <moves>6</moves>
         <hiring_turns>20</hiring_turns>
         <gold_drop>0</gold_drop>
+        <privileges></privileges>
+        <resources>mushrooms</resources>
     </unit>
 
     <unit>
         <id>13</id>
         <name>Caravan</name>
-        <char>m</char>
+        <char>=</char>
         <health>1000</health>
         <damage>0</damage>
         <moves>5</moves>
         <hiring_turns>0</hiring_turns>
         <gold_drop>500</gold_drop>
+        <privileges></privileges>
+        <resources></resources>
+    </unit>
+
+    <unit>
+        <id>14</id>
+        <name>Lumberjack</name>
+        <char>*</char>
+        <health>500</health>
+        <damage>0</damage>
+        <moves>3</moves>
+        <hiring_turns>3</hiring_turns>
+        <gold_drop>0</gold_drop>
+        <privileges>chop_trees</privileges>
+        <resources></resources>
+    </unit>
+
+    <unit>
+        <id>15</id>
+        <name>Miner</name>
+        <char>*</char>
+        <health>500</health>
+        <damage>0</damage>
+        <moves>3</moves>
+        <hiring_turns>3</hiring_turns>
+        <gold_drop>0</gold_drop>
+        <privileges>build_mine</privileges>
+        <resources>iron</resources>
     </unit>
 </units>

@@ -17,6 +17,11 @@ void strTrimSpaces(char * str);
 DynArray * strSplit(char delimiter, char * str, int max_length);
 
 /*
+    Split string to IntArray, converts each element to int by function.
+*/
+IntArray * strSplitAndConvert(char delimiter, char * str, int (* function)(char * data));
+
+/*
     Split string to IntArray by delimiter (convertint each element to integer
     by atoi() function).
 */

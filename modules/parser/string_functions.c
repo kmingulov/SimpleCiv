@@ -48,7 +48,7 @@ DynArray * strSplit(char delimiter, char * str, int max_length)
                 new_name[index++] = str[i];
             }
         }
-        else
+        else if(index != 0)
         {
             new_name[index] = '\0';
             // Copying name.
@@ -58,10 +58,36 @@ DynArray * strSplit(char delimiter, char * str, int max_length)
             index = 0;
         }
     }
-    new_name[index] = '\0';
-    daPrepend(array, new_name);
+
+    if(index != 0)
+    {
+        new_name[index] = '\0';
+        daPrepend(array, new_name);
+    }
 
     return array;
+}
+
+IntArray * strSplitAndConvert(char delimiter, char * str, int (* function)(char * data))
+{
+    DynArray * array = strSplit(delimiter, str, 16);
+
+    if(array == NULL)
+    {
+        return NULL;
+    }
+
+    IntArray * result = iaCreate();
+
+    for(int i = 0; i < array -> length; i++)
+    {
+        char * tmp = daGetByIndex(array, i);
+        iaPrepend(result, function(tmp));
+    }
+
+    daDestroy(array, &free);
+
+    return result;
 }
 
 IntArray * strSplitToInts(char delimiter, char * str)
