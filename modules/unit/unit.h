@@ -69,6 +69,11 @@ void destroyUnitCommonInfo(void * data);
 IntArray * createUnitStatus(IntArray * techs_status, DynArray * techs_info, DynArray * units_info);
 
 /*
+    Updates unit table.
+*/
+void updateUnitStatus(IntArray * units_status, IntArray * techs_status, DynArray * techs_info);
+
+/*
     Creates new unit in world in row r, column c. Id of unit is unit_id and
     owner is player.
 */

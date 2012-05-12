@@ -21,14 +21,6 @@ void destroyControl(Control * control)
     free(control);
 }
 
-int * twoIntsInPointer(int a, int b)
-{
-    int * result = malloc(sizeof(int) * 2);
-    result[0] = a;
-    result[1] = b;
-    return result;
-}
-
 List * controlProcess(World * world, View * view, Control * control, int key)
 {
     // Arrow keys.
@@ -105,17 +97,17 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         }
 
         // Choosing technology state.
-        if(control -> state == CONTROL_CHOOSE_TECH)
+        if(control -> state == CONTROL_CHOOSE_TECH || control -> state == CONTROL_CHOOSE_UNIT)
         {
             List * list = listCreate();
             switch(key)
             {
                 case KEY_UP  :
-                    listPrepend(list, createMessage(VIEW_MOVE_TECH_CURSOR_TOP, NULL));
+                    listPrepend(list, createMessage(VIEW_CHOOSER_MOVE_CURSOR_TOP, NULL));
                 break;
 
                 case KEY_DOWN:
-                    listPrepend(list, createMessage(VIEW_MOVE_TECH_CURSOR_BOTTOM, NULL));
+                    listPrepend(list, createMessage(VIEW_CHOOSER_MOVE_CURSOR_BOTTOM, NULL));
                 break;
             }
             return list;
@@ -185,6 +177,8 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                 {
                     // Updating tech table.
                     updateTechnologyStatus(player -> available_techs, n);
+                    // Updating unit table.
+                    updateUnitStatus(player -> available_units, player -> available_techs, world -> techs_info);
                     // Updating research info.
                     player -> research -> id = -1;
                     player -> research -> turns = 0;
@@ -219,7 +213,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
     }
 
     // Space event.
-    if(key == KEY_SPACE)
+    if( key == KEY_SPACE && (control -> state == CONTROL_MOVE_CURSOR || control -> state == CONTROL_MOVE_UNIT) )
     {
         Node * node = NULL;
 

@@ -738,7 +738,7 @@ int viewProcess(World * world, View * view, List * list)
                     drawTechView(world, view);
                 break;
 
-                case VIEW_MOVE_TECH_CURSOR_TOP:
+                case VIEW_CHOOSER_MOVE_CURSOR_TOP:
                     if(view -> chooser -> current > -1)
                     {
                         addch(' ');
@@ -748,7 +748,7 @@ int viewProcess(World * world, View * view, List * list)
                     }
                 break;
 
-                case VIEW_MOVE_TECH_CURSOR_BOTTOM:
+                case VIEW_CHOOSER_MOVE_CURSOR_BOTTOM:
                     if(view -> chooser -> current < view -> chooser -> ids -> length - 1)
                     {
                         addch(' ');

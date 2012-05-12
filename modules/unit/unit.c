@@ -46,6 +46,13 @@ IntArray * createUnitStatus(IntArray * techs_status, DynArray * techs_info, DynA
 {
     IntArray * result = iaLengthCreate(units_info -> length);
 
+    updateUnitStatus(result, techs_status, techs_info);
+
+    return result;
+}
+
+void updateUnitStatus(IntArray * units_status, IntArray * techs_status, DynArray * techs_info)
+{
     for(int i = 0; i < techs_status -> length; i++)
     {
         if( iaGetByIndex(techs_status, i) == TECH_RESEARCHED )
@@ -56,13 +63,11 @@ IntArray * createUnitStatus(IntArray * techs_status, DynArray * techs_info, DynA
                 for(int j = 0; j < units -> length; j++)
                 {
                     int id = iaGetByIndex(units, j);
-                    iaSetByIndex(result, id, UNIT_AVAILABLE);
+                    iaSetByIndex(units_status, id, UNIT_AVAILABLE);
                 }
             }
         }
     }
-
-    return result;
 }
 
 Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char unit_id, Player * player)
