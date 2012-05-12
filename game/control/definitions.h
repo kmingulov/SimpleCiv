@@ -6,5 +6,6 @@
 #define CONTROL_CHOOSE_TECH 2
 #define CONTROL_CHOOSE_UNIT 3
 #define CONTROL_HELP        4
+#define CONTROL_UNIT_INFO   5
 
 #endif

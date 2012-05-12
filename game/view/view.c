@@ -8,6 +8,18 @@
 #include "../world/definitions.h"
 #include "view.h"
 
+const char res_names_readable[][16] = {"Bronze", "Iron", "Coal", "Gunpowder",
+    "Horses", "Mushrooms"};
+
+const int res_values[] = {CELL_RES_BRONZE, CELL_RES_IRON, CELL_RES_COAL,
+    CELL_RES_GUNPOWDER, CELL_RES_HORSES, CELL_RES_MUSHROOMS};
+
+const char prvl_names_readable[][16] = {"Building city", "Building mine",
+    "Can float", "Choping trees"};
+
+const int prvl_values[] = {UNIT_PRVL_BUILD_CITY, UNIT_PRVL_BUILD_MINE,
+    UNIT_PRVL_CAN_FLOAT, UNIT_PRVL_CHOP_TREES};
+
 void initColours()
 {
     init_pair(0, COLOR_WHITE, COLOR_BLACK);
@@ -214,6 +226,90 @@ void drawHelpView(World * world, View * view)
 
     // That's all.
     line++;
+    move(line, 3);
+}
+
+void drawUnitInfoView(World * world, View * view)
+{
+    erase();
+
+    // Getting unit.
+    Node * n = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
+    Unit * u = (Unit *) n -> data;
+    UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, u -> unit_id);
+
+    // Drawing main interface.
+    drawBox(0, 0, view -> rows, view -> columns);
+
+    // Drawing unit info.
+    int line = 2; int column = 20;
+
+    attron(A_BOLD); mvprintw(line++, 3, "%s", u_info -> name); attroff(A_BOLD);
+
+    line++;
+    mvprintw(line,   3,      "Symbol");
+    mvprintw(line++, column, "%c", u_info -> c);
+
+    line++;
+    mvprintw(line,   3,      "Health");
+    mvprintw(line++, column, "%d", u_info -> max_health);
+    mvprintw(line,   3,      "Damage");
+    mvprintw(line++, column, "%d", u_info -> max_damage);
+    mvprintw(line,   3,      "Moves");
+    mvprintw(line++, column, "%d", u_info -> max_moves);
+
+    line++;
+    mvprintw(line,   3,      "Hiring turns");
+    mvprintw(line++, column, "%d * city coefficient", u_info -> hiring_turns);
+
+    line++;
+    mvprintw(line,   3,      "Gold drop");
+    mvprintw(line++, column, "%d", u_info -> gold_drop);
+
+    line++;
+    mvprintw(line++, 3,      "Requires for hiring:");
+    if(u_info -> resources == NULL || u_info -> resources -> length == 0)
+    {
+        mvprintw(line++, 5, "Nothing");
+    }
+    else
+    {
+        for(int i = 0; i < u_info -> resources -> length; i++)
+        {
+            int r = iaGetByIndex(u_info -> resources, i);
+            for(int j = 0; j < CELL_RES_COUNT; j++)
+            {
+                if(res_values[j] == r)
+                {
+                    mvprintw(line++, 5, "%s", res_names_readable[j]);
+                    break;
+                }
+            }
+        }
+    }
+
+    line++;
+    mvprintw(line++, 3,      "Privileges:");
+    if(u_info -> privileges == NULL || u_info -> privileges -> length == 0)
+    {
+        mvprintw(line++, 5, "Nothing");
+    }
+    else
+    {
+        for(int i = 0; i < u_info -> privileges -> length; i++)
+        {
+            int r = iaGetByIndex(u_info -> privileges, i);
+            for(int j = 0; j < UNIT_PRVL_COUNT; j++)
+            {
+                if(prvl_values[j] == r)
+                {
+                    mvprintw(line++, 5, "%s", prvl_names_readable[j]);
+                    break;
+                }
+            }
+        }
+    }
+
     move(line, 3);
 }
 
@@ -651,6 +747,10 @@ int viewProcess(World * world, View * view, List * list)
 
                 case VIEW_REDRAW_HELP:
                     drawHelpView(world, view);
+                break;
+
+                case VIEW_REDRAW_UNIT_INFO:
+                    drawUnitInfoView(world, view);
                 break;
             }
             le = le -> next;

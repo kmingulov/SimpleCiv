@@ -7,7 +7,7 @@
     Definitions for parser.
 */
 // Count of states.
-#define XML_STATES                  25
+#define XML_STATES                  27
 
 #define XML_NONE                    0
 
@@ -29,7 +29,7 @@
 #define XML_UNIT_MOVES              14
 #define XML_UNIT_HIRING_TURNS       15
 #define XML_UNIT_GOLD_DROP          16
-#define XML_UNIT_PRIVILIGIES        17
+#define XML_UNIT_PRIVILEGES         17
 #define XML_UNIT_RESOURCES          18
 
 #define XML_TECH                    19

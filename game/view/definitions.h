@@ -34,8 +34,9 @@
 #define VIEW_REDRAW_TECH_DIALOG      4
 #define VIEW_REDRAW_CITY_DIALOG      5
 #define VIEW_REDRAW_HELP             6
+#define VIEW_REDRAW_UNIT_INFO        7
 
-#define VIEW_MOVE_CURSOR_RIGHT       7
+#define VIEW_MOVE_CURSOR_RIGHT       8
 #define VIEW_MOVE_CURSOR_LEFT        9
 #define VIEW_MOVE_CURSOR_TOP         10
 #define VIEW_MOVE_CURSOR_BOTTOM      11

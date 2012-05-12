@@ -17,7 +17,7 @@ UnitCommonInfo * createUnitCommonInfo()
     unit -> max_moves = 0;
     unit -> hiring_turns = 0;
     unit -> gold_drop = 0;
-    unit -> priviligies = NULL;
+    unit -> privileges = NULL;
     unit -> resources = NULL;
 
     return unit;
@@ -29,14 +29,14 @@ void destroyUnitCommonInfo(void * data)
 
     free(unit -> name);
 
-    if(unit -> priviligies != NULL)
+    if(unit -> privileges != NULL)
     {
-        iaDestroy(unit -> priviligies);
+        iaDestroy(unit -> privileges);
     }
 
     if(unit -> resources != NULL)
     {
-        iaDestroy(unit -> priviligies);
+        iaDestroy(unit -> resources);
     }
 
     free(unit);

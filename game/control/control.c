@@ -295,7 +295,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             return list;
         }
 
-        if(control -> state == CONTROL_HELP)
+        if(control -> state == CONTROL_HELP || control -> state == CONTROL_UNIT_INFO)
         {
             control -> state = CONTROL_MOVE_CURSOR;
             List * list = listCreate();
@@ -322,6 +322,24 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             control -> state = CONTROL_HELP;
             List * list = listCreate();
             listPrepend(list, createMessage(VIEW_REDRAW_HELP, NULL));
+            return list;
+        }
+    }
+
+    // Showing unit info.
+    if((char) key == 'I' || (char) key == 'i')
+    {
+        if(control -> state == CONTROL_MOVE_CURSOR || control -> state == CONTROL_MOVE_UNIT)
+        {
+            Node * n = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
+            // There is no unit, cannot show any info.
+            if(n == NULL)
+            {
+                return NULL;
+            }
+            control -> state = CONTROL_UNIT_INFO;
+            List * list = listCreate();
+            listPrepend(list, createMessage(VIEW_REDRAW_UNIT_INFO, NULL));
             return list;
         }
     }
