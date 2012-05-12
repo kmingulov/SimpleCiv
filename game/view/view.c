@@ -390,57 +390,53 @@ void drawCityView(World * world, View * view)
     drawBox(0, 0, view -> rows, view -> columns);
 
     // Drawing player name and other info.
+    int line = 2;
     Player * player = (Player *) world -> graph_players -> data;
     City * city = (City * ) getNeighbour(view -> current_cell, EDGE_CELL_CITY) -> data;
     attron(A_BOLD); mvprintw(2, 3, "%s's city %s", player -> name, city -> name); attroff(A_BOLD);
+    mvprintw(line++, 3, "%d gold, %d gold spents on reasearches every turn", player -> gold, player -> research -> delta);
 
-    // Drawing available units.
-    attron(A_BOLD); mvprintw(4, 3, "Available for hiring:"); attroff(A_BOLD);
-    int line = 5; int start_r = line; int count = 0;
-    for(int i = 0; i < player -> available_units -> length; i++)
+    // Drawing space.
+    line++;
+
+    // Drawing unit.
+    attron(A_BOLD); mvprintw(line++, 3, "Current unit:"); attroff(A_BOLD);
+    if(player -> research -> id == -1)
     {
-        int value = iaGetByIndex(player -> available_units, i);
-        if(value == UNIT_AVAILABLE)
+        mvprintw(line++, 3, "No unit");
+    }
+    else
+    {
+        // Getting unit.
+        //~ Node * n = (Node *) daGetByIndex(world -> units_info, player -> units -> unit_data);
+        //~ UnitCommonInfo * u = (UnitCommonInfo *) n -> data;
+        //~ // Printing it.
+        //~ mvprintw(line++, 3, "%s (%d/%d turns)", u -> name, player -> units_info -> hiring_turns, u -> hiring_turns);
+        // If player doesn't have enought money…
+        if(player -> gold < player -> research -> delta)
         {
-            //~ Unit * u = (Unit *) ((Node *) daGetByIndex(world -> units_info, i)) -> data;
-            //~ // Checking for hiring.
-            //~ if(u -> requires_resources == NULL)
-            //~ {
-                //~ // Nothing requires. Great.
-                //~ count++;
-                //~ mvprintw(line++, 3, "[ ] %s (%d turns)", u -> name, u -> turns);
-            //~ }
-            //~ else
-            //~ {
-                //~ // Checking for each resource.
-                //~ char okay = 1;
-                //~ for(int j = 0; j < u -> requires_resources -> length; j++)
-                //~ {
-                    //~ // Getting resource id.
-                    //~ int id = iaGetByIndex(u -> requires_resources, j);
-                    //~ // Does player have this resources?
-                    //~ if(iaGetByIndex(player -> resources, id) == 0)
-                    //~ {
-                        //~ // Sad but true.
-                        //~ okay = 0;
-                        //~ break;
-                    //~ }
-                //~ }
-                //~ // You're lucky man.
-                //~ if(okay == 1)
-                //~ {
-                    //~ count++;
-                    //~ mvprintw(line++, 3, "[ ] %s (%d turns)", u -> name, u -> turns);
-                //~ }
-            //~ }
+            mvprintw(line++, 3, "(Your unit is suspended: you don't have enough gold!)");
         }
     }
 
-    if(count == 0)
+    // Drawing space.
+    line++;
+
+    // Drawing available technologies.
+    attron(A_BOLD); mvprintw(line++, 3, "Available for hiring:"); attroff(A_BOLD);
+    // Remembering start_r line.
+    view -> chooser -> start_r = line;
+    mvprintw(line++, 3, "[ ] Do not explore anything");
+    // Getting ids.
+    IntArray * ids = view -> chooser -> ids;
+    for(int i = 0; i < ids -> length; i++)
     {
-        mvprintw(line++, 3, "No units");
+        UnitCommonInfo * u = (UnitCommonInfo *) ((Node *) daGetByIndex(world -> units_info, iaGetByIndex(ids, i))) -> data;
+        mvprintw(line++, 3, "[ ] %s (%d turns)", u -> name, u -> hiring_turns);
     }
-    move(start_r, 4);
+
+    mvaddch(view -> chooser -> start_r + view -> chooser -> current + 1, 4, '*');
+    move(view -> chooser -> start_r + view -> chooser -> current + 1, 4);
 }
 
 void drawPlayerInfo(World * world, View * view)
