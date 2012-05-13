@@ -1,6 +1,7 @@
 #ifndef TECHNOLOGY
 #define TECHNOLOGY
 
+//#include "../player/player.h"
 #include "../dyn_array/dyn_array.h"
 #include "../int_array/int_array.h"
 #include "../graph/graph.h"
@@ -80,5 +81,13 @@ IntArray * createTechnologyStatus(DynArray * techs_info);
     Updates technology status table for one technology.
 */
 void updateTechnologyStatus(IntArray * techs_status, Node * tech);
+
+/*
+    Checkes available with technology or no.
+    Looks for player's resources (function updateTechnologyStatus() doesn't do
+    this).
+    Returns 1 if available, 0 if no.
+*/
+//int checkForResources(Technology * tech, Player * player);
 
 #endif

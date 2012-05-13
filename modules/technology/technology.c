@@ -178,3 +178,36 @@ void updateTechnologyStatus(IntArray * techs_status, Node * tech)
         }
     }
 }
+
+/*int checkForResources(Technology * tech, Player * player)
+{
+    // Checking for resources.
+    if(tech -> requires_resources == NULL)
+    {
+        // Nothing requires. Great.
+        return 1;
+    }
+
+    // Checking for each resource.
+    char okay = 1;
+    for(int i = 0; i < tech -> requires_resources -> length; i++)
+    {
+        // Getting resource id.
+        int id = iaGetByIndex(tech -> requires_resources, i);
+        // Does player have this resources?
+        if(iaGetByIndex(player -> resources, id) == 0)
+        {
+            // Sad but true.
+            okay = 0;
+            break;
+        }
+    }
+
+    // You're lucky man.
+    if(okay == 1)
+    {
+        return 1;
+    }
+
+    return 0;
+}*/
