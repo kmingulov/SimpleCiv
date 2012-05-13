@@ -386,15 +386,18 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         {
             Node * n = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
             Unit * unit = (Unit *) n -> data;
-            Player * player = (Player *) world -> graph_players -> data;
             UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, unit -> unit_id);
 
-            if (iaSearchForData(u_info -> privileges, UNIT_PRVL_BUILD_CITY))
+            if(iaSearchForData(u_info -> privileges, UNIT_PRVL_BUILD_CITY) != -1)
             {
                 char * s = malloc(sizeof(char) * 16);
                 strcpy(s, "NAME");
 
-                createCity(world,s, unit -> r, unit -> c, player);
+                createCity(world, s, unit -> r, unit -> c, unit -> owner);
+
+                List * list = listCreate();
+                listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+                return list;
             }
             return NULL;
         }
