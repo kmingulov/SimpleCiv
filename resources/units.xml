@@ -222,7 +222,7 @@
     </unit>  
     
      <unit>
-        <id>999</id>
+        <id>17</id>
         <name>Admin-unit</name>
         <char>]</char>
         <health>5000</health>

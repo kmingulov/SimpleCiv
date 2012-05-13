@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include <string.h>
+
 
 #include "../../modules/list/list.h"
 #include "../../modules/city/city.h"
@@ -389,7 +391,10 @@ List * controlProcess(World * world, View * view, Control * control, int key)
 
             if (iaSearchForData(u_info -> privileges, UNIT_PRVL_BUILD_CITY))
             {
-                createCity(world,"ADD RANDOM NAME FOR CITY", unit -> r, unit -> c, player);
+                char * s = malloc(sizeof(char) * 16);
+                strcpy(s, "NAME");
+
+                createCity(world,s, unit -> r, unit -> c, player);
             }
             return NULL;
         }
