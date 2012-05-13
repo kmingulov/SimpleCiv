@@ -8,18 +8,24 @@
 #include "../world/definitions.h"
 #include "view.h"
 
-const char res_names_readable[][16] = {"Bronze", "Iron", "Coal", "Gunpowder",
+/*
+    Some consts for drawing.
+*/
+const char VIEW_RES_NAMES[][16] = {"Bronze", "Iron", "Coal", "Gunpowder",
     "Horses", "Mushrooms"};
 
-const int res_values[] = {CELL_RES_BRONZE, CELL_RES_IRON, CELL_RES_COAL,
+const int VIEW_RES_VALUES[] = {CELL_RES_BRONZE, CELL_RES_IRON, CELL_RES_COAL,
     CELL_RES_GUNPOWDER, CELL_RES_HORSES, CELL_RES_MUSHROOMS};
 
-const char prvl_names_readable[][16] = {"Building city", "Building mine",
+const char VIEW_PRVL_NAMES[][16] = {"Building city", "Building mine",
     "Can float", "Choping trees"};
 
-const int prvl_values[] = {UNIT_PRVL_BUILD_CITY, UNIT_PRVL_BUILD_MINE,
+const int VIEW_PRVL_VALUES[] = {UNIT_PRVL_BUILD_CITY, UNIT_PRVL_BUILD_MINE,
     UNIT_PRVL_CAN_FLOAT, UNIT_PRVL_CHOP_TREES};
 
+/*
+    Initialize colour pairs.
+*/
 void initColours()
 {
     init_pair(0, COLOR_WHITE, COLOR_BLACK);
@@ -79,6 +85,27 @@ void destroyView(View * view)
 {
     endwin();
     free(view);
+}
+
+void focusOn(World * world, View * view, int r, int c)
+{
+    // Get node with cell.
+    Node * cell = getCell(world -> graph_map, r, c);
+
+    // Remember it.
+    view -> current_cell = cell;
+    view -> map_r = r;
+    view -> map_c = c;
+
+    // Set cursor to the middle of the screen.
+    view -> cur_r = view -> rows / 2;
+    view -> cur_c = view -> sidebar / 2;
+
+    // Scroll player's graph_map.
+    Player * player = (Player *) world -> graph_players -> data;
+    // Map in the window starts from (1, 1) point, so add 1 to r and c
+    // coordinates.
+    player -> graph_map = getCell(view -> current_cell, 1 - view -> cur_r, 1 - view -> cur_c);
 }
 
 ViewChooser * createTechChooser(World * world)
@@ -301,9 +328,9 @@ void drawUnitInfoView(World * world, View * view)
             int r = iaGetByIndex(u_info -> resources, i);
             for(int j = 0; j < CELL_RES_COUNT; j++)
             {
-                if(res_values[j] == r)
+                if(VIEW_RES_VALUES[j] == r)
                 {
-                    mvprintw(line++, 5, "%s", res_names_readable[j]);
+                    mvprintw(line++, 5, "%s", VIEW_RES_NAMES[j]);
                     break;
                 }
             }
@@ -323,9 +350,9 @@ void drawUnitInfoView(World * world, View * view)
             int r = iaGetByIndex(u_info -> privileges, i);
             for(int j = 0; j < UNIT_PRVL_COUNT; j++)
             {
-                if(prvl_values[j] == r)
+                if(VIEW_PRVL_VALUES[j] == r)
                 {
-                    mvprintw(line++, 5, "%s", prvl_names_readable[j]);
+                    mvprintw(line++, 5, "%s", VIEW_PRVL_NAMES[j]);
                     break;
                 }
             }
