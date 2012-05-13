@@ -8,6 +8,7 @@
 #include "../../modules/graph/graph.h"
 #include "../world/definitions.h"
 #include "../message/message.h"
+#include "view_textbox.h"
 #include "view.h"
 
 /*
@@ -42,6 +43,7 @@ void initColours()
     init_pair(PLAYER_COLOURS_START + 2, 5, 0);
     init_pair(PLAYER_COLOURS_START + 3, 6, 0);
     init_pair(PLAYER_COLOURS_START + 4, 7, 0);
+    init_pair(PLAYER_COLOURS_START + 5, COLOR_WHITE, COLOR_BLACK);
 }
 
 View * createView(World * world)

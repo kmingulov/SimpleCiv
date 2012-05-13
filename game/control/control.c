@@ -245,6 +245,11 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             // Next player.
             world -> graph_players = getNeighbour(world -> graph_players, EDGE_NEXT_PLAYER);
             player = (Player *) world -> graph_players -> data;
+            if(player -> is_computer)
+            {
+                world -> graph_players = getNeighbour(world -> graph_players, EDGE_NEXT_PLAYER);
+                player = (Player *) world -> graph_players -> data;
+            }
             // Getting his settings (if there are != 0).
             if(player -> cur_r != 0)  view -> cur_r = player -> cur_r; else view -> cur_r = view -> rows / 2;
             if(player -> cur_c != 0)  view -> cur_c = player -> cur_c; else view -> cur_c = view -> sidebar / 2;

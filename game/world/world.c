@@ -16,7 +16,7 @@
 
 World * createWorld()
 {
-    // Creating world.
+    // Allocate memory for world.
     World * world = malloc(sizeof(World));
 
     // Parsing config.xml.
@@ -116,9 +116,32 @@ World * createWorld()
             world -> graph_players = temp;
         }
     }
+    // Computer player.
+    char * name = malloc(sizeof(char) * 8);
+    Player * player = createPlayer(strcpy(name, "Neutral"), NULL, NULL);
+    player -> is_computer = 1;
+    player -> colour = 5;
+    // Generating units.
+    int r, c, counter = 0;
+    while(counter < 2 * world -> properties -> players_count)
+    {
+        r = rand() % world -> properties -> map_r;
+        c = rand() % world -> properties -> map_c;
+        Cell * cell = (Cell *) getCell(world -> graph_map, r, c) -> data;
+        if(cell -> territory != CELL_TYPE_WATER)
+        {
+            createUnit(world, r, c, 13, player);
+            counter++;
+        }
+    }
+    temp = addNode(temp, EDGE_NEXT_PLAYER, NODE_PLAYER, player);
+
+    // Link list.
     addEdge(temp, world -> graph_players, EDGE_NEXT_PLAYER);
+
     iaDestroy(unit_table);
     iaDestroy(tech_table);
+
     printf("Done\n");
 
     printf("All done!\n");

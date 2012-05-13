@@ -4,7 +4,7 @@
 /*
     Admin mode.
 */
-#define ADMIN_MODE         0
+#define ADMIN_MODE         1
 
 /*
     Definition for players colours.

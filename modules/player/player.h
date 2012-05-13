@@ -12,6 +12,9 @@ typedef struct Player
     char * name;
     char colour;
 
+    // Player is a computer.
+    char is_computer;
+
     // Gold.
     int gold;
 
