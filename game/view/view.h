@@ -63,6 +63,11 @@ ViewChooser * createUnitChooser(World * world, View * view);
 void destroyChooser(ViewChooser * chooser);
 
 /*
+    Focus on the (r, c) cell of the map.
+*/
+void focusOn(World * world, View * view, int r, int c);
+
+/*
     Draws basic view (for map).
 */
 void drawGeneralView(World * world, View * view);

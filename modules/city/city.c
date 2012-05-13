@@ -99,7 +99,7 @@ void developCity(World * world, void * data)
             if(city -> hiring -> turns == u_info -> hiring_turns)
             {
                 createUnit(world, city -> r, city -> c, city -> hiring -> id, city -> owner);
-                city -> hiring -> id = 0;
+                city -> hiring -> id = -1;
                 city -> hiring -> turns = 0;
                 city -> hiring -> delta = 0;
             }

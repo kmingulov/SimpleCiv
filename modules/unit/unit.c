@@ -104,9 +104,9 @@ UnitHiring * createHiring()
 {
     UnitHiring * res = malloc(sizeof(UnitHiring));
 
-    res -> id = 0;
+    res -> id = -1;
     res -> turns = 0;
-    res -> delta = 2;
+    res -> delta = 0;
 
     return res;
 }
