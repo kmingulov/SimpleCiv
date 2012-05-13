@@ -418,6 +418,8 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             )
             {
                 ((Cell *) view -> current_cell -> data) -> territory = CELL_TYPE_GRASS;
+                unit -> owner -> gold += 5;
+                unit -> moves = 0;
                 List * list = listCreate();
                 listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
                 return list;
