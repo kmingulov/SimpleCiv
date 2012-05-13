@@ -14,6 +14,7 @@
 #include "../../modules/list/list.h"
 #include "../world/world.h"
 #include "view_chooser.h"
+#include "view_textbox.h"
 #include "draw_functions.h"
 #include "definitions.h"
 
@@ -33,6 +34,8 @@ typedef struct View
     Node * current_cell;
     // Current chooser.
     ViewChooser * chooser;
+    // Current textbox.
+    ViewTextbox * textbox;
 } View;
 
 /*
@@ -40,6 +43,12 @@ typedef struct View
 */
 View * createView(World * world);
 void destroyView(View * view);
+
+/*
+    Information adders for ViewTextbox.
+*/
+void addHelpInfoToTextbox(ViewTextbox * tb);
+void addUnitInfoToTextbox(ViewTextbox * tb, World * world, View * view);
 
 /*
     Focus on the (r, c) cell of the map.

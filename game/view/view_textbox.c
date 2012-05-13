@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include <curses.h>
 
 #include "draw_functions.h"
@@ -10,6 +11,7 @@ ViewTextbox * createViewTextbox(int r, int c, int lines_per_page)
     ViewTextbox * textbox = malloc(sizeof(ViewTextbox));
 
     textbox -> lines_per_page = lines_per_page;
+    textbox -> pages_count = 1;
     textbox -> current_page = 0;
     textbox -> lines = daCreate();
     textbox -> properties = iaCreate();
@@ -24,6 +26,7 @@ void addString(ViewTextbox * tb, char * string, int bold)
     char * s = malloc(sizeof(char) * (tb -> c - 4));
     daPrepend(tb -> lines, strcpy(s, string));
     iaPrepend(tb -> properties, bold);
+    tb -> pages_count = ceil((float) tb -> lines -> length / tb -> lines_per_page);
 }
 
 void drawViewTextbox(ViewTextbox * tb)

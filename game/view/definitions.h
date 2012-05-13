@@ -33,18 +33,17 @@
 #define VIEW_REDRAW_MAP              2
 #define VIEW_REDRAW_TECH_DIALOG      4
 #define VIEW_REDRAW_CITY_DIALOG      5
-#define VIEW_REDRAW_HELP             6
-#define VIEW_REDRAW_UNIT_INFO        7
+#define VIEW_REDRAW_TEXTBOX          6
 
-#define VIEW_MOVE_CURSOR_RIGHT       8
-#define VIEW_MOVE_CURSOR_LEFT        9
-#define VIEW_MOVE_CURSOR_TOP         10
-#define VIEW_MOVE_CURSOR_BOTTOM      11
+#define VIEW_MOVE_CURSOR_RIGHT       7
+#define VIEW_MOVE_CURSOR_LEFT        8
+#define VIEW_MOVE_CURSOR_TOP         9
+#define VIEW_MOVE_CURSOR_BOTTOM      10
 
-#define VIEW_CHOOSER_MOVE_CURSOR_TOP    12
-#define VIEW_CHOOSER_MOVE_CURSOR_BOTTOM 13
+#define VIEW_CHOOSER_MOVE_CURSOR_TOP    11
+#define VIEW_CHOOSER_MOVE_CURSOR_BOTTOM 12
 
-#define VIEW_ESCAPE                  14
+#define VIEW_ESCAPE                  13
 
 /*
     Interface definitions.

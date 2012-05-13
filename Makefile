@@ -20,7 +20,7 @@ OBJ_PLAYER = player.o
 OBJ_PARSE = string_functions.o expat_handlers.o xml.o
 
 # helpful for ncurses and view
-OBJ_NCURSES = draw_functions.o view_chooser.o
+OBJ_NCURSES = draw_functions.o view_chooser.o view_textbox.o
 
 # main modules
 OBJ_MAIN = world.o view.o control.o message.o main.o
@@ -127,6 +127,9 @@ draw_functions.o: game/view/draw_functions.c
 
 view_chooser.o: game/view/view_chooser.c
 	$(CC) $(CFLAGS) game/view/view_chooser.c
+
+view_textbox.o: game/view/view_textbox.c
+	$(CC) $(CFLAGS) game/view/view_textbox.c
 
 # main
 world.o: game/world/world.c

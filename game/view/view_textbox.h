@@ -9,6 +9,9 @@ typedef struct ViewTextbox
     // Sizes.
     int r, c;
 
+    // Page count.
+    int pages_count;
+
     // Current page.
     int current_page;
 
@@ -27,7 +30,14 @@ typedef struct ViewTextbox
 */
 ViewTextbox * createViewTextbox(int r, int c, int lines_per_page);
 
+/*
+    Adds string to textbox.
+*/
 void addString(ViewTextbox * tb, char * string, int bold);
+
+/*
+    Draws textbox.
+*/
 void drawViewTextbox(ViewTextbox * tb);
 
 /*

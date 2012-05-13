@@ -77,6 +77,7 @@ View * createView(World * world)
     }
 
     result -> chooser = NULL;
+    result -> textbox = NULL;
 
     // Go through player's list and set for each player his cur_*, map_* and
     // current_cell.
@@ -159,80 +160,55 @@ void drawGeneralView(World * world, View * view)
     putInMiddle(r - 4, s + 1, c - s - 2, "Press h for help");
 }
 
-void drawHelpView(World * world, View * view)
+void addHelpInfoToTextbox(ViewTextbox * tb)
 {
-    erase();
-
-    // Drawing main interface.
-    drawBox(0, 0, view -> rows, view -> columns);
-
-    // Drawing help info.
-    int line = 2; int column = 20;
+    addString(tb, "Help", 1);
+    addString(tb, "Use up/down arrow keys to scroll this text.", 0);
+    addString(tb, "", 0);
 
     // Map window.
-    attron(A_BOLD); mvprintw(line++, 3, "Map:"); attroff(A_BOLD);
-    mvprintw(line,   3,      "Arrow keys");
-    mvprintw(line++, column, "Move unit/cursor.");
-    mvprintw(line,   3,      "Enter");
-    mvprintw(line++, column, "End turn.");
-    mvprintw(line,   3,      "Space");
-    mvprintw(line++, column, "Choose unit to move or open city hiring dialog.");
-    mvprintw(line,   3,      "c");
-    mvprintw(line++, column, "Create city (if settler is selected).");
-    mvprintw(line,   3,      "t");
-    mvprintw(line++, column, "Open research dialog.");
-    mvprintw(line,   3,      "h");
-    mvprintw(line++, column, "Show this help.");
-    mvprintw(line,   3,      "q");
-    mvprintw(line++, column, "Quit game.");
+    addString(tb, "Map:", 1);
+    addString(tb, "Arrow keys       Move unit/cursor.", 0);
+    addString(tb, "Enter            End turn.", 0);
+    addString(tb, "Space            Choose unit to move or open city hiring dialog.", 0);
+    addString(tb, "c                Create city (if settler is selected).", 0);
+    addString(tb, "b                Cut the forest (if lumberjack is selected).", 0);
+    addString(tb, "m                Build a mine (if miner is selected).", 0);
+    addString(tb, "t                Open research dialog.", 0);
+    addString(tb, "h                Show this help.", 0);
+    addString(tb, "i                Show unit information.", 0);
+    addString(tb, "q                Quit game.", 0);
+    addString(tb, "", 0);
 
     // Hiring dialog.
-    line++;
-    attron(A_BOLD); mvprintw(line++, 3, "Hiring dialog:"); attroff(A_BOLD);
-    mvprintw(line,   3,      "Up/down keys");
-    mvprintw(line++, column, "Choose unit.");
-    mvprintw(line,   3,      "Enter");
-    mvprintw(line++, column, "Start hiring (will terminate current hiring).");
-    mvprintw(line,   3,      "q");
-    mvprintw(line++, column, "Quit to map.");
+    addString(tb, "Hiring dialog:", 1);
+    addString(tb, "Up/down keys     Choose unit.", 0);
+    addString(tb, "Enter            Start hiring (will terminate current hiring).", 0);
+    addString(tb, "q                Quit to map.", 0);
+    addString(tb, "", 0);
 
     // Research dialog.
-    line++;
-    attron(A_BOLD); mvprintw(line++, 3, "Research dialog:"); attroff(A_BOLD);
-    mvprintw(line,   3,      "Up/down keys");
-    mvprintw(line++, column, "Choose technology.");
-    mvprintw(line,   3,      "Enter");
-    mvprintw(line++, column, "Start research (will terminate current research).");
-    mvprintw(line,   3,      "q");
-    mvprintw(line++, column, "Quit to map.");
+    addString(tb, "Research dialog:", 1);
+    addString(tb, "Up/down keys     Choose technology.", 0);
+    addString(tb, "Enter            Start research (will terminate current research).", 0);
+    addString(tb, "q                Quit to map.", 0);
+    addString(tb, "", 0);
 
     // One hint.
-    line++;
-    mvprintw(line,   3,      "Press q to hide this help.");
-
-    // That's all.
-    line++;
-    move(line, 3);
+    addString(tb, "Press q to hide this help.", 0);
 }
 
-void drawUnitInfoView(World * world, View * view)
+void addUnitInfoToTextbox(ViewTextbox * tb, World * world, View * view)
 {
-    erase();
-
     // Getting unit.
     Node * n = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
     Unit * u = (Unit *) n -> data;
     UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, u -> unit_id);
 
-    // Drawing main interface.
-    drawBox(0, 0, view -> rows, view -> columns);
+    addString(tb, u_info -> name, 1);
+    addString(tb, "Symbol       Move unit/cursor.", 0);
 
-    // Drawing unit info.
-    int line = 2; int column = 20;
-
-    attron(A_BOLD); mvprintw(line++, 3, "%s", u_info -> name); attroff(A_BOLD);
-
-    line++;
+    /*line++;
     mvprintw(line,   3,      "Symbol");
     mvprintw(line++, column, "%c", u_info -> c);
 
@@ -294,9 +270,7 @@ void drawUnitInfoView(World * world, View * view)
                 }
             }
         }
-    }
-
-    move(line, 3);
+    }*/
 }
 
 void drawTechView(World * world, View * view)
@@ -734,12 +708,8 @@ int viewProcess(World * world, View * view, List * list)
                     drawCityView(world, view);
                 break;
 
-                case VIEW_REDRAW_HELP:
-                    drawHelpView(world, view);
-                break;
-
-                case VIEW_REDRAW_UNIT_INFO:
-                    drawUnitInfoView(world, view);
+                case VIEW_REDRAW_TEXTBOX:
+                    drawViewTextbox(view -> textbox);
                 break;
             }
             le = le -> next;

@@ -113,6 +113,32 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             }
             return list;
         }
+
+        // Scrolling textbox.
+        if(control -> state == CONTROL_TEXTBOX)
+        {
+            switch(key)
+            {
+                case KEY_UP  :
+                    view -> textbox -> current_page -= 1;
+                    if(view -> textbox -> current_page < 0)
+                    {
+                        view -> textbox -> current_page = 0;
+                    }
+                break;
+
+                case KEY_DOWN:
+                    view -> textbox -> current_page += 1;
+                    if(view -> textbox -> current_page >= view -> textbox -> pages_count)
+                    {
+                        view -> textbox -> current_page = view -> textbox -> pages_count - 1;
+                    }
+                break;
+            }
+            List * list = listCreate();
+            listPrepend(list, createMessage(VIEW_REDRAW_TEXTBOX, NULL));
+            return list;
+        }
     }
 
     // Enter.
@@ -344,9 +370,11 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             return list;
         }
 
-        if(control -> state == CONTROL_HELP || control -> state == CONTROL_UNIT_INFO)
+        if(control -> state == CONTROL_TEXTBOX)
         {
             control -> state = CONTROL_MOVE_CURSOR;
+            destroyViewTextbox(view -> textbox);
+            view -> textbox = NULL;
             List * list = listCreate();
             listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
             return list;
@@ -368,9 +396,11 @@ List * controlProcess(World * world, View * view, Control * control, int key)
     {
         if(control -> state == CONTROL_MOVE_CURSOR || control -> state == CONTROL_MOVE_UNIT)
         {
-            control -> state = CONTROL_HELP;
+            view -> textbox = createViewTextbox(view -> rows, view -> columns, view -> rows - 4);
+            addHelpInfoToTextbox(view -> textbox);
+            control -> state = CONTROL_TEXTBOX;
             List * list = listCreate();
-            listPrepend(list, createMessage(VIEW_REDRAW_HELP, NULL));
+            listPrepend(list, createMessage(VIEW_REDRAW_TEXTBOX, NULL));
             return list;
         }
     }
@@ -386,9 +416,11 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             {
                 return NULL;
             }
-            control -> state = CONTROL_UNIT_INFO;
+            view -> textbox = createViewTextbox(view -> rows, view -> columns, view -> rows - 4);
+            addUnitInfoToTextbox(view -> textbox, world, view);
+            control -> state = CONTROL_TEXTBOX;
             List * list = listCreate();
-            listPrepend(list, createMessage(VIEW_REDRAW_UNIT_INFO, NULL));
+            listPrepend(list, createMessage(VIEW_REDRAW_TEXTBOX, NULL));
             return list;
         }
     }
