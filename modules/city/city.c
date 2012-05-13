@@ -15,10 +15,10 @@ City * createCity(World * world, char * name, int r, int c, Player * player)
     }
 
     // Checking that there is one non-water cell.
-    int coord[][2] = {{r, c}, {r + 1, c}, {r - 1, c}, {r, c - 1}, {r, c + 1},
-        {r + 1, c + 1}, {r - 1, c + 1}, {r + 1, c - 1}, {r - 1, c - 1}};
+    int coord[][2] = {{r + 1, c}, {r - 1, c}, {r, c - 1}, {r, c + 1},
+        {r + 1, c + 1}, {r - 1, c + 1}, {r + 1, c - 1}, {r - 1, c - 1}, {r, c}};
     int found = 0;
-    for(int i = 0; i < 9; i++)
+    for(int i = 0; i < 8; i++)
     {
         Cell * c = getCell(world -> graph_map, coord[i][0], coord[i][1]) -> data;
         if(c -> territory != CELL_TYPE_WATER)
@@ -27,7 +27,7 @@ City * createCity(World * world, char * name, int r, int c, Player * player)
             break;
         }
     }
-    if(found == 0)
+    if(found == 0 || ((Cell *) getCell(world -> graph_map, r, c) -> data) -> territory == CELL_TYPE_WATER)
     {
         return 0;
     }

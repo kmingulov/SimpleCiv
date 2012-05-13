@@ -390,7 +390,8 @@ List * controlProcess(World * world, View * view, Control * control, int key)
     // Create city.
     if((char) key == 'C' || (char) key == 'c')
     {
-        if(control -> state == CONTROL_MOVE_UNIT)
+        Node * c = getNeighbour(view -> current_cell, EDGE_CELL_CITY);
+        if(control -> state == CONTROL_MOVE_UNIT && c == NULL)
         {
             Node * n = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
             Unit * unit = (Unit *) n -> data;
@@ -412,6 +413,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             }
             return NULL;
         }
+        return NULL;
     }
 
     // Cut the forest.
