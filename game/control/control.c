@@ -425,13 +425,14 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         }
     }
 
-    // Unit switch
+    // Unit switch.
     if((char) key == 'N' || (char) key == 'n')
     {
         if(control -> state == CONTROL_MOVE_UNIT)
         {
             Player * player = (Player *) world -> graph_players -> data;
-            Unit * unit = (Unit *)player -> units -> head -> next;
+            Unit * unit = (Unit *) player -> units -> head -> next -> data;
+            player -> units -> head = player -> units -> head -> next;
             focusOn(world, view, unit -> r, unit -> c);
             List * list = listCreate();
             listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
