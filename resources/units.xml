@@ -219,5 +219,18 @@
         <gold_drop>0</gold_drop>
         <privileges>build_city</privileges>
         <resources></resources>
-    </unit>
+    </unit>  
+    
+     <unit>
+        <id>999</id>
+        <name>Admin-unit</name>
+        <char>]</char>
+        <health>5000</health>
+        <damage>0</damage>
+        <moves>300</moves>
+        <hiring_turns>1</hiring_turns>
+        <gold_drop>0</gold_drop>
+        <privileges>build_city,build_mine</privileges>
+        <resources></resources>
+    </unit>    
 </units>

@@ -377,5 +377,32 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         }
     }
 
+
+    // Creaty city.
+    if((char) key == 'C' || (char) key == 'c')
+    {
+        Node * n = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
+        if(n == NULL)
+        {
+            return NULL;
+        }
+        Unit * unit = (Unit *) n -> data;
+        Player * player = (Player *) world -> graph_players -> data;
+        UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, unit -> unit_id);
+        if(player != unit -> owner)
+        {
+            return NULL;
+        }
+
+        if(control -> state == CONTROL_MOVE_UNIT)
+        {
+            if (iaSearchForData(u_info -> privileges, UNIT_PRVL_BUILD_CITY))
+            {
+                createCity(world,"fasfs", unit -> r, unit -> c, player);
+            }
+            return NULL;
+        }
+    }
+
     return NULL;
 }

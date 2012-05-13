@@ -13,7 +13,7 @@ typedef struct City
 
     // Owner of this city.
     Player * owner;
-    unsigned int r, c;
+    int r, c;
 
     // Current population.
     unsigned int population;
@@ -28,7 +28,7 @@ typedef struct City
 /*
     Creates a city in row r, column c. Player is owner of the city.
 */
-City * createCity(World * world, char * name, unsigned int r, unsigned int c, Player * player);
+City * createCity(World * world, char * name, int r, int c, Player * player);
 
 /*
     Developes the city.

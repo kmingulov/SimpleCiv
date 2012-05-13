@@ -3,7 +3,7 @@
 
 #include "city.h"
 
-City * createCity(World * world, char * name, unsigned int r, unsigned int c, Player * player)
+City * createCity(World * world, char * name, int r, int c, Player * player)
 {
     // Cell (r,c) already have a city.
     if(getNeighbour( getCell(world -> graph_map, r, c), EDGE_CELL_CITY ) != NULL)
