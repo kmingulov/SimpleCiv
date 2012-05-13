@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #include "../../modules/parser/xml.h"
 #include "../../modules/cell/cell.h"
@@ -130,6 +131,7 @@ World * createWorld()
         Cell * cell = (Cell *) getCell(world -> graph_map, r, c) -> data;
         if(cell -> territory != CELL_TYPE_WATER)
         {
+            // Creating caravans.
             createUnit(world, r, c, 13, player);
             counter++;
         }

@@ -85,7 +85,7 @@ void developCity(World * world, void * data)
 
     // Increase owner's money.
     Player * player = city -> owner;
-    player -> gold += ceil((float) 20.0f * exp(log((float) n / 100000.0f) / 7.0f) );
+    player -> gold += ceil((float) 10.0f * exp(log((float) n / 100000.0f) / 7.0f) );
 
     // Process hiring. (Player must have enough money.)
     if(city -> hiring -> id != -1 && player -> gold >= city -> hiring -> delta)

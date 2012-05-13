@@ -87,7 +87,7 @@ void unitsFight(World * world, Unit ** unit1, Unit ** unit2)
     if( (* unit1) -> health <= 0 )
     {
         // Player2 getting drop.
-        (* unit2) -> owner -> gold += u2 -> gold_drop;
+        (* unit2) -> owner -> gold += u1 -> gold_drop;
         // Destroing unit.
         destroyUnit(world, * unit1);
         * unit1 = NULL;
@@ -95,7 +95,7 @@ void unitsFight(World * world, Unit ** unit1, Unit ** unit2)
     if( (* unit2) -> health <= 0 )
     {
         // Player1 getting drop.
-        (* unit1) -> owner -> gold += u1 -> gold_drop;
+        (* unit1) -> owner -> gold += u2 -> gold_drop;
         // Destroing unit.
         destroyUnit(world, * unit2);
         * unit2 = NULL;
