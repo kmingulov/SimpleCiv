@@ -2,6 +2,7 @@
 
 #include "../../modules/player/player.h"
 #include "../../modules/technology/technology.h"
+#include "../../modules/unit/unit_common_info.h"
 #include "../world/definitions.h"
 #include "view_chooser.h"
 
@@ -79,13 +80,47 @@ ViewChooser * createUnitChooser(World * world, City * city)
         int value = iaGetByIndex(player -> available_units, i);
         if(value == UNIT_AVAILABLE)
         {
-            iaPrepend(chooser -> ids, i);
-            // It is current research?
-            if(i == city -> hiring -> id)
+            UnitCommonInfo * u_info = daGetByIndex(world -> units_info, i);
+            // Checking for resources.
+            if(u_info -> resources == NULL)
             {
-                chooser -> current = count;
+                // Nothing requires. Great.
+                count++;
+                iaPrepend(chooser -> ids, i);
+                // It is current hiring?
+                if(i == city -> hiring -> id)
+                {
+                    chooser -> current = count;
+                }
             }
-            count++;
+            else
+            {
+                // Checking for each resource.
+                char okay = 1;
+                for(int j = 0; j < u_info -> resources -> length; j++)
+                {
+                    // Getting resource id.
+                    int id = iaGetByIndex(u_info -> resources, j);
+                    // Does player have this resources?
+                    if(iaGetByIndex(player -> resources, id) == 0)
+                    {
+                        // Sad but true.
+                        okay = 0;
+                        break;
+                    }
+                }
+                // You're lucky man.
+                if(okay == 1)
+                {
+                    count++;
+                    iaPrepend(chooser -> ids, i);
+                    // It is current hiring?
+                    if(i == city -> hiring -> id)
+                    {
+                        chooser -> current = count;
+                    }
+                }
+            }
         }
     }
 

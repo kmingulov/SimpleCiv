@@ -26,6 +26,11 @@ typedef struct Unit
 Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char unit_id, Player * player);
 
 /*
+    Destroys unit.
+*/
+void destroyUnit(World * world, Unit * unit);
+
+/*
     Figth between two units.
 */
 void unitsFight(World * world, Unit ** unit1, Unit ** unit2);

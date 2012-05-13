@@ -112,8 +112,6 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             }
             return list;
         }
-
-        // TODO Add choosing unit state.
     }
 
     // Enter.
@@ -171,10 +169,22 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                 // If there're equal, player doesn't change anything.
                 if(u_id != city -> hiring -> id)
                 {
+                    // Set info.
                     UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, u_id);
                     city -> hiring -> id = u_id;
                     city -> hiring -> turns = 0;
                     city -> hiring -> delta = 1.5f * u_info -> hiring_turns;
+                    // Decrement player's resources.
+                    Player * player = (Player *) world -> graph_players -> data;
+                    if(u_info -> resources != NULL)
+                    {
+                        for(int i = 0; i < u_info -> resources -> length; i++)
+                        {
+                            int id = iaGetByIndex(u_info -> resources, i);
+                            int res = iaGetByIndex(player -> resources, id);
+                            iaSetByIndex(player -> resources, id, res - 1);
+                        }
+                    }
                 }
             }
             // Go back to the map.
@@ -388,10 +398,13 @@ List * controlProcess(World * world, View * view, Control * control, int key)
 
             if(iaSearchForData(u_info -> privileges, UNIT_PRVL_BUILD_CITY) != -1)
             {
+                // TODO Input city name.
                 char * s = malloc(sizeof(char) * 16);
                 strcpy(s, "NAME");
 
                 createCity(world, s, unit -> r, unit -> c, unit -> owner);
+                destroyUnit(world, unit);
+                control -> state = CONTROL_MOVE_CURSOR;
 
                 List * list = listCreate();
                 listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
