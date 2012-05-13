@@ -2,7 +2,7 @@
 #define PLAYERS
 
 #include "../list/list.h"
-#include "../technology/technology.h"
+#include "../technology/technology_research.h"
 #include "../graph/graph.h"
 #include "../int_array/int_array.h"
 

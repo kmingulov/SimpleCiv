@@ -1,11 +1,13 @@
 #include <stdlib.h>
 
-#include "../../modules/graph/graph.h"
 #include "../../modules/player/player.h"
 #include "../../modules/city/city.h"
 #include "../../modules/unit/unit.h"
+#include "../../modules/unit/unit_common_info.h"
 #include "../../modules/technology/technology.h"
+#include "../../modules/graph/graph.h"
 #include "../world/definitions.h"
+#include "../message/message.h"
 #include "view.h"
 
 /*
@@ -53,14 +55,16 @@ View * createView(World * world)
     cbreak();
     keypad(stdscr, TRUE);
     start_color();
-    attroff(A_BOLD);;
+    attroff(A_BOLD);
     attron(COLOR_PAIR(0));
 
-    // Color pairs. 0 — default, 1-5 — territories' colors.
+    // Colour pairs.
     initColours();
 
+    // Get sizes.
     getmaxyx(stdscr, result -> rows, result -> columns);
 
+    // Set sidebar.
     result -> sidebar = 0.8 * result -> columns;
 
     // Min size of sidepanel is 20 chars.
@@ -106,101 +110,6 @@ void focusOn(World * world, View * view, int r, int c)
     // Map in the window starts from (1, 1) point, so add 1 to r and c
     // coordinates.
     player -> graph_map = getCell(view -> current_cell, 1 - view -> cur_r, 1 - view -> cur_c);
-}
-
-ViewChooser * createTechChooser(World * world)
-{
-    ViewChooser * chooser = malloc(sizeof(ViewChooser));
-
-    chooser -> ids = iaCreate();
-    chooser -> current = -1;
-    chooser -> start_r = -1;
-
-    Player * player = (Player *) world -> graph_players -> data;
-
-    int count = 0;
-    for(int i = 0; i < player -> available_techs -> length; i++)
-    {
-        int value = iaGetByIndex(player -> available_techs, i);
-        if(value == TECH_AVAILABLE)
-        {
-            Technology * t = (Technology *) ((Node *) daGetByIndex(world -> techs_info, i)) -> data;
-            // Checking for resources.
-            if(t -> requires_resources == NULL)
-            {
-                // Nothing requires. Great.
-                count++;
-                iaPrepend(chooser -> ids, t -> id);
-            }
-            else
-            {
-                // Checking for each resource.
-                char okay = 1;
-                for(int j = 0; j < t -> requires_resources -> length; j++)
-                {
-                    // Getting resource id.
-                    int id = iaGetByIndex(t -> requires_resources, j);
-                    // Does player have this resources?
-                    if(iaGetByIndex(player -> resources, id) == 0)
-                    {
-                        // Sad but true.
-                        okay = 0;
-                        break;
-                    }
-                }
-                // You're lucky man.
-                if(okay == 1)
-                {
-                    count++;
-                    iaPrepend(chooser -> ids, t -> id);
-                }
-            }
-            // It is current research?
-            if(t -> id == player -> research -> id)
-            {
-                chooser -> current = count - 1;
-            }
-        }
-    }
-
-    return chooser;
-}
-
-ViewChooser * createUnitChooser(World * world, View * view)
-{
-    ViewChooser * chooser = malloc(sizeof(ViewChooser));
-
-    chooser -> ids = iaCreate();
-    chooser -> current = -1;
-    chooser -> start_r = -1;
-
-    Player * player = (Player *) world -> graph_players -> data;
-    Node * n = getNeighbour(view -> current_cell, EDGE_CELL_CITY);
-    City * city = (City *) n -> data;
-
-    int count = 0;
-    for(int i = 0; i < player -> available_units -> length; i++)
-    {
-        int value = iaGetByIndex(player -> available_units, i);
-        if(value == UNIT_AVAILABLE)
-        {
-            iaPrepend(chooser -> ids, i);
-            // It is current research?
-            if(i == city -> hiring -> id)
-            {
-                chooser -> current = count;
-            }
-            count++;
-        }
-    }
-
-    return chooser;
-}
-
-void destroyChooser(ViewChooser * chooser)
-{
-    iaDestroy(chooser -> ids);
-    free(chooser);
 }
 
 void drawGeneralView(World * world, View * view)

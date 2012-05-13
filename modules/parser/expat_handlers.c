@@ -2,10 +2,9 @@
 #include <string.h>
 
 #include "../../game/world/definitions.h"
-#include "../graph/graph.h"
-#include "../dyn_array/dyn_array.h"
-#include "../int_array/int_array.h"
-#include "../unit/unit.h"
+#include "../../game/world/world_properties.h"
+#include "../unit/unit_common_info.h"
+#include "../technology/technology_parse_info.h"
 #include "../technology/technology.h"
 #include "string_functions.h"
 #include "expat_handlers.h"

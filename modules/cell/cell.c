@@ -1,5 +1,6 @@
 #include <stdlib.h>
 
+#include "../../game/world/definitions.h"
 #include "../city/city.h"
 #include "cell.h"
 

@@ -1,8 +1,6 @@
 #ifndef DRAW_FUNCTIONS
 #define DRAW_FUNCTIONS
 
-#include "view.h"
-
 /*
     Clears block from (start_r, start_c) to (start_r + r, start_c + c) point.
 */

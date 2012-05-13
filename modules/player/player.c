@@ -1,7 +1,6 @@
 #include <stdlib.h>
 
 #include "../../game/world/definitions.h"
-#include "../city/city.h"
 #include "player.h"
 
 Player * createPlayer(char * name, IntArray * available_units, IntArray * available_techs)
@@ -40,10 +39,14 @@ void destroyPlayer(Player * player)
 {
     listDestroy(player -> cities, NULL);
     listDestroy(player -> units, NULL);
+
     iaDestroy(player -> available_units);
     iaDestroy(player -> available_techs);
+
     destroyResearch(player -> research);
+
     iaDestroy(player -> resources);
+
     free(player -> name);
     free(player);
 }

@@ -3,72 +3,9 @@
 
 #include "../../game/world/definitions.h"
 #include "../graph/graph.h"
-#include "../technology/technology.h"
-#include "../dyn_array/dyn_array.h"
+#include "../cell/cell.h"
+#include "unit_common_info.h"
 #include "unit.h"
-
-UnitCommonInfo * createUnitCommonInfo()
-{
-    UnitCommonInfo * unit = malloc(sizeof(UnitCommonInfo));
-
-    unit -> name = NULL;
-    unit -> max_health = 0;
-    unit -> max_damage = 0;
-    unit -> max_moves = 0;
-    unit -> hiring_turns = 0;
-    unit -> gold_drop = 0;
-    unit -> privileges = NULL;
-    unit -> resources = NULL;
-
-    return unit;
-}
-
-void destroyUnitCommonInfo(void * data)
-{
-    UnitCommonInfo * unit = (UnitCommonInfo *) data;
-
-    free(unit -> name);
-
-    if(unit -> privileges != NULL)
-    {
-        iaDestroy(unit -> privileges);
-    }
-
-    if(unit -> resources != NULL)
-    {
-        iaDestroy(unit -> resources);
-    }
-
-    free(unit);
-}
-
-IntArray * createUnitStatus(IntArray * techs_status, DynArray * techs_info, DynArray * units_info)
-{
-    IntArray * result = iaLengthCreate(units_info -> length);
-
-    updateUnitStatus(result, techs_status, techs_info);
-
-    return result;
-}
-
-void updateUnitStatus(IntArray * units_status, IntArray * techs_status, DynArray * techs_info)
-{
-    for(int i = 0; i < techs_status -> length; i++)
-    {
-        if( iaGetByIndex(techs_status, i) == TECH_RESEARCHED )
-        {
-            IntArray * units = ((Technology *) ((Node *) daGetByIndex(techs_info , i)) -> data) -> provides_units;
-            if(units != NULL)
-            {
-                for(int j = 0; j < units -> length; j++)
-                {
-                    int id = iaGetByIndex(units, j);
-                    iaSetByIndex(units_status, id, UNIT_AVAILABLE);
-                }
-            }
-        }
-    }
-}
 
 Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char unit_id, Player * player)
 {
@@ -98,17 +35,6 @@ Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char u
     addEdge(getCell(world -> graph_map, r, c), node, EDGE_CELL_UNIT);
 
     return unit;
-}
-
-UnitHiring * createHiring()
-{
-    UnitHiring * res = malloc(sizeof(UnitHiring));
-
-    res -> id = -1;
-    res -> turns = 0;
-    res -> delta = 0;
-
-    return res;
 }
 
 void destroyUnit(World * world, Unit * unit)

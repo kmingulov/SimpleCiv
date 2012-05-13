@@ -1,8 +1,6 @@
 #ifndef EXPAT_HANDLERS
 #define EXPAT_HANDLERS
 
-#include "../../game/world/world.h"
-
 /*
     Definitions for parser.
 */

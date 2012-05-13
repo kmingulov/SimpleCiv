@@ -1,14 +1,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-#include "../../modules/list/list.h"
-#include "../../modules/city/city.h"
 #include "../../modules/unit/unit.h"
-#include "../../modules/cell/cell.h"
-#include "../view/definitions.h"
-#include "../world/definitions.h"
-#include "../view/view.h"
+#include "../../modules/unit/unit_table.h"
+#include "../../modules/unit/unit_common_info.h"
+#include "../../modules/technology/technology.h"
+#include "../../modules/technology/technology_table.h"
 #include "control.h"
 #include "definitions.h"
 
@@ -213,9 +210,9 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                 if(player -> research -> turns == t -> turns)
                 {
                     // Updating tech table.
-                    updateTechnologyStatus(player -> available_techs, n);
+                    updateTechnologyTable(player -> available_techs, n);
                     // Updating unit table.
-                    updateUnitStatus(player -> available_units, player -> available_techs, world -> techs_info);
+                    updateUnitTable(player -> available_units, player -> available_techs, world -> techs_info);
                     // Updating research info.
                     player -> research -> id = -1;
                     player -> research -> turns = 0;
@@ -297,7 +294,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             {
                 control -> state = CONTROL_CHOOSE_UNIT;
                 // Create chooser.
-                view -> chooser = createUnitChooser(world, view);
+                view -> chooser = createUnitChooser(world, city);
                 List * list = listCreate();
                 listPrepend(list, createMessage(VIEW_REDRAW_CITY_DIALOG, NULL));
                 return list;

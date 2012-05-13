@@ -8,28 +8,6 @@
 #include "../player/player.h"
 
 /*
-    This is struct of unit. It's really similar to technology struct (see
-    modules/technology/technology.h file).
-    This struct for units' info table (common for all players).
-    Each player also will have table with technologies' id and value.
-    Also there will be a common for all players table with these values: hp,
-    damage, etc.
-*/
-
-typedef struct UnitCommonInfo
-{
-    char * name;
-    char c;
-    unsigned int max_health;
-    unsigned int max_damage;
-    unsigned int max_moves;
-    unsigned int hiring_turns;
-    unsigned int gold_drop;
-    IntArray * privileges;
-    IntArray * resources;
-} UnitCommonInfo;
-
-/*
     This struct of real unit, who live in our world.
 */
 typedef struct Unit
@@ -42,47 +20,10 @@ typedef struct Unit
 } Unit;
 
 /*
-    Struct of hiring (for cities).
-*/
-typedef struct UnitHiring
-{
-    int id;
-    // How many turns we researching this technology.
-    int turns;
-    // How many does it cost.
-    int delta;
-} UnitHiring;
-
-/*
-    Creates UnitCommonInfo.
-*/
-UnitCommonInfo * createUnitCommonInfo();
-
-/*
-    Destroys UnitCommonInfo variable.
-*/
-void destroyUnitCommonInfo(void * data);
-
-/*
-    Creates unit table.
-*/
-IntArray * createUnitStatus(IntArray * techs_status, DynArray * techs_info, DynArray * units_info);
-
-/*
-    Updates unit table.
-*/
-void updateUnitStatus(IntArray * units_status, IntArray * techs_status, DynArray * techs_info);
-
-/*
     Creates new unit in world in row r, column c. Id of unit is unit_id and
     owner is player.
 */
 Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char unit_id, Player * player);
-
-/*
-    Creates hiring.
-*/
-UnitHiring * createHiring();
 
 /*
     Figth between two units.

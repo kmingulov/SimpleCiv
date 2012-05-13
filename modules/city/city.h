@@ -2,9 +2,8 @@
 #define CITY
 
 #include "../../game/world/world.h"
-
 #include "../player/player.h"
-#include "../unit/unit.h"
+#include "../unit/unit_hiring.h"
 
 typedef struct City
 {

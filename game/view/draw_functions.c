@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
+#include <curses.h>
 
 #include "draw_functions.h"
 

@@ -1,7 +1,15 @@
 #ifndef WORLD_DEFINITIONS
 #define WORLD_DEFINITIONS
 
+/*
+    Admin mode.
+*/
 #define ADMIN_MODE         1
+
+/*
+    Definition for players colors.
+*/
+#define PLAYER_COLOURS_COUNT 5
 
 /*
     Defines for nodes' types.

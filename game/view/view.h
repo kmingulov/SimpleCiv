@@ -4,36 +4,22 @@
     Ncurses has "memory leaks". Read more at:
     http://invisible-island.net/ncurses/ncurses.faq.html#config_leaks
 */
-
 #ifndef MODULE_VIEW
 #define MODULE_VIEW
 
-// For name game
-#define GAME_NAME "SimpleCiv"
-
 #include <curses.h>
 
+#include "../../modules/graph/graph.h"
 #include "../../modules/cell/cell.h"
 #include "../../modules/list/list.h"
 #include "../world/world.h"
-#include "../message/message.h"
+#include "view_chooser.h"
 #include "draw_functions.h"
 #include "definitions.h"
 
 /*
     View struct, which contains general settings of view.
 */
-
-typedef struct ViewChooser
-{
-    // Array of ids.
-    IntArray * ids;
-    // Current id.
-    int current;
-    // First row of the list with items.
-    int start_r;
-} ViewChooser;
-
 typedef struct View
 {
     // Number of rows and columns and distance between left edge of screen and
@@ -54,13 +40,6 @@ typedef struct View
 */
 View * createView(World * world);
 void destroyView(View * view);
-
-/*
-    Functions of creation and destruction chooser.
-*/
-ViewChooser * createTechChooser(World * world);
-ViewChooser * createUnitChooser(World * world, View * view);
-void destroyChooser(ViewChooser * chooser);
 
 /*
     Focus on the (r, c) cell of the map.

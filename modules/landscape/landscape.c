@@ -1,8 +1,10 @@
-#include "landscape.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
+
+#include "../../game/world/definitions.h"
+#include "landscape.h"
 
 void generateLandscape(Node * c, int k, char required, char fill)
 {

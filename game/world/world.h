@@ -1,33 +1,10 @@
 #ifndef MODEL
 #define MODEL
 
-#include "definitions.h"
 #include "../../modules/dyn_array/dyn_array.h"
-#include "../../modules/int_array/int_array.h"
-
 #include "../../modules/graph/graph.h"
-#include "../../modules/cell/cell.h"
-
-/*
-    Definition for players colors.
-*/
-#define PLAYER_COLOURS_COUNT         5
-
-/*
-    Struct of world properties.
-*/
-typedef struct WorldProperties
-{
-    // Count of rows and columns in map.
-    int map_r, map_c;
-
-    // Players' count.
-    int players_count;
-
-    // And their names and city's names.
-    DynArray * player_names;
-    DynArray * player_cities;
-} WorldProperties;
+#include "definitions.h"
+#include "world_properties.h"
 
 /*
     Struct of world.
@@ -46,7 +23,7 @@ typedef struct World
 
     // Common info about technologies and units.
     DynArray * units_info; // Type — UnitCommonInfo.
-    DynArray * techs_info; // Type — TechnologyCommonInfo.
+    DynArray * techs_info; // Type — Node (in tech tree).
 } World;
 
 /*

@@ -1,7 +1,6 @@
 #ifndef TECHNOLOGY
 #define TECHNOLOGY
 
-//#include "../player/player.h"
 #include "../dyn_array/dyn_array.h"
 #include "../int_array/int_array.h"
 #include "../graph/graph.h"
@@ -22,31 +21,6 @@ typedef struct Technology
     IntArray * provides_units;
 } Technology;
 
-typedef struct TechnologyParseInfo
-{
-    IntArray * provides_technologies;
-    Node * tech_in_tree;
-} TechnologyParseInfo;
-
-typedef struct TechnologyResearch
-{
-    int id;
-    // How many turns we exploring this technology.
-    int turns;
-    // How many gold it's cost.
-    int delta;
-} TechnologyResearch;
-
-/*
-    Creates new variable of type TechnologyParseInfo.
-*/
-TechnologyParseInfo * createTechnologyParseInfo();
-
-/*
-    Destroys TechnologyParseInfo.
-*/
-void destroyTechnologyParseInfo(void * data);
-
 /*
     Destroys Node with technology.
 */
@@ -58,36 +32,8 @@ void destroyTechnologyCommonInfo(void * data);
 void destroyTechnology(void * data);
 
 /*
-    Creates new research.
-*/
-TechnologyResearch * createResearch();
-
-/*
-    Destroys research.
-*/
-void destroyResearch(TechnologyResearch * tr);
-
-/*
     Creates edges in technology tree.
 */
 Node * createEdgesInTechnologyTree(DynArray * techs_data);
-
-/*
-    Creates technology status table.
-*/
-IntArray * createTechnologyStatus(DynArray * techs_info);
-
-/*
-    Updates technology status table for one technology.
-*/
-void updateTechnologyStatus(IntArray * techs_status, Node * tech);
-
-/*
-    Checkes available with technology or no.
-    Looks for player's resources (function updateTechnologyStatus() doesn't do
-    this).
-    Returns 1 if available, 0 if no.
-*/
-//int checkForResources(Technology * tech, Player * player);
 
 #endif

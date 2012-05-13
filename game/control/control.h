@@ -1,12 +1,10 @@
 #ifndef CONTROL
 #define CONTROL
 
-#include "../message/message.h"
-
-#include "../../modules/player/player.h"
-#include "../../modules/unit/unit.h"
-#include "../../modules/city/city.h"
 #include "../../modules/list/list.h"
+#include "../message/message.h"
+#include "../world/world.h"
+#include "../view/view.h"
 
 typedef struct Control
 {

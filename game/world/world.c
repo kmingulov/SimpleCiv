@@ -2,17 +2,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "world.h"
-
 #include "../../modules/parser/xml.h"
-
+#include "../../modules/cell/cell.h"
 #include "../../modules/landscape/landscape.h"
-
+#include "../../modules/player/player.h"
 #include "../../modules/city/city.h"
 #include "../../modules/unit/unit.h"
-#include "../../modules/technology/technology.h"
-
-#include "../../modules/player/player.h"
+#include "../../modules/unit/unit_table.h"
+#include "../../modules/unit/unit_common_info.h"
+#include "../../modules/technology/technology_parse_info.h"
+#include "../../modules/technology/technology_table.h"
+#include "world.h"
 
 World * createWorld()
 {
@@ -65,12 +65,12 @@ World * createWorld()
 
     // Creating tech tables.
     printf("Creating technology table… ");
-    IntArray * techs_status = createTechnologyStatus(world -> techs_info);
+    IntArray * tech_table = createTechnologyTable(world -> techs_info);
     printf("Done\n");
 
     // Creating unit tables.
     printf("Creating units table… ");
-    IntArray * units_status = createUnitStatus(techs_status, world -> techs_info, world -> units_info);
+    IntArray * unit_table = createUnitTable(tech_table, world -> techs_info, world -> units_info);
     printf("Done\n");
 
     // Free techs_data.
@@ -96,7 +96,7 @@ World * createWorld()
         // Creating new player.
         char * name = (char *) daGetByIndex(world -> properties -> player_names, i);
         char * city_name = (char *) daGetByIndex(world -> properties -> player_cities, i);
-        Player * player = createPlayer(name, iaCopy(units_status), iaCopy(techs_status));
+        Player * player = createPlayer(name, iaCopy(unit_table), iaCopy(tech_table));
         // Adding player colour.
         player -> colour = i % PLAYER_COLOURS_COUNT;
         // Creating default city.
@@ -118,8 +118,8 @@ World * createWorld()
         }
     }
     addEdge(temp, world -> graph_players, EDGE_NEXT_PLAYER);
-    iaDestroy(units_status);
-    iaDestroy(techs_status);
+    iaDestroy(unit_table);
+    iaDestroy(tech_table);
     printf("Done\n");
 
     printf("All done!\n");

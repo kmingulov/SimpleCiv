@@ -1,6 +1,9 @@
-#include <math.h>
 #include <stdlib.h>
+#include <math.h>
 
+#include "../cell/cell.h"
+#include "../unit/unit_common_info.h"
+#include "../unit/unit.h"
 #include "city.h"
 
 City * createCity(World * world, char * name, int r, int c, Player * player)

@@ -1,7 +1,6 @@
 #ifndef CELL
 #define CELL
 
-#include "../../game/world/definitions.h"
 #include "../graph/graph.h"
 
 typedef struct Cell
