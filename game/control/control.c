@@ -5,6 +5,7 @@
 #include "../../modules/list/list.h"
 #include "../../modules/city/city.h"
 #include "../../modules/unit/unit.h"
+#include "../../modules/cell/cell.h"
 #include "../view/definitions.h"
 #include "../world/definitions.h"
 #include "../view/view.h"
@@ -395,6 +396,28 @@ List * controlProcess(World * world, View * view, Control * control, int key)
 
                 createCity(world, s, unit -> r, unit -> c, unit -> owner);
 
+                List * list = listCreate();
+                listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+                return list;
+            }
+            return NULL;
+        }
+    }
+
+    // Cut the forest.
+    if((char) key == 'B' || (char) key == 'b')
+    {
+        if(control -> state == CONTROL_MOVE_UNIT)
+        {
+            Node * n = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
+            Unit * unit = (Unit *) n -> data;
+            UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, unit -> unit_id);
+            if(
+                iaSearchForData(u_info -> privileges, UNIT_PRVL_CHOP_TREES) != -1 &&
+                ((Cell *) view -> current_cell -> data) -> territory == CELL_TYPE_TREE
+            )
+            {
+                ((Cell *) view -> current_cell -> data) -> territory = CELL_TYPE_GRASS;
                 List * list = listCreate();
                 listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
                 return list;
