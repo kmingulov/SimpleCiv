@@ -54,13 +54,14 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         // Move unit state.
         if(control -> state == CONTROL_MOVE_UNIT)
         {
-            // Cannot move not your unit.
+            // Cannot move to the cell with another unit.
             Node * n = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
             if(n == NULL)
             {
                 return NULL;
             }
             Unit * unit = (Unit *) n -> data;
+            // Cannot move not your unit.
             Player * player = (Player *) world -> graph_players -> data;
             if(player != unit -> owner)
             {
@@ -206,7 +207,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             player -> map_r = view -> map_r;
             player -> map_c = view -> map_c;
             player -> current_cell = view -> current_cell;
-            // Nulling all.
+            // Changing state.
             control -> state = CONTROL_MOVE_CURSOR;
             // Processing player's research. Also player need to have enough money.
             if(player -> research -> id != -1 && player -> gold > player -> research -> delta)

@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <assert.h>
 
 #include "../../modules/player/player.h"
 #include "../../modules/city/city.h"
@@ -50,7 +51,7 @@ View * createView(World * world)
 {
     View * result = malloc(sizeof(View));
 
-    // Initialize ncurses.
+    // Initialize curses.
     initscr();
     raw();
     noecho();
@@ -75,14 +76,39 @@ View * createView(World * world)
         result -> sidebar = result -> columns - 20;
     }
 
-    result -> cur_r = result -> rows / 2;
-    result -> cur_c = result -> sidebar / 2;
-    result -> map_r = result -> cur_r - 1;
-    result -> map_c = result -> cur_c - 1;
-
-    result -> current_cell = getCell(world -> graph_map, result -> map_r, result -> map_c);
-
     result -> chooser = NULL;
+
+    // Go through player's list and set for each player his cur_*, map_* and
+    // current_cell.
+    for(int i = 0; i < world -> properties -> players_count; i++)
+    {
+        // Get player.
+        Player * player = (Player *) world -> graph_players -> data;
+        // And his city.
+        City * city = (City *) player -> cities -> head -> data;
+        // Focus on this city.
+        player -> cur_r = result -> rows / 2;
+        player -> cur_c = result -> sidebar / 2;
+        player -> map_r = city -> r;
+        player -> map_c = city -> c;
+        player -> current_cell = getCell(world -> graph_map, city -> r, city -> c);
+        player -> graph_map = getCell(player -> current_cell, 1 - player -> cur_r, 1 - player -> cur_c);
+        // Go on.
+        world -> graph_players = getNeighbour(world -> graph_players, EDGE_NEXT_PLAYER);
+        player = (Player *) world -> graph_players -> data;
+        if(player -> is_computer)
+        {
+            world -> graph_players = getNeighbour(world -> graph_players, EDGE_NEXT_PLAYER);
+        }
+    }
+
+    // Load first player settings.
+    Player * player = (Player *) world -> graph_players -> data;
+    result -> cur_r = player -> cur_r;
+    result -> cur_c = player -> cur_c;
+    result -> map_r = player -> map_r;
+    result -> map_c = player -> map_c;
+    result -> current_cell = player -> current_cell;
 
     return result;
 }
@@ -333,8 +359,16 @@ void drawTechView(World * world, View * view)
         int value = iaGetByIndex(player -> available_techs, i);
         if(value == TECH_RESEARCHED)
         {
-            Technology * t = (Technology *) ((Node *) daGetByIndex(world -> techs_info, i)) -> data;
-            mvprintw(line++, 3, "%s", t -> name);
+            if(line < view -> rows - 3)
+            {
+                Technology * t = (Technology *) ((Node *) daGetByIndex(world -> techs_info, i)) -> data;
+                mvprintw(line++, 3, "%s", t -> name);
+            }
+        }
+
+        if(line == view -> rows - 3)
+        {
+            mvprintw(line++, 3, "And others...");
         }
     }
 
