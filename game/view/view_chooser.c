@@ -85,13 +85,13 @@ ViewChooser * createUnitChooser(World * world, City * city)
             if(u_info -> resources == NULL)
             {
                 // Nothing requires. Great.
-                count++;
                 iaPrepend(chooser -> ids, i);
                 // It is current hiring?
                 if(i == city -> hiring -> id)
                 {
                     chooser -> current = count;
                 }
+                count++;
             }
             else
             {
@@ -112,13 +112,13 @@ ViewChooser * createUnitChooser(World * world, City * city)
                 // You're lucky man.
                 if(okay == 1)
                 {
-                    count++;
                     iaPrepend(chooser -> ids, i);
                     // It is current hiring?
                     if(i == city -> hiring -> id)
                     {
                         chooser -> current = count;
                     }
+                    count++;
                 }
             }
         }
