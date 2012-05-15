@@ -491,6 +491,18 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
             return list;
         }
+
+        if(control -> state == CONTROL_MOVE_CURSOR)
+        {
+            Player * player = (Player *) world -> graph_players -> data;
+            City * city = (City *) player -> cities -> head -> next -> data;
+            player -> cities -> head = player -> cities -> head -> next;
+            focusOn(world, view, city -> r, city -> c);
+            List * list = listCreate();
+            listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+            return list;
+        }
+
     }
 
     return NULL;
