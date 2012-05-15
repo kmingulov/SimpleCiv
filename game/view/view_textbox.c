@@ -6,15 +6,17 @@
 #include "draw_functions.h"
 #include "view_textbox.h"
 
-ViewTextbox * createViewTextbox(int r, int c, int lines_per_page)
+ViewTextbox * createViewTextbox(int start_r, int start_c, int r, int c)
 {
     ViewTextbox * textbox = malloc(sizeof(ViewTextbox));
 
-    textbox -> lines_per_page = lines_per_page;
+    textbox -> lines_per_page = r - 4;
     textbox -> pages_count = 1;
     textbox -> current_page = 0;
     textbox -> lines = daCreate();
     textbox -> properties = iaCreate();
+    textbox -> start_r = start_r;
+    textbox -> start_c = start_c;
     textbox -> r = r;
     textbox -> c = c;
 
@@ -54,13 +56,13 @@ void addBoldString(ViewTextbox * tb, const char * format, ...)
 
 void drawViewTextbox(ViewTextbox * tb)
 {
-    erase();
-    drawBox(0, 0, tb -> r, tb -> c);
+    clearBlock(tb -> start_r, tb -> start_c, tb -> r, tb -> c);
+    drawBox(tb -> start_r, tb -> start_c, tb -> r, tb -> c);
 
     int start_line = tb -> current_page * tb -> lines_per_page;
     int end_line = start_line + tb -> lines_per_page;
 
-    int line = 2;
+    int line = tb -> start_r + 2;
     for(int i = start_line; i < end_line; i++)
     {
         if(i < tb -> lines -> length)
@@ -70,7 +72,7 @@ void drawViewTextbox(ViewTextbox * tb)
 
             if(b) attron(A_BOLD);
 
-            mvprintw(line++, 3, t);
+            mvprintw(line++, tb -> start_c + 3, t);
 
             if(b) attroff(A_BOLD);
         }

@@ -49,6 +49,7 @@ void destroyView(View * view);
 */
 void addHelpInfoToTextbox(ViewTextbox * tb);
 void addUnitInfoToTextbox(ViewTextbox * tb, World * world, View * view);
+void addWinInfoToTextbox(ViewTextbox * tb);
 
 /*
     Focus on the (r, c) cell of the map.

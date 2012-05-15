@@ -265,6 +265,15 @@ void addUnitInfoToTextbox(ViewTextbox * tb, World * world, View * view)
     }
 }
 
+void addWinInfoToTextbox(ViewTextbox * tb)
+{
+    addBoldString(tb, "       Congratulations!       ");
+    addString(tb,     "           You win!           ");
+    addString(tb,     "You can continue game or quit.");
+    addString(tb,     "");
+    addString(tb,     "(press q to hide this message)");
+}
+
 void drawTechView(World * world, View * view)
 {
     erase();

@@ -6,6 +6,9 @@
 
 typedef struct ViewTextbox
 {
+    // Start point.
+    int start_r, start_c;
+
     // Sizes.
     int r, c;
 
@@ -28,7 +31,7 @@ typedef struct ViewTextbox
 /*
     Creates new textbox.
 */
-ViewTextbox * createViewTextbox(int r, int c, int lines_per_page);
+ViewTextbox * createViewTextbox(int start_r, int start_c, int r, int c);
 
 /*
     Adds formatted string to textbox (bold or not).

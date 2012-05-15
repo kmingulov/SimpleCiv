@@ -90,6 +90,17 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                     {
                         List * list = listCreate();
                         listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+                        // Maybe there was a city capture.
+                        if(world -> properties -> players_count == 1)
+                        {
+                            // Show win message (9x36).
+                            int start_r = (view -> rows - 9) / 2;
+                            int start_c = (view -> columns - 36) / 2;
+                            view -> textbox = createViewTextbox(start_r, start_c, 9, 36);
+                            addWinInfoToTextbox(view -> textbox);
+                            control -> state = CONTROL_TEXTBOX;
+                            listPrepend(list, createMessage(VIEW_REDRAW_TEXTBOX, NULL));
+                        }
                         return list;
                     }
                     return NULL;
@@ -396,7 +407,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
     {
         if(control -> state == CONTROL_MOVE_CURSOR || control -> state == CONTROL_MOVE_UNIT)
         {
-            view -> textbox = createViewTextbox(view -> rows, view -> columns, view -> rows - 4);
+            view -> textbox = createViewTextbox(5, 5, view -> rows - 10, view -> columns - 10);
             addHelpInfoToTextbox(view -> textbox);
             control -> state = CONTROL_TEXTBOX;
             List * list = listCreate();
@@ -416,7 +427,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             {
                 return NULL;
             }
-            view -> textbox = createViewTextbox(view -> rows, view -> columns, view -> rows - 4);
+            view -> textbox = createViewTextbox(5, 5, view -> rows - 10, view -> columns - 10);
             addUnitInfoToTextbox(view -> textbox, world, view);
             control -> state = CONTROL_TEXTBOX;
             List * list = listCreate();

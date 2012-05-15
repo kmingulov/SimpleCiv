@@ -249,6 +249,7 @@ int moveUnit(World * world, Node * current_cell, int direction)
                 destroyPlayer(prev_owner);
                 daDestroy(current -> edges, &free);
                 free(current);
+                world -> properties -> players_count -= 1;
             }
             return 2;
         }
