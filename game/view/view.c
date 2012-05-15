@@ -162,40 +162,39 @@ void drawGeneralView(World * world, View * view)
 
 void addHelpInfoToTextbox(ViewTextbox * tb)
 {
-    addString(tb, "Help", 1);
-    addString(tb, "Use up/down arrow keys to scroll this text.", 0);
-    addString(tb, "", 0);
+    addBoldString(tb, "Help");
+    addString(tb, "Use up/down arrow keys to scroll this text.");
+    addString(tb, "Press q to hide this help.");
+    addString(tb, "");
 
     // Map window.
-    addString(tb, "Map:", 1);
-    addString(tb, "Arrow keys       Move unit/cursor.", 0);
-    addString(tb, "Enter            End turn.", 0);
-    addString(tb, "Space            Choose unit to move or open city hiring dialog.", 0);
-    addString(tb, "c                Create city (if settler is selected).", 0);
-    addString(tb, "b                Cut the forest (if lumberjack is selected).", 0);
-    addString(tb, "m                Build a mine (if miner is selected).", 0);
-    addString(tb, "t                Open research dialog.", 0);
-    addString(tb, "h                Show this help.", 0);
-    addString(tb, "i                Show unit information.", 0);
-    addString(tb, "q                Quit game.", 0);
-    addString(tb, "", 0);
+    addBoldString(tb, "Map:");
+    addString(tb, "Arrow keys       Move unit/cursor.");
+    addString(tb, "Enter            End turn.");
+    addString(tb, "Space            Choose unit to move or open city hiring dialog.");
+    addString(tb, "c                Create city (if settler is selected).");
+    addString(tb, "b                Cut the forest (if lumberjack is selected).");
+    addString(tb, "m                Build a mine (if miner is selected).");
+    addString(tb, "t                Open research dialog.");
+    addString(tb, "h                Show this help.");
+    addString(tb, "i                Show unit information.");
+    addString(tb, "n                Show next unit (if selected) or next city.");
+    addString(tb, "q                Quit game.");
+    addString(tb, "");
 
     // Hiring dialog.
-    addString(tb, "Hiring dialog:", 1);
-    addString(tb, "Up/down keys     Choose unit.", 0);
-    addString(tb, "Enter            Start hiring (will terminate current hiring).", 0);
-    addString(tb, "q                Quit to map.", 0);
-    addString(tb, "", 0);
+    addBoldString(tb, "Hiring dialog:");
+    addString(tb, "Up/down keys     Choose unit.");
+    addString(tb, "Enter            Start hiring (will terminate current hiring).");
+    addString(tb, "q                Quit to map.");
+    addString(tb, "");
 
     // Research dialog.
-    addString(tb, "Research dialog:", 1);
-    addString(tb, "Up/down keys     Choose technology.", 0);
-    addString(tb, "Enter            Start research (will terminate current research).", 0);
-    addString(tb, "q                Quit to map.", 0);
-    addString(tb, "", 0);
-
-    // One hint.
-    addString(tb, "Press q to hide this help.", 0);
+    addBoldString(tb, "Research dialog:");
+    addString(tb, "Up/down keys     Choose technology.");
+    addString(tb, "Enter            Start research (will terminate current research).");
+    addString(tb, "q                Quit to map.");
+    addString(tb, "");
 }
 
 void addUnitInfoToTextbox(ViewTextbox * tb, World * world, View * view)
@@ -205,34 +204,27 @@ void addUnitInfoToTextbox(ViewTextbox * tb, World * world, View * view)
     Unit * u = (Unit *) n -> data;
     UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, u -> unit_id);
 
-    addString(tb, u_info -> name, 1);
-    addString(tb, "Symbol       Move unit/cursor.", 0);
+    addBoldString(tb, u_info -> name);
+    addString(tb, "");
 
-    /*line++;
-    mvprintw(line,   3,      "Symbol");
-    mvprintw(line++, column, "%c", u_info -> c);
+    addString(tb, "Symbol       %c", u_info -> c);
+    addString(tb, "");
 
-    line++;
-    mvprintw(line,   3,      "Health");
-    mvprintw(line++, column, "%d", u_info -> max_health);
-    mvprintw(line,   3,      "Damage");
-    mvprintw(line++, column, "%d", u_info -> max_damage);
-    mvprintw(line,   3,      "Moves");
-    mvprintw(line++, column, "%d", u_info -> max_moves);
+    addString(tb, "Health       %d", u_info -> max_health);
+    addString(tb, "Damage       %d", u_info -> max_damage);
+    addString(tb, "Moves        %d", u_info -> max_moves);
+    addString(tb, "");
 
-    line++;
-    mvprintw(line,   3,      "Hiring turns");
-    mvprintw(line++, column, "%d * city coefficient", u_info -> hiring_turns);
+    addString(tb, "Hiring turns %d", u_info -> hiring_turns);
+    addString(tb, "");
 
-    line++;
-    mvprintw(line,   3,      "Gold drop");
-    mvprintw(line++, column, "%d", u_info -> gold_drop);
+    addString(tb, "Gold drop    %d", u_info -> gold_drop);
+    addString(tb, "");
 
-    line++;
-    mvprintw(line++, 3,      "Requires for hiring:");
+    addString(tb, "Requires for hiring:");
     if(u_info -> resources == NULL || u_info -> resources -> length == 0)
     {
-        mvprintw(line++, 5, "Nothing");
+        addString(tb, "    Nothing");
     }
     else
     {
@@ -243,18 +235,19 @@ void addUnitInfoToTextbox(ViewTextbox * tb, World * world, View * view)
             {
                 if(VIEW_RES_VALUES[j] == r)
                 {
-                    mvprintw(line++, 5, "%s", VIEW_RES_NAMES[j]);
+                    addString(tb, "    %s", VIEW_RES_NAMES[j]);
                     break;
                 }
             }
         }
     }
 
-    line++;
-    mvprintw(line++, 3,      "Privileges:");
+    addString(tb, "");
+
+    addString(tb, "Privileges:");
     if(u_info -> privileges == NULL || u_info -> privileges -> length == 0)
     {
-        mvprintw(line++, 5, "Nothing");
+        addString(tb, "    Nothing");
     }
     else
     {
@@ -265,12 +258,12 @@ void addUnitInfoToTextbox(ViewTextbox * tb, World * world, View * view)
             {
                 if(VIEW_PRVL_VALUES[j] == r)
                 {
-                    mvprintw(line++, 5, "%s", VIEW_PRVL_NAMES[j]);
+                    addString(tb, "    %s", VIEW_PRVL_NAMES[j]);
                     break;
                 }
             }
         }
-    }*/
+    }
 }
 
 void drawTechView(World * world, View * view)

@@ -21,12 +21,35 @@ ViewTextbox * createViewTextbox(int r, int c, int lines_per_page)
     return textbox;
 }
 
-void addString(ViewTextbox * tb, char * string, int bold)
+void addString(ViewTextbox * tb, const char * format, ...)
 {
+    // Buffer and args list.
+    va_list args;
+    char buffer[1024];
+    va_start(args, format);
+    vsnprintf(buffer, sizeof(buffer) - 1, format, args);
+
+    // Cut buffer.
+    buffer[tb -> c - 5] = '\0';
+
+    // Add string.
     char * s = malloc(sizeof(char) * (tb -> c - 4));
-    daPrepend(tb -> lines, strcpy(s, string));
-    iaPrepend(tb -> properties, bold);
+    daPrepend(tb -> lines, strcpy(s, &buffer[0]));
+    iaPrepend(tb -> properties, 0);
     tb -> pages_count = ceil((float) tb -> lines -> length / tb -> lines_per_page);
+}
+
+void addBoldString(ViewTextbox * tb, const char * format, ...)
+{
+    // Args list.
+    va_list args;
+    va_start(args, format);
+
+    // Add string.
+    addString(tb, format, args);
+
+    // Make it bold!
+    tb -> properties -> data[tb -> properties -> length - 1] = 1;
 }
 
 void drawViewTextbox(ViewTextbox * tb)

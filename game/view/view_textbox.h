@@ -31,9 +31,10 @@ typedef struct ViewTextbox
 ViewTextbox * createViewTextbox(int r, int c, int lines_per_page);
 
 /*
-    Adds string to textbox.
+    Adds formatted string to textbox (bold or not).
 */
-void addString(ViewTextbox * tb, char * string, int bold);
+void addString(ViewTextbox * tb, const char * format, ...);
+void addBoldString(ViewTextbox * tb, const char * format, ...);
 
 /*
     Draws textbox.
