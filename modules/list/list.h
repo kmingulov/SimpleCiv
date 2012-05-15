@@ -40,6 +40,11 @@ void listPrepend(List * list, void * data);
 void * listGetByN(List * list, int n);
 
 /*
+    Returns list element, which contains data.
+*/
+ListElement * getListElementByPointer(List * list, void * data);
+
+/*
     Removes element in list by pointer.
     Returns 0 if failed, 1 if deleted succesfully.
 */

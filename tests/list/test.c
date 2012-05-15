@@ -28,6 +28,8 @@ int main()
 
     ListElement * head = l -> head;
 
+    assert( getListElementByPointer(l, data) == head -> prev );
+
     assert(head -> prev -> next == head);
     assert(head -> next -> prev == head);
     assert(head -> next -> next -> next == head);

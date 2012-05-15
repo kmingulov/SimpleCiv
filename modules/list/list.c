@@ -76,6 +76,22 @@ void * listGetByN(List * list, int n)
     return result -> data;
 }
 
+ListElement * getListElementByPointer(List * list, void * data)
+{
+    ListElement * current = list -> head;
+
+    for(int i = 0; i < list -> length; i++)
+    {
+        if(current -> data == data)
+        {
+            return current;
+        }
+        current = current -> next;
+    }
+
+    return NULL;
+}
+
 int listDeleteByPointer(List * list, void * data, void (* function)(void * data))
 {
     ListElement * current = list -> head;
