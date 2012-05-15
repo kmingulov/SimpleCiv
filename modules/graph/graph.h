@@ -35,6 +35,11 @@ Node * addNode(Node * parent, unsigned char edge_type, unsigned char node_type, 
 void addEdge(Node * node1, Node * node2, unsigned char edge_type);
 
 /*
+    Destroys _first_ found edge from node parent with edge_type.
+*/
+void destroyEdge(Node * parent, unsigned char edge_type);
+
+/*
     Creates new graph.
 */
 Node * createGraph(unsigned char node_type, void * data);

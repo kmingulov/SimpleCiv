@@ -30,6 +30,22 @@ void addEdge(Node * node1, Node * node2, unsigned char edge_type)
     daPrepend(node1 -> edges, edge);
 }
 
+void destroyEdge(Node * parent, unsigned char edge_type)
+{
+    DynArray * edges = parent -> edges;
+    for(int i = 0; i < edges -> length; i++)
+    {
+        Edge * edge = daGetByIndex(edges, i);
+        if(edge -> type == edge_type)
+        {
+            // Destroy edge.
+            // TODO Create daRemoveByIndex() function.
+            daRemoveByPointer(edges, edge, &free);
+            break;
+        }
+    }
+}
+
 Node * createGraph(unsigned char node_type, void * data)
 {
     return addNode(NULL, 0, node_type, data);

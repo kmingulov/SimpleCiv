@@ -210,7 +210,6 @@ int moveUnit(World * world, Node * current_cell, int direction)
             Player * prev_owner = city -> owner;
             Player * new_owner = unit -> owner;
 
-
             // Change owner.
             city -> owner = new_owner;
             // Remove city from old owner's cities list.
@@ -218,34 +217,33 @@ int moveUnit(World * world, Node * current_cell, int direction)
             // Add to new owner.
             listPrepend(new_owner -> cities, city);
 
-            Node * prev = world -> graph_players;
-            world -> graph_players = getNeighbour(world -> graph_players, EDGE_NEXT_PLAYER);
-            Node * current = world -> graph_players;
-            while (current -> data  != prev_owner)
+            // If prev_owner doesn't have cities any more, destroy him.
+            if(prev_owner -> cities -> length == 0)
             {
-                prev = current;
-                current = getNeighbour(current, EDGE_NEXT_PLAYER);
+                // Get prev_owner's node.
+                Node * prev = world -> graph_players;
+                world -> graph_players = getNeighbour(world -> graph_players, EDGE_NEXT_PLAYER);
+                Node * current = world -> graph_players;
+                while(current -> data != prev_owner)
+                {
+                    prev = current;
+                    current = getNeighbour(current, EDGE_NEXT_PLAYER);
+                }
+                // Now current is prev_owner, prev is player before prev_owner.
+                // Get next player.
+                Node * next = getNeighbour(current, EDGE_NEXT_PLAYER);
+                // Remove old edge.
+                //destroyEdge(prev, EDGE_NEXT_PLAYER);
+                // Add new edge.
+                addEdge(prev, next, EDGE_NEXT_PLAYER);
+                // Destroy old player.
+                // To do this it's needed to rewrite destroyPlayer() function.
+                //destroyPlayer(prev_owner);
+                //daDestroy(current -> edges, &free);
+                //free(current);
             }
-
-            //~ daGetByIndex(current, )
-
-            destroyPlayer(prev_owner);
-
-
-            /*if (deleteplayer -> cities == NULL// && deleteplayer -> units == NULL )
-            {
-                // удалить из world
-                // Надо получить player в виде Node
-                // как?
-                //world -> graph_players =
-                destroyPlayer(city -> owner);
-                // также надо юнита задвинуть в город.
-                // ещё valgrind ругается на 215 строку и вообще неладное творит-
-                // ся, если пытаться так захватывать.
-            }*/
             return 2;
         }
-        return 0;
     }
 
     // Motion.
