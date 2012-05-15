@@ -137,6 +137,7 @@ World * createWorld()
         }
     }
     temp = addNode(temp, EDGE_NEXT_PLAYER, NODE_PLAYER, player);
+    world -> computer = player;
 
     // Link list.
     addEdge(temp, world -> graph_players, EDGE_NEXT_PLAYER);

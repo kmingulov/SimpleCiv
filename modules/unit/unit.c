@@ -237,11 +237,18 @@ int moveUnit(World * world, Node * current_cell, int direction)
                 destroyEdge(prev, EDGE_NEXT_PLAYER);
                 // Add new edge.
                 addEdge(prev, next, EDGE_NEXT_PLAYER);
+                // Make all units neutral.
+                ListElement * le = prev_owner -> units -> head;
+                for(int i = 0; i < prev_owner -> units -> length; i++)
+                {
+                    Unit * u = (Unit *) le -> data;
+                    u -> owner = world -> computer;
+                    le = le -> next;
+                }
                 // Destroy old player.
-                // To do this it's needed to rewrite destroyPlayer() function.
-                //destroyPlayer(prev_owner);
-                //daDestroy(current -> edges, &free);
-                //free(current);
+                destroyPlayer(prev_owner);
+                daDestroy(current -> edges, &free);
+                free(current);
             }
             return 2;
         }
