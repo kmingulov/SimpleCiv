@@ -7,6 +7,13 @@
 #define ADMIN_MODE         1
 
 /*
+    Balance defines.
+*/
+#define BALANCE_CHOPPING_GAIN 5
+#define BALANCE_MINE_COST     5
+#define BALANCE_MINE_GAIN     1
+
+/*
     Definition for players colours.
 */
 #define PLAYER_COLOURS_COUNT 5
@@ -79,6 +86,9 @@
 #define CELL_RES_GUNPOWDER 4
 #define CELL_RES_HORSES    5
 #define CELL_RES_MUSHROOMS 6
+
+#define CELL_NO_MINE       0
+#define CELL_MINE          1
 
 /*
     Units priviligies.

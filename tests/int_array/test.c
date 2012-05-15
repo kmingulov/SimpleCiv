@@ -18,6 +18,8 @@ int main()
     assert(array -> length == 27);
     assert(array -> available == 3);
     assert(array -> data[26] == 26);
+    iaIncrementByIndex(array, 0, 1);
+    assert(array -> data[0] == 1);
 
     // All done.
     iaDestroy(array);

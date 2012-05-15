@@ -9,6 +9,8 @@ typedef struct Cell
     unsigned char territory;
     // Resources.
     unsigned char resources;
+    // Is there mine or not.
+    unsigned char mine;
 } Cell;
 
 /*

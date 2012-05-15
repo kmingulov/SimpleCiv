@@ -479,8 +479,38 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             )
             {
                 ((Cell *) view -> current_cell -> data) -> territory = CELL_TYPE_GRASS;
-                unit -> owner -> gold += 5;
+                unit -> owner -> gold += BALANCE_CHOPPING_GAIN;
                 unit -> moves = 0;
+                List * list = listCreate();
+                listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+                return list;
+            }
+            return NULL;
+        }
+    }
+
+    // Build mine.
+    if((char) key == 'M' || (char) key == 'm')
+    {
+        if(control -> state == CONTROL_MOVE_UNIT)
+        {
+            Node * n = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
+            Unit * unit = (Unit *) n -> data;
+            UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, unit -> unit_id);
+            Cell * cell = ((Cell *) view -> current_cell -> data);
+            if(
+                iaSearchForData(u_info -> privileges, UNIT_PRVL_BUILD_MINE) != -1 &&
+                cell -> mine == CELL_NO_MINE &&
+                cell -> resources != CELL_RES_NONE
+            )
+            {
+                // Create mine.
+                cell -> mine = CELL_MINE;
+                unit -> owner -> gold -= BALANCE_MINE_COST;
+                // Increment player's resources.
+                IntArray * resources = unit -> owner -> resources;
+                iaIncrementByIndex(resources, cell -> resources, BALANCE_MINE_GAIN);
+                destroyUnit(world, unit);
                 List * list = listCreate();
                 listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
                 return list;

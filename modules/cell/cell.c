@@ -9,6 +9,7 @@ Node * createRow(int l)
     Cell * head = malloc(sizeof(Cell));
     head -> territory = 0;
     head -> resources = 0;
+    head -> mine = 0;
 
     // Creating row.
     Node * row_head = createGraph(NODE_CELL, head);
@@ -20,6 +21,7 @@ Node * createRow(int l)
         Cell * temp = malloc(sizeof(Cell));
         temp -> territory = 0;
         temp -> resources = 0;
+        temp -> mine = 0;
         // Adding this cell to row (+ edge from previous to new).
         Node * new = addNode(previous, EDGE_CELL_RIGHT, NODE_CELL, temp);
         // Adding edge (from new to previous).
