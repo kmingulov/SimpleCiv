@@ -181,15 +181,29 @@ int moveUnit(World * world, Node * current_cell, int direction)
     }
 
     // There is another unit?
-    Node * neighbour = getNeighbour(destination, EDGE_CELL_UNIT);
-    if(neighbour != NULL)
+    if(getNeighbour(destination, EDGE_CELL_UNIT) != NULL)
     {
+        Node * neighbour = getNeighbour(destination, EDGE_CELL_UNIT);
         Unit * another_unit = (Unit *) neighbour -> data;
         // Fight!
         if(another_unit -> owner != unit -> owner)
         {
             unit -> moves = 0;
             unitsFight(world, &unit, &another_unit);
+            return 2;
+        }
+        return 0;
+    }
+
+    if(getNeighbour(destination, EDGE_CELL_CITY != NULL))
+    {
+        Node * neighbour = getNeighbour(destination, EDGE_CELL_CITY);
+        City * city = (City *) neighbour -> data;
+        // Fight!
+        if(city -> owner != unit -> owner)
+        {
+            unit -> moves = 0;
+            unitcityFight(world,&unit, &city);
             return 2;
         }
         return 0;
@@ -227,4 +241,19 @@ int moveUnit(World * world, Node * current_cell, int direction)
     daPrepend(destination -> edges, edge);
 
     return 1;
+}
+
+
+void unitcityFight(World * world, Unit ** unit1, City ** city)
+{
+
+    DynArray * units_info = world -> units_info;
+
+    // Getting units' info.
+    //~ UnitCommonInfo * u1 = (UnitCommonInfo *) daGetByIndex(units_info, (* unit1) -> unit_id);
+    /* если в городе есть юниты, то пройтись циклом по всем и
+     * вызвать unitsFight(world,unit,unit in city)
+     * если нет юнитов, то city -> owner = unit -> owner
+     * */
+
 }
