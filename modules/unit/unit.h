@@ -7,8 +7,6 @@
 #include "../dyn_array/dyn_array.h"
 #include "../player/player.h"
 
-#include "../city/city.h"
-
 /*
     This struct of real unit, who live in our world.
 */
@@ -36,13 +34,6 @@ void destroyUnit(World * world, Unit * unit);
     Figth between two units.
 */
 void unitsFight(World * world, Unit ** unit1, Unit ** unit2);
-
-
-/*
-    Figth between unit vs city.
-*/
-void unitcityFight(World * world, Unit ** unit1, City ** city);
-
 
 /*
     Treats units at the end of a course

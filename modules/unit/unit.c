@@ -7,6 +7,8 @@
 #include "unit_common_info.h"
 #include "unit.h"
 
+#include "../city/city.h"
+
 Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char unit_id, Player * player)
 {
     // Cell (r,c) already have a unit.
@@ -203,7 +205,7 @@ int moveUnit(World * world, Node * current_cell, int direction)
         if(city -> owner != unit -> owner)
         {
             unit -> moves = 0;
-            unitcityFight(world,&unit, &city);
+            city -> owner = unit -> owner;
             return 2;
         }
         return 0;
@@ -241,20 +243,4 @@ int moveUnit(World * world, Node * current_cell, int direction)
     daPrepend(destination -> edges, edge);
 
     return 1;
-}
-
-
-void unitcityFight(World * world, Unit ** unit1, City ** city)
-{
-
-    DynArray * units_info = world -> units_info;
-
-    // Getting units' info.
-    //~ UnitCommonInfo * u1 = (UnitCommonInfo *) daGetByIndex(units_info, (* unit1) -> unit_id);
-    /* если в городе есть юниты, то пройтись циклом по всем и
-     * вызвать unitsFight(world,unit,unit in city)
-     * если нет юнитов, то city -> owner = unit -> owner
-     * если это был последний город игрока и (последний юнит), то убить игрока
-     * */
-
 }

@@ -187,7 +187,7 @@
         <name>Lumberjack</name>
         <char>*</char>
         <health>500</health>
-        <damage>0</damage>
+        <damage>10</damage>
         <moves>3</moves>
         <hiring_turns>3</hiring_turns>
         <gold_drop>0</gold_drop>
