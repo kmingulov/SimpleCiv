@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <math.h>
+#include <assert.h>
 
 #include "../../game/world/definitions.h"
 #include "../graph/graph.h"
@@ -220,10 +221,10 @@ int moveUnit(World * world, Node * current_cell, int direction)
             // If prev_owner doesn't have cities any more, destroy him.
             if(prev_owner -> cities -> length == 0)
             {
+                // NOTE: We don't have right to change world -> graph_players!
                 // Get prev_owner's node.
                 Node * prev = world -> graph_players;
-                world -> graph_players = getNeighbour(world -> graph_players, EDGE_NEXT_PLAYER);
-                Node * current = world -> graph_players;
+                Node * current = getNeighbour(prev, EDGE_NEXT_PLAYER);
                 while(current -> data != prev_owner)
                 {
                     prev = current;
@@ -233,7 +234,7 @@ int moveUnit(World * world, Node * current_cell, int direction)
                 // Get next player.
                 Node * next = getNeighbour(current, EDGE_NEXT_PLAYER);
                 // Remove old edge.
-                //destroyEdge(prev, EDGE_NEXT_PLAYER);
+                destroyEdge(prev, EDGE_NEXT_PLAYER);
                 // Add new edge.
                 addEdge(prev, next, EDGE_NEXT_PLAYER);
                 // Destroy old player.

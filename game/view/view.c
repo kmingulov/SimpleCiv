@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <assert.h>
 
 #include "../../modules/player/player.h"
 #include "../../modules/city/city.h"
@@ -570,7 +569,7 @@ void drawMap(World * world, View * view)
         line = getNeighbour(line, EDGE_CELL_BOTTOM);
         current = line;
     }
-    move(view->cur_r,view->cur_c);
+    move(view -> cur_r, view -> cur_c);
 }
 
 int viewProcess(World * world, View * view, List * list)
