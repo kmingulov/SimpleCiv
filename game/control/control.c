@@ -478,7 +478,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         }
     }
 
-    // Switching units/cities.
+    // Scrolling units/cities.
     if((char) key == 'N' || (char) key == 'n')
     {
         // Getting player.
@@ -504,10 +504,18 @@ List * controlProcess(World * world, View * view, Control * control, int key)
 
         if(control -> state == CONTROL_MOVE_CURSOR)
         {
-            Player * player = (Player *) world -> graph_players -> data;
-            City * city = (City *) player -> cities -> head -> next -> data;
+            // If there is city, start scrolling from this city (like above with
+            // units).
+            Node * node = getNeighbour(view -> current_cell, EDGE_CELL_CITY);
+            if(node != NULL)
+            {
+                City * city = (City *) node -> data;
+                player -> cities -> head = getListElementByPointer(player -> cities, city);
+            }
             player -> cities -> head = player -> cities -> head -> next;
+            City * city = (City *) player -> cities -> head -> data;
             focusOn(world, view, city -> r, city -> c);
+            // Send message.
             List * list = listCreate();
             listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
             return list;
