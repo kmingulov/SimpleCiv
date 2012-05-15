@@ -9,8 +9,16 @@
 /*
     Balance defines.
 */
+// Unit's resource cost.
+#define BALANCE_UNIT_RES_COST 1
+
+// Gain from chopping trees.
 #define BALANCE_CHOPPING_GAIN 5
+
+// Mine building's cost.
 #define BALANCE_MINE_COST     5
+
+// Gain (in resources) from mine building.
 #define BALANCE_MINE_GAIN     1
 
 /*

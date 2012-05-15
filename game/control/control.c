@@ -510,6 +510,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                 // Increment player's resources.
                 IntArray * resources = unit -> owner -> resources;
                 iaIncrementByIndex(resources, cell -> resources, BALANCE_MINE_GAIN);
+                control -> state = CONTROL_MOVE_CURSOR;
                 destroyUnit(world, unit);
                 List * list = listCreate();
                 listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
