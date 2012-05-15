@@ -478,15 +478,25 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         }
     }
 
-    // Unit switch.
+    // Switching units/cities.
     if((char) key == 'N' || (char) key == 'n')
     {
+        // Getting player.
+        Player * player = (Player *) world -> graph_players -> data;
         if(control -> state == CONTROL_MOVE_UNIT)
         {
-            Player * player = (Player *) world -> graph_players -> data;
-            Unit * unit = (Unit *) player -> units -> head -> next -> data;
+            // Get unit.
+            Node * node = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
+            Unit * unit = (Unit *) node -> data;
+            // Scroll player's units list to this unit (player will scroll
+            // units from these unit).
+            player -> units -> head = getListElementByPointer(player -> units, unit);
+            // Scroll next.
             player -> units -> head = player -> units -> head -> next;
+            // Focus on this unit.
+            unit = (Unit *) player -> units -> head -> data;
             focusOn(world, view, unit -> r, unit -> c);
+            // Send message.
             List * list = listCreate();
             listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
             return list;
