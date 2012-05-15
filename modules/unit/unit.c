@@ -8,7 +8,6 @@
 #include "unit.h"
 #include "../player/player.h"
 
-
 #include "../city/city.h"
 
 Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char unit_id, Player * player)
@@ -199,7 +198,8 @@ int moveUnit(World * world, Node * current_cell, int direction)
         return 0;
     }
 
-    if(getNeighbour(destination, EDGE_CELL_CITY != NULL))
+    // There is a city?
+    if(getNeighbour(destination, EDGE_CELL_CITY) != NULL)
     {
         Node * neighbour = getNeighbour(destination, EDGE_CELL_CITY);
         City * city = (City *) neighbour -> data;
@@ -207,16 +207,25 @@ int moveUnit(World * world, Node * current_cell, int direction)
         if(city -> owner != unit -> owner)
         {
             unit -> moves = 0;
-            Player * deleteplayer = city -> owner;
-            city -> owner = unit -> owner;
-            if (deleteplayer -> cities == NULL /* && deleteplayer -> units == NULL*/ )
+            Player * prev_owner = city -> owner;
+            Player * new_owner = unit -> owner;
+            // Change owner.
+            city -> owner = new_owner;
+            // Remove city from old owner's cities list.
+            listDeleteByPointer(prev_owner -> cities, city, NULL);
+            // Add to new owner.
+            listPrepend(new_owner -> cities, city);
+            /*if (deleteplayer -> cities == NULL// && deleteplayer -> units == NULL )
             {
                 // удалить из world
                 // Надо получить player в виде Node
                 // как?
                 //world -> graph_players =
                 destroyPlayer(city -> owner);
-            }
+                // также надо юнита задвинуть в город.
+                // ещё valgrind ругается на 215 строку и вообще неладное творит-
+                // ся, если пытаться так захватывать.
+            }*/
             return 2;
         }
         return 0;
