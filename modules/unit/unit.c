@@ -209,12 +209,29 @@ int moveUnit(World * world, Node * current_cell, int direction)
             unit -> moves = 0;
             Player * prev_owner = city -> owner;
             Player * new_owner = unit -> owner;
+
+
             // Change owner.
             city -> owner = new_owner;
             // Remove city from old owner's cities list.
             listDeleteByPointer(prev_owner -> cities, city, NULL);
             // Add to new owner.
             listPrepend(new_owner -> cities, city);
+
+            Node * prev = world -> graph_players;
+            world -> graph_players = getNeighbour(world -> graph_players, EDGE_NEXT_PLAYER);
+            Node * current = world -> graph_players;
+            while (current -> data  != prev_owner)
+            {
+                prev = current;
+                current = getNeighbour(current, EDGE_NEXT_PLAYER);
+            }
+
+            //~ daGetByIndex(current, )
+
+            destroyPlayer(prev_owner);
+
+
             /*if (deleteplayer -> cities == NULL// && deleteplayer -> units == NULL )
             {
                 // удалить из world
