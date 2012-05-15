@@ -6,6 +6,8 @@
 #include "../cell/cell.h"
 #include "unit_common_info.h"
 #include "unit.h"
+#include "../player/player.h"
+
 
 #include "../city/city.h"
 
@@ -205,7 +207,16 @@ int moveUnit(World * world, Node * current_cell, int direction)
         if(city -> owner != unit -> owner)
         {
             unit -> moves = 0;
+            Player * deleteplayer = city -> owner;
             city -> owner = unit -> owner;
+            if (deleteplayer -> cities == NULL /* && deleteplayer -> units == NULL*/ )
+            {
+                // удалить из world
+                // Надо получить player в виде Node
+                // как?
+                //world -> graph_players =
+                destroyPlayer(city -> owner);
+            }
             return 2;
         }
         return 0;
