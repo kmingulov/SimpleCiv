@@ -111,7 +111,15 @@ int listDeleteByPointer(List * list, void * data, void (* function)(void * data)
         free(current);
 
         list -> length--;
-        list -> head = next;
+        if(list -> length == 0)
+        {
+            // No more elements.
+            list -> head = NULL;
+        }
+        else
+        {
+            list -> head = next;
+        }
 
         return 1;
     }
