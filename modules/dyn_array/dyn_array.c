@@ -1,3 +1,24 @@
+/*
+
+    SimpleCiv is simple clone of Civilization game, using ncurses library.
+    Copyright (C) 2012 by K. Mingulov, A. Sapronov.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*/
+
 #include <string.h>
 #include <stdlib.h>
 
@@ -9,7 +30,7 @@ DynArray * daCreate()
 
     array -> length = 0;
     array -> available = DYN_ARRAY_INCREMENT;
-    array -> data = malloc(DYN_ARRAY_ELEM_SIZE * array -> available);
+    array -> data = malloc(DYN_ARRAY_POINTER_SIZE * array -> available);
 
     return array;
 }
@@ -34,9 +55,9 @@ void daExpand(DynArray * array)
     // Expanding array.
     array -> available += DYN_ARRAY_INCREMENT;
     // Allocating new memory.
-    void ** new_data = malloc(DYN_ARRAY_ELEM_SIZE * (array -> length + array -> available));
+    void ** new_data = malloc(DYN_ARRAY_POINTER_SIZE * (array -> length + array -> available));
     // Coping old data.
-    memcpy(new_data, array -> data, DYN_ARRAY_ELEM_SIZE * array -> length);
+    memcpy(new_data, array -> data, DYN_ARRAY_POINTER_SIZE * array -> length);
     // Deleting all data and remembering pointer.
     free(array -> data);
     array -> data = new_data;
@@ -113,7 +134,7 @@ int daRemoveByPointer(DynArray * array, void * data, void (* deleteFunc)(void * 
     // Nothing found.
     if(index == array -> length)
     {
-        return 0;
+        return 1;
     }
 
     // Deleting data.
@@ -135,5 +156,5 @@ int daRemoveByPointer(DynArray * array, void * data, void (* deleteFunc)(void * 
     // reason for this (we don't use remove so often).
 
     // All done.
-    return 1;
+    return 0;
 }
