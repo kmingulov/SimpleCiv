@@ -90,17 +90,20 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                     {
                         List * list = listCreate();
                         listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
-                        // Maybe there was a city capture.
-                        if(world -> properties -> players_count == 1)
-                        {
-                            // Show win message (9x36).
-                            int start_r = (view -> rows - 9) / 2;
-                            int start_c = (view -> columns - 36) / 2;
-                            view -> textbox = createViewTextbox(start_r, start_c, 9, 36);
-                            addWinInfoToTextbox(view -> textbox);
-                            control -> state = CONTROL_TEXTBOX;
-                            listPrepend(list, createMessage(VIEW_REDRAW_TEXTBOX, NULL));
-                        }
+                        return list;
+                    }
+                    else if(res == 3)
+                    {
+                        // Show win message (9x36).
+                        int start_r = (view -> rows - 9) / 2;
+                        int start_c = (view -> columns - 36) / 2;
+                        view -> textbox = createViewTextbox(start_r, start_c, 9, 36);
+                        addWinInfoToTextbox(view -> textbox);
+                        control -> state = CONTROL_TEXTBOX;
+                        // Redrawing.
+                        List * list = listCreate();
+                        listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+                        listPrepend(list, createMessage(VIEW_REDRAW_TEXTBOX, NULL));
                         return list;
                     }
                     return NULL;

@@ -250,6 +250,11 @@ int moveUnit(World * world, Node * current_cell, int direction)
                 daDestroy(current -> edges, &free);
                 free(current);
                 world -> properties -> players_count -= 1;
+                // It is last player.
+                if(world -> properties -> players_count == 1)
+                {
+                    return 3;
+                }
             }
             return 2;
         }
