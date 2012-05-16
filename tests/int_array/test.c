@@ -14,14 +14,19 @@ int main()
         iaPrepend(array, i);
     }
 
+    // Test copy.
+    IntArray * copy = iaCopy(array);
+    assert(iaGetByIndex(copy, 7) == 7);
+    iaDestroy(copy);
+
     // Basic tests.
     assert(array -> length == 27);
     assert(array -> available == 3);
     assert(array -> data[26] == 26);
     iaIncrementByIndex(array, 0, 1);
     assert(array -> data[0] == 1);
-
-    // All done.
+    assert(iaGetByIndex(array, 7) == 7);
+    assert(iaSearchForData(array, 100) == -1);
     iaDestroy(array);
 
     // Test for iaLengthCreate().
