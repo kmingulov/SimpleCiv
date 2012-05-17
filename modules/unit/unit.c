@@ -1,3 +1,24 @@
+/*
+
+    SimpleCiv is simple clone of Civilization game, using ncurses library.
+    Copyright (C) 2012 by K. Mingulov, A. Sapronov.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*/
+
 #include <stdlib.h>
 #include <math.h>
 
@@ -50,8 +71,7 @@ void destroyUnit(World * world, Unit * unit)
     Player * player = unit -> owner;
 
     // Removing unit from map.
-    int r = unit -> r; int c = unit -> c;
-    Node * n = getMapCell(world -> map, r, c);
+    Node * n = getMapCell(world -> map, unit -> r, unit -> c);
     Edge * edge;
     for(int i = 0; i < n -> edges -> length; i++)
     {
@@ -61,8 +81,10 @@ void destroyUnit(World * world, Unit * unit)
             break;
         }
     }
+
     // Removing node with unit.
     destroyNode(edge -> target, &destroyUnitNodeData);
+
     // Removing pointer to him from map.
     daRemoveByPointer(n -> edges, edge, &free);
 
@@ -72,40 +94,44 @@ void destroyUnit(World * world, Unit * unit)
 
 void unitsFight(World * world, Unit ** unit1, Unit ** unit2)
 {
-    DynArray * units_info = world -> units_info;
-
     // Getting units' info.
-    UnitCommonInfo * u1 = (UnitCommonInfo *) daGetByIndex(units_info, (* unit1) -> unit_id);
-    UnitCommonInfo * u2 = (UnitCommonInfo *) daGetByIndex(units_info, (* unit2) -> unit_id);
+    UnitCommonInfo * u1 = (UnitCommonInfo *) daGetByIndex(world -> units_info, (* unit1) -> unit_id);
+    UnitCommonInfo * u2 = (UnitCommonInfo *) daGetByIndex(world -> units_info, (* unit2) -> unit_id);
 
     // Calculating max damage.
-    double damage1 = (double) (* unit1) -> health / u1 -> max_health * u1 -> max_damage;
-    double damage2 = (double) (* unit2) -> health / u2 -> max_health * u2 -> max_damage;
+    float damage1 = (float) (* unit1) -> health / u1 -> max_health * u1 -> max_damage;
+    float damage2 = (float) (* unit2) -> health / u2 -> max_health * u2 -> max_damage;
 
     // Random damage between 70% and 100% of damage1/damage2.
-    damage1 *= ((double) (rand() % 7 + 4.0f)) / 10.0f;
-    damage2 *= ((double) (rand() % 7 + 4.0f)) / 10.0f;
+    int delta = BALANCE_UNIT_DAMAGE_MAX - BALANCE_UNIT_DAMAGE_MIN;
+    damage1 *= (float) (rand() % delta + BALANCE_UNIT_DAMAGE_MIN) / 100.0f;
+    damage2 *= (float) (rand() % delta + BALANCE_UNIT_DAMAGE_MIN) / 100.0f;
 
-    // Fight!
-    (* unit1) -> health -= ceil(damage2);
-    (* unit2) -> health -= ceil(damage1);
-
-    // Checking there're alive or not.
-    if( (* unit1) -> health <= 0 )
+    // Checking there're still alive or not.
+    if( (* unit1) -> health <= ceil(damage2) )
     {
-        // Player2 getting drop.
+        // Player2 gets drop.
         (* unit2) -> owner -> gold += u1 -> gold_drop;
-        // Destroing unit.
+        // Destroy unit.
         destroyUnit(world, * unit1);
         * unit1 = NULL;
     }
-    if( (* unit2) -> health <= 0 )
+    else
     {
-        // Player1 getting drop.
+        (* unit1) -> health -= ceil(damage2);
+    }
+
+    if( (* unit2) -> health <= ceil(damage1) )
+    {
+        // Player1 gets drop.
         (* unit1) -> owner -> gold += u2 -> gold_drop;
-        // Destroing unit.
+        // Destroy unit.
         destroyUnit(world, * unit2);
         * unit2 = NULL;
+    }
+    else
+    {
+        (* unit2) -> health -= ceil(damage1);
     }
 }
 
@@ -115,24 +141,26 @@ void developUnit(void * data, DynArray * info)
     UnitCommonInfo * unit_info = (UnitCommonInfo *) daGetByIndex(info, unit -> unit_id);
 
     // Unit needs money.
-    if(unit -> owner -> gold <= 3)
+    if(unit -> owner -> gold <= BALANCE_UNIT_SALARY)
     {
         // No money, no honey.
-        unit -> health -= ceil(0.1f * unit_info -> max_health);
+        unit -> health -= ceil(BALANCE_UNIT_HEALTH_DELTA * unit_info -> max_health);
         if(unit -> health < 0)
         {
             // But he can't die from hunger.
-            unit -> health = ceil((float) 0.1f * unit_info -> max_health);
+            unit -> health = ceil((float) BALANCE_UNIT_HEALTH_DELTA * unit_info -> max_health);
         }
     }
     else
     {
-        unit -> owner -> gold -= 3;
+        // Pay salary.
+        unit -> owner -> gold -= BALANCE_UNIT_SALARY;
+        // Heals unit.
         if(unit -> moves == unit_info -> max_moves)
         {
-            if(unit -> health + 0.1f * unit_info -> max_health < unit_info -> max_health)
+            if(unit -> health + BALANCE_UNIT_SALARY * unit_info -> max_health < unit_info -> max_health)
             {
-                unit -> health = unit -> health + 0.1f * unit_info -> max_health;
+                unit -> health = unit -> health + BALANCE_UNIT_SALARY * unit_info -> max_health;
             }
             else
             {
@@ -157,6 +185,7 @@ int moveUnit(World * world, Node * current_cell, int direction)
         }
     }
 
+    // Getting unit, his info and destination.
     Unit * unit = (Unit *) edge -> target -> data;
     UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, unit -> unit_id);
     Node * destination = getNeighbour(current_cell, direction);
@@ -164,7 +193,7 @@ int moveUnit(World * world, Node * current_cell, int direction)
     // Unit cannot go any more.
     if(unit -> moves == 0)
     {
-        return 0;
+        return 3;
     }
 
     // Unit is a ship?
@@ -173,7 +202,7 @@ int moveUnit(World * world, Node * current_cell, int direction)
         // Cannot go to the land, if there is no city.
         if( ((Cell *) destination -> data) -> territory != CELL_TYPE_WATER && getNeighbour(destination, EDGE_CELL_CITY) == NULL )
         {
-            return 0;
+            return 3;
         }
     }
 
@@ -183,7 +212,7 @@ int moveUnit(World * world, Node * current_cell, int direction)
         // Not a ship.
         if(u_info -> privileges == NULL || iaSearchForData(u_info -> privileges, UNIT_PRVL_CAN_FLOAT) == -1)
         {
-            return 0;
+            return 3;
         }
     }
 
@@ -197,9 +226,9 @@ int moveUnit(World * world, Node * current_cell, int direction)
         {
             unit -> moves = 0;
             unitsFight(world, &unit, &another_unit);
-            return 2;
+            return 1;
         }
-        return 0;
+        return 3;
     }
 
     // There is a city?
@@ -207,7 +236,7 @@ int moveUnit(World * world, Node * current_cell, int direction)
     {
         Node * neighbour = getNeighbour(destination, EDGE_CELL_CITY);
         City * city = (City *) neighbour -> data;
-        // Fight!
+        // Capture!
         if(city -> owner != unit -> owner)
         {
             unit -> moves = 0;
@@ -256,10 +285,10 @@ int moveUnit(World * world, Node * current_cell, int direction)
                 // It is last player.
                 if(world -> properties -> players_count == 1)
                 {
-                    return 3;
+                    return 2;
                 }
             }
-            return 2;
+            return 0;
         }
     }
 
@@ -294,5 +323,5 @@ int moveUnit(World * world, Node * current_cell, int direction)
     daRemoveByPointer(current_cell -> edges, edge, NULL);
     daPrepend(destination -> edges, edge);
 
-    return 1;
+    return 0;
 }

@@ -1,3 +1,24 @@
+/*
+
+    SimpleCiv is simple clone of Civilization game, using ncurses library.
+    Copyright (C) 2012 by K. Mingulov, A. Sapronov.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*/
+
 #ifndef UNIT_H
 #define UNIT_H
 
@@ -8,14 +29,14 @@
 #include "../player/player.h"
 
 /*
-    This struct of real unit, who live in our world.
+    This is struct of real unit, who live in our world.
 */
 typedef struct Unit
 {
     unsigned char unit_id;   // Unit id in units' info table.
     Player * owner;          // Owner of this unit.
     int r, c;                // X and Y coordinates.
-    int health;              // Current health.
+    unsigned int health;     // Current health.
     unsigned int moves;      // Available moves.
 } Unit;
 
@@ -26,6 +47,7 @@ typedef struct Unit
 Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char unit_id, Player * player);
 
 /*
+    Destroys unit's node's data.
 */
 void destroyUnitNodeData(unsigned char type, void * data);
 
@@ -40,13 +62,13 @@ void destroyUnit(World * world, Unit * unit);
 void unitsFight(World * world, Unit ** unit1, Unit ** unit2);
 
 /*
-    Treats units at the end of a course
+    Developes units at the end of a course.
 */
 void developUnit(void * data, DynArray * info);
 
 /*
-    Moves unit. Returns 0 if failed, 1 if moved succefully, 2 if there was a
-    fight.
+    Moves unit. Returns 0 if moved succefully, 1 if there was a fight, 2 if
+    player win the game, 3 if failed.
 */
 int moveUnit(World * world, Node * current_cell, int direction);
 

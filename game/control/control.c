@@ -78,7 +78,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                 {
                     // Succefully moved unit.
                     int res = moveUnit(world, view -> current_cell, keys[i][1]);
-                    if(res == 1)
+                    if(res == 0)
                     {
                         List * list = listCreate();
                         listPrepend(list, createMessage(VIEW_REDRAW_MAP, NULL));
@@ -86,13 +86,13 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                         listPrepend(list, createMessage(keys[i][2], NULL));
                         return list;
                     }
-                    else if(res == 2)
+                    else if(res == 1)
                     {
                         List * list = listCreate();
                         listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
                         return list;
                     }
-                    else if(res == 3)
+                    else if(res == 2)
                     {
                         // Show win message (9x36).
                         int start_r = (view -> rows - 9) / 2;

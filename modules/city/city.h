@@ -19,8 +19,8 @@
 
 */
 
-#ifndef CITY
-#define CITY
+#ifndef CITY_H
+#define CITY_H
 
 #include "../../game/world/world.h"
 #include "../player/player.h"
