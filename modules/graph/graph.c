@@ -1,3 +1,24 @@
+/*
+
+    SimpleCiv is simple clone of Civilization game, using ncurses library.
+    Copyright (C) 2012 by K. Mingulov, A. Sapronov.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*/
+
 #include <stdlib.h>
 
 #include "graph.h"
@@ -11,7 +32,7 @@ Node * addNode(Node * parent, unsigned char edge_type, unsigned char node_type, 
     child -> data = data;
     child -> edges = daCreate();
 
-    // If parent not null linking two nodes.
+    // If parent isn't null linking two nodes.
     if(parent != NULL)
     {
         addEdge(parent, child, edge_type);
@@ -33,13 +54,13 @@ void addEdge(Node * node1, Node * node2, unsigned char edge_type)
 void destroyEdge(Node * parent, unsigned char edge_type)
 {
     DynArray * edges = parent -> edges;
+    // Search for edge with edge_type.
     for(int i = 0; i < edges -> length; i++)
     {
         Edge * edge = daGetByIndex(edges, i);
         if(edge -> type == edge_type)
         {
             // Destroy edge.
-            // TODO Create daRemoveByIndex() function.
             daRemoveByPointer(edges, edge, &free);
             break;
         }
@@ -51,10 +72,10 @@ Node * createGraph(unsigned char node_type, void * data)
     return addNode(NULL, 0, node_type, data);
 }
 
-void destroyNode(Node * target)
+void destroyNode(Node * target, void (* deleteFunc)(unsigned char type, void * data))
 {
     daDestroy(target -> edges, &free);
-    free(target -> data);
+    deleteFunc(target -> type, target -> data);
     free(target);
 }
 
