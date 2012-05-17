@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <assert.h>
-#include "../../modules/cell/cell.h"
+
+#include "../../game/world/definitions.h"
+#include "../../modules/map/map.h"
 
 int main()
 {
-    Node * n = createMap(10, 10);
+    Map * map = createMap(10, 10);
+
+    Node * n = map -> head;
 
     // Testing all directions.
     unsigned char a[4] = {EDGE_CELL_RIGHT, EDGE_CELL_LEFT, EDGE_CELL_TOP, EDGE_CELL_BOTTOM};
@@ -18,19 +22,19 @@ int main()
         assert( temp == n );
     }
 
-    assert(getCell(n, 10, 10) == n);
+    assert(getCell(map, 10, 10) == n);
 
-    destroyMap(n, 10, 10);
+    destroyMap(map);
 
     // Creating non-square map.
-    n = createMap(7, 13);
+    map = createMap(7, 13);
 
-    assert(getCell(n, 0, 0) == n);
-    assert(getCell(n, 7, 0) == n);
-    assert(getCell(n, 7, 13) == n);
-    assert(getCell(n, 0, 13) == n);
+    assert(getCell(map, 0, 0) == n);
+    assert(getCell(map, 7, 0) == n);
+    assert(getCell(map, 7, 13) == n);
+    assert(getCell(map, 0, 13) == n);
 
-    destroyMap(n, 7, 13);
+    destroyMap(map);
 
     return 0;
 }

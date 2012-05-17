@@ -2,7 +2,7 @@
 OBJ_COMMON = list.o dyn_array.o int_array.o
 
 # graph and map
-OBJ_GRAPH = graph.o cell.o landscape.o
+OBJ_GRAPH = graph.o map.o landscape.o
 
 # unit
 OBJ_UNIT = unit.o unit_common_info.o unit_hiring.o unit_table.o
@@ -71,8 +71,8 @@ int_array.o: modules/int_array/int_array.c
 graph.o: modules/graph/graph.c
 	$(CC) $(CFLAGS) modules/graph/graph.c
 
-cell.o: modules/cell/cell.c
-	$(CC) $(CFLAGS) modules/cell/cell.c
+map.o: modules/map/map.c
+	$(CC) $(CFLAGS) modules/map/map.c
 
 landscape.o: modules/landscape/landscape.c
 	$(CC) $(CFLAGS) modules/landscape/landscape.c

@@ -1,8 +1,30 @@
+/*
+
+    SimpleCiv is simple clone of Civilization game, using ncurses library.
+    Copyright (C) 2012 by K. Mingulov, A. Sapronov.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*/
+
 #include <stdlib.h>
 
 #include "../../game/world/definitions.h"
+#include "../unit/unit.h"
 #include "../city/city.h"
-#include "cell.h"
+#include "map.h"
 
 Node * createRow(int l)
 {
@@ -51,8 +73,13 @@ void mergeRows(Node * n1, Node * n2)
     } while (x1 != n1 || x2 != n2);
 }
 
-Node * createMap(int max_r, int max_c)
+Map * createMap(int max_r, int max_c)
 {
+    Map * map = malloc(sizeof(Map));
+
+    map -> max_r = max_r;
+    map -> max_c = max_c;
+
     Node * head = createRow(max_c);
     Node * row = head;
 
@@ -68,39 +95,50 @@ Node * createMap(int max_r, int max_c)
 
     mergeRows(row, head);
 
-    return head;
+    map -> head = head;
+
+    return map;
 }
 
+/*
+    Auxiliary function for units and cities deletion.
+*/
 void destroyUnitsAndCities(Node * parent, Node * child, Edge * edge)
 {
     if(edge -> type == EDGE_CELL_UNIT)
     {
-        destroyNode(child);
+        destroyNode(child, &destroyUnitNodeData);
     }
     else if(edge -> type == EDGE_CELL_CITY)
     {
-        free( ((City *) child -> data) -> name );
-        free( ((City *) child -> data) -> hiring );
-        destroyNode(child);
+        destroyNode(child, destroyCityNodeData);
     }
 }
 
-void destroyMap(Node * map_head, int max_r, int max_c)
+/*
+    Auxiliary function for cell deletion.
+*/
+void destroyCell(unsigned char type, void * data)
 {
-    Node * current = map_head;
+    free(data);
+}
+
+void destroyMap(Map * map)
+{
+    Node * current = map -> head;
     Node * next_row = current;
 
-    for(int i = 0; i < max_r; i++)
+    for(int i = 0; i < map -> max_r; i++)
     {
         next_row = getNeighbour(next_row, EDGE_CELL_BOTTOM);
-        for(int j = 0; j < max_c; j++)
+        for(int j = 0; j < map -> max_c; j++)
         {
             // Destroing units and cities.
             foreachNeighbour(current, &destroyUnitsAndCities);
             // Getting next.
             Node * next = getNeighbour(current, EDGE_CELL_RIGHT);
             // Removing this node and all it's edges.
-            destroyNode(current);
+            destroyNode(current, &destroyCell);
             // Going on.
             current = next;
         }
@@ -109,11 +147,13 @@ void destroyMap(Node * map_head, int max_r, int max_c)
         // here, but it was moved because at final step we deleted all map and
         // have no cell to getNeighbour() => segmentation fault.
     }
+
+    free(map);
 }
 
-Node * getCell(Node * map_head, int r, int c)
+Node * getCell(Map * map, int r, int c)
 {
-    Node * result = map_head;
+    Node * result = map -> head;
 
     if(r > 0)
     {

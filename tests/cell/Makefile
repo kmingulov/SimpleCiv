@@ -1,5 +1,5 @@
 # object files to compile
-OBJ = dyn_array.o cell.o graph.o test.o
+OBJ = dyn_array.o map.o graph.o test.o
 
 # debug flag
 DEBUG = -g
@@ -22,8 +22,8 @@ dyn_array.o: ../../modules/dyn_array/dyn_array.c
 graph.o: ../../modules/graph/graph.c
 	gcc $(CFLAGS) ../../modules/graph/graph.c
 
-cell.o: ../../modules/cell/cell.c
-	gcc $(CFLAGS) ../../modules/cell/cell.c
+map.o: ../../modules/map/map.c
+	gcc $(CFLAGS) ../../modules/map/map.c
 
 test.o: test.c
 	gcc $(CFLAGS) test.c
