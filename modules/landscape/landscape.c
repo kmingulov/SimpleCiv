@@ -90,6 +90,8 @@ void generateMap(Node * map, int max_r, int max_c)
         c = rand () % max_c;
     } while( ((Cell *) getCell(current, r, c) -> data) -> territory == CELL_TYPE_WATER );
     ((Cell *) getCell(current, r, c) -> data) -> resources = CELL_RES_MUSHROOMS;
+
+    printf("\n%d %d\n", r, c);
 }
 
 /*
