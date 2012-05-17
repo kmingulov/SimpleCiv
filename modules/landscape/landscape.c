@@ -1,3 +1,24 @@
+/*
+
+    SimpleCiv is simple clone of Civilization game, using ncurses library.
+    Copyright (C) 2012 by K. Mingulov, A. Sapronov.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*/
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
@@ -6,7 +27,7 @@
 #include "../../game/world/definitions.h"
 #include "landscape.h"
 
-void generateLandscape(Node * c, int k, char required, char fill)
+void generateLandscape(Node * c, long long k, char required, char fill)
 {
     unsigned char directions[4] = {EDGE_CELL_RIGHT, EDGE_CELL_LEFT,
         EDGE_CELL_BOTTOM, EDGE_CELL_TOP};
@@ -50,8 +71,8 @@ void generateMap(Map * map)
     // Generating landscape.
     for(int i = 0; i < 4; i++)
     {
-        int n = 7;
-        int k = pow(2, n);
+        long long n = 7;
+        long long k = pow(2, n);
         for(int j = 0; j < n; j++)
         {
             Node * c = getMapCell(map, rand() % map -> max_r, rand() % map -> max_c);

@@ -2,24 +2,28 @@
 #define WORLD_DEFINITIONS
 
 /*
-    Admin mode.
+    ADMIN MODE.
 */
 #define ADMIN_MODE            0
 
 /*
-    Balance defines.
+    BALANCE DEFINES.
 */
 // Unit's resource cost.
-#define BALANCE_UNIT_RES_COST 1
+#define BALANCE_UNIT_RES_COST       1
 
 // Gain from chopping trees.
-#define BALANCE_CHOPPING_GAIN 5
+#define BALANCE_CHOPPING_GAIN       5
 
 // Mine building's cost.
-#define BALANCE_MINE_COST     5
+#define BALANCE_MINE_COST           5
 
 // Gain (in resources) from mine building.
-#define BALANCE_MINE_GAIN     1
+#define BALANCE_MINE_GAIN           1
+
+// First city's population bounds.
+#define BALANCE_CITY_POPUL_MIN      180
+#define BALANCE_CITY_POPUL_MAX      200
 
 /*
     Definition for players colours.

@@ -1,3 +1,24 @@
+/*
+
+    SimpleCiv is simple clone of Civilization game, using ncurses library.
+    Copyright (C) 2012 by K. Mingulov, A. Sapronov.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*/
+
 #include <stdlib.h>
 #include <math.h>
 
@@ -32,7 +53,11 @@ City * createCity(World * world, char * name, int r, int c, Player * player)
         return 0;
     }
 
-    // Woohoo! Adding resources to player.
+    // Allocate some memory.
+    City * city = malloc(sizeof(City));
+    Node * node = createGraph(NODE_CITY, city);
+
+    // Add resources to player and increment value of city -> res_count.
     IntArray * array = player -> resources;
     for(int i = 0; i < 9; i++)
     {
@@ -41,16 +66,14 @@ City * createCity(World * world, char * name, int r, int c, Player * player)
         if(res != CELL_RES_NONE)
         {
             array -> data[res] += 1;
+            city -> res_count += 1;
         }
     }
 
-    // Allocate some memory.
-    City * city = malloc(sizeof(City));
-    Node * node = createGraph(NODE_CITY, city);
-
     // Basics.
     city -> name = name;
-    city -> population = rand() % 100 + 100;
+    // Sets population from interval (min, max).
+    city -> population = rand() % (BALANCE_CITY_POPUL_MAX - BALANCE_CITY_POPUL_MIN) + BALANCE_CITY_POPUL_MIN;
     city -> age = 0;
     city -> hiring = createHiring();
 
@@ -70,18 +93,18 @@ void developCity(World * world, void * data)
 {
     City * city = (City *) data;
 
-    // TODO Add resources dependence in formula.
+    // Get population.
     float n = (float) city -> population;
 
     // Random number.
     float r = (float) (rand() % 100 + 1) / 100;
 
     // Increase population.
-    n += 40.0f * r / 3.14f / (1.0f + ((float) city -> age * city -> age) / 10000);
+    n += 40.0f * sqrt(city -> res_count + 1) * r / 3.14f / (1.0f + ((float) city -> age * city -> age) / 10000);
     city -> population = ceil(n);
 
     // Increase age.
-    (city -> age)++;
+    city -> age += 1;
 
     // Increase owner's money.
     Player * player = city -> owner;
@@ -103,10 +126,13 @@ void developCity(World * world, void * data)
         }
         else
         {
+            // Continue hiring.
             player -> gold -= city -> hiring -> delta;
             city -> hiring -> turns += 1;
+            // It's final turn in hiring.
             if(city -> hiring -> turns == u_info -> hiring_turns)
             {
+                // Create unit and delete all data about previous hiring.
                 createUnit(world, city -> r, city -> c, city -> hiring -> id, city -> owner);
                 city -> hiring -> id = -1;
                 city -> hiring -> turns = 0;
@@ -121,7 +147,7 @@ void destroyCityNodeData(unsigned char type, void * data)
     City * city = (City *) data;
 
     free(city -> name);
-    free(city -> hiring);
+    destroyHiring(city -> hiring);
 
     free(data);
 }
