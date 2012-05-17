@@ -59,6 +59,7 @@ City * createCity(World * world, char * name, int r, int c, Player * player)
 
     // Add resources to player and increment value of city -> res_count.
     IntArray * array = player -> resources;
+    city -> res_count = 0;
     for(int i = 0; i < 9; i++)
     {
         Cell * c = getMapCell(world -> map, coord[i][0], coord[i][1]) -> data;
