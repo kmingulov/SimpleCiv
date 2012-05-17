@@ -25,7 +25,7 @@ void generateLandscape(Node * c, int k, char required, char fill)
     }
 }
 
-void generateMap(Node * map, int max_r, int max_c)
+void generateMap(Map * map)
 {
     unsigned char territories[4] = {CELL_TYPE_WATER, CELL_TYPE_TREE,
         CELL_TYPE_HILL, CELL_TYPE_MOUNTAIN};
@@ -34,12 +34,12 @@ void generateMap(Node * map, int max_r, int max_c)
 
     srand(time(NULL));
 
-    Node * current = map;
+    Node * current = map -> head;
 
     // Filling up by default type of territory (grass).
-    for(int i = 0; i < max_r; i++)
+    for(int i = 0; i < map -> max_r; i++)
     {
-        for(int j = 0; j < max_c; j++)
+        for(int j = 0; j < map -> max_c; j++)
         {
             ((Cell *) current -> data) -> territory = CELL_TYPE_GRASS;
             current = getNeighbour(current, EDGE_CELL_RIGHT);
@@ -54,7 +54,7 @@ void generateMap(Node * map, int max_r, int max_c)
         int k = pow(2, n);
         for(int j = 0; j < n; j++)
         {
-            Node * c = getCell(map, rand() % max_r, rand() % max_c);
+            Node * c = getMapCell(map, rand() % map -> max_r, rand() % map -> max_c);
             generateLandscape(c, k, required[i], territories[i]);
             k /= 2;
         }
@@ -63,9 +63,9 @@ void generateMap(Node * map, int max_r, int max_c)
     // Generating resources.
     unsigned char resources[CELL_RES_COUNT] = {CELL_RES_BRONZE, CELL_RES_IRON,
         CELL_RES_COAL, CELL_RES_GUNPOWDER, CELL_RES_HORSES};
-    for(int i = 0; i < max_r; i++)
+    for(int i = 0; i < map -> max_r; i++)
     {
-        for(int j = 0; j < max_c; j++)
+        for(int j = 0; j < map -> max_c; j++)
         {
             Cell * c = (Cell *) current -> data;
             if(c -> territory != CELL_TYPE_WATER)
@@ -86,16 +86,15 @@ void generateMap(Node * map, int max_r, int max_c)
     int c;
     do
     {
-        r = rand () % max_r;
-        c = rand () % max_c;
-    } while( ((Cell *) getCell(current, r, c) -> data) -> territory == CELL_TYPE_WATER );
-    ((Cell *) getCell(current, r, c) -> data) -> resources = CELL_RES_MUSHROOMS;
-
-    printf("\n%d %d\n", r, c);
+        r = rand () % map -> max_r;
+        c = rand () % map -> max_c;
+    } while( ((Cell *) getMapCell(map, r, c) -> data) -> territory == CELL_TYPE_WATER );
+    ((Cell *) getMapCell(map, r, c) -> data) -> resources = CELL_RES_MUSHROOMS;
 }
 
 /*
     Big chunk of code, where I tried to implement Perlin noise for cycled map.
+    And failed :(
 
 double noiseRand(double x, double y)
 {

@@ -73,7 +73,7 @@ void mergeRows(Node * n1, Node * n2)
     } while (x1 != n1 || x2 != n2);
 }
 
-Map * createMap(int max_r, int max_c)
+Map * createMap(unsigned int max_r, unsigned int max_c)
 {
     Map * map = malloc(sizeof(Map));
 
@@ -151,9 +151,14 @@ void destroyMap(Map * map)
     free(map);
 }
 
-Node * getCell(Map * map, int r, int c)
+Node * getMapCell(Map * map, int r, int c)
 {
-    Node * result = map -> head;
+    return getCell(map -> head, r, c);
+}
+
+Node * getCell(Node * node, int r, int c)
+{
+    Node * result = node;
 
     if(r > 0)
     {

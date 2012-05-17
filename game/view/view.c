@@ -91,7 +91,7 @@ View * createView(World * world)
         player -> cur_c = result -> sidebar / 2;
         player -> map_r = city -> r;
         player -> map_c = city -> c;
-        player -> current_cell = getCell(world -> graph_map, city -> r, city -> c);
+        player -> current_cell = getMapCell(world -> map, city -> r, city -> c);
         player -> graph_map = getCell(player -> current_cell, 1 - player -> cur_r, 1 - player -> cur_c);
         // Go on.
         world -> graph_players = getNeighbour(world -> graph_players, EDGE_NEXT_PLAYER);
@@ -122,7 +122,7 @@ void destroyView(View * view)
 void focusOn(World * world, View * view, int r, int c)
 {
     // Get node with cell.
-    Node * cell = getCell(world -> graph_map, r, c);
+    Node * cell = getMapCell(world -> map, r, c);
 
     // Remember it.
     view -> current_cell = cell;

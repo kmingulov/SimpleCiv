@@ -1,5 +1,5 @@
-#ifndef UNIT
-#define UNIT
+#ifndef UNIT_H
+#define UNIT_H
 
 #include "../../game/world/world.h"
 
@@ -24,6 +24,10 @@ typedef struct Unit
     owner is player.
 */
 Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char unit_id, Player * player);
+
+/*
+*/
+void destroyUnitNodeData(unsigned char type, void * data);
 
 /*
     Destroys unit.

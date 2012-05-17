@@ -2,7 +2,7 @@
 #define LANDSCAPE
 
 #include "../graph/graph.h"
-#include "../cell/cell.h"
+#include "../map/map.h"
 
 /*
     Recursive algorithm to generate random landscape.
@@ -14,10 +14,9 @@
 void generateLandscape(Node * c, int k, char required, char fill);
 
 /*
-    Function generate random landscape and put it in fourly circular list "map".
-    Ints max_r and max_c are count of rows and columns.
+    Function generate random landscape and put it in "map".
     Uses generateLandscape function.
 */
-void generateMap(Node * map, int max_r, int max_c);
+void generateMap(Map * map);
 
 #endif

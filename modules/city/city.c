@@ -1,15 +1,15 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "../cell/cell.h"
 #include "../unit/unit_common_info.h"
 #include "../unit/unit.h"
+#include "../map/map.h"
 #include "city.h"
 
 City * createCity(World * world, char * name, int r, int c, Player * player)
 {
     // Cell (r,c) already have a city.
-    if(getNeighbour( getCell(world -> graph_map, r, c), EDGE_CELL_CITY ) != NULL)
+    if(getNeighbour( getMapCell(world -> map, r, c), EDGE_CELL_CITY ) != NULL)
     {
         return NULL;
     }
@@ -20,14 +20,14 @@ City * createCity(World * world, char * name, int r, int c, Player * player)
     int found = 0;
     for(int i = 0; i < 8; i++)
     {
-        Cell * c = getCell(world -> graph_map, coord[i][0], coord[i][1]) -> data;
+        Cell * c = getMapCell(world -> map, coord[i][0], coord[i][1]) -> data;
         if(c -> territory != CELL_TYPE_WATER)
         {
             found = 1;
             break;
         }
     }
-    if(found == 0 || ((Cell *) getCell(world -> graph_map, r, c) -> data) -> territory == CELL_TYPE_WATER)
+    if(found == 0 || ((Cell *) getMapCell(world -> map, r, c) -> data) -> territory == CELL_TYPE_WATER)
     {
         return 0;
     }
@@ -36,7 +36,7 @@ City * createCity(World * world, char * name, int r, int c, Player * player)
     IntArray * array = player -> resources;
     for(int i = 0; i < 9; i++)
     {
-        Cell * c = getCell(world -> graph_map, coord[i][0], coord[i][1]) -> data;
+        Cell * c = getMapCell(world -> map, coord[i][0], coord[i][1]) -> data;
         unsigned char res = c -> resources;
         if(res != CELL_RES_NONE)
         {
@@ -61,7 +61,7 @@ City * createCity(World * world, char * name, int r, int c, Player * player)
     // Cell info.
     city -> r = r;
     city -> c = c;
-    addEdge(getCell(world -> graph_map, r, c), node, EDGE_CELL_CITY);
+    addEdge(getMapCell(world -> map, r, c), node, EDGE_CELL_CITY);
 
     return city;
 }
@@ -91,7 +91,7 @@ void developCity(World * world, void * data)
     if(city -> hiring -> id != -1 && player -> gold >= city -> hiring -> delta)
     {
         // There is other units?
-        Node * n = getCell(world -> graph_map, city -> r, city -> c);
+        Node * n = getMapCell(world -> map, city -> r, city -> c);
         n = getNeighbour(n, EDGE_CELL_UNIT);
         // Getting unit info.
         UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, city -> hiring -> id);
@@ -114,4 +114,14 @@ void developCity(World * world, void * data)
             }
         }
     }
+}
+
+void destroyCityNodeData(unsigned char type, void * data)
+{
+    City * city = (City *) data;
+
+    free(city -> name);
+    free(city -> hiring);
+
+    free(data);
 }

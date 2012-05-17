@@ -10,8 +10,8 @@
 #include <curses.h>
 
 #include "../../modules/graph/graph.h"
-#include "../../modules/cell/cell.h"
 #include "../../modules/list/list.h"
+#include "../../modules/map/map.h"
 #include "../world/world.h"
 #include "view_chooser.h"
 #include "view_textbox.h"

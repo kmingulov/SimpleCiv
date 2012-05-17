@@ -4,7 +4,7 @@
 #include <assert.h>
 
 #include "../../modules/parser/xml.h"
-#include "../../modules/cell/cell.h"
+#include "../../modules/map/map.h"
 #include "../../modules/landscape/landscape.h"
 #include "../../modules/player/player.h"
 #include "../../modules/city/city.h"
@@ -81,11 +81,11 @@ World * createWorld()
 
     // Creating map.
     printf("Creating map %dx%d… ", world -> properties -> map_r, world -> properties -> map_c);
-    world -> graph_map = createMap(world -> properties -> map_r, world -> properties -> map_c);
+    world -> map = createMap(world -> properties -> map_r, world -> properties -> map_c);
     printf("Done\n");
 
     printf("Creating landscape… ");
-    generateMap(world -> graph_map, world -> properties -> map_r, world -> properties -> map_c);
+    generateMap(world -> map);
     printf("Done\n");
 
     // Creating players list.
@@ -109,7 +109,7 @@ World * createWorld()
             city = createCity(world, city_name, rand() % world -> properties -> map_r, rand() % world -> properties -> map_c, player);
         }
         createUnit(world, city -> r, city -> c, 14, player);
-        player -> graph_map = world -> graph_map;
+        player -> graph_map = world -> map -> head;
         temp = addNode(temp, EDGE_NEXT_PLAYER, NODE_PLAYER, player);
         // Remembering head.
         if(world -> graph_players == NULL)
@@ -128,7 +128,7 @@ World * createWorld()
     {
         r = rand() % world -> properties -> map_r;
         c = rand() % world -> properties -> map_c;
-        Cell * cell = (Cell *) getCell(world -> graph_map, r, c) -> data;
+        Cell * cell = (Cell *) getMapCell(world -> map, r, c) -> data;
         if(cell -> territory != CELL_TYPE_WATER)
         {
             // Creating caravans.
@@ -172,7 +172,7 @@ void destroyWorld(World * world)
     DynArray * deleted = daCreate();
 
     // Destroy map.
-    destroyMap(world -> graph_map, world -> properties -> map_r, world -> properties -> map_c);
+    destroyMap(world -> map);
 
     // Destroy properties.
     daDestroy(world -> properties -> player_names, NULL);

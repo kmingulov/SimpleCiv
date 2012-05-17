@@ -75,7 +75,12 @@ Node * createGraph(unsigned char node_type, void * data)
 void destroyNode(Node * target, void (* deleteFunc)(unsigned char type, void * data))
 {
     daDestroy(target -> edges, &free);
-    deleteFunc(target -> type, target -> data);
+
+    if(deleteFunc != NULL)
+    {
+        deleteFunc(target -> type, target -> data);
+    }
+
     free(target);
 }
 

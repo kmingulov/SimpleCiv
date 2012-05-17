@@ -34,4 +34,8 @@ City * createCity(World * world, char * name, int r, int c, Player * player);
 */
 void developCity(World * world, void * data);
 
+/*
+*/
+void destroyCityNodeData(unsigned char type, void * data);
+
 #endif

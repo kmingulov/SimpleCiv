@@ -1,10 +1,8 @@
 #include <stdlib.h>
 #include <math.h>
-#include <assert.h>
 
 #include "../../game/world/definitions.h"
 #include "../graph/graph.h"
-#include "../cell/cell.h"
 #include "unit_common_info.h"
 #include "unit.h"
 #include "../player/player.h"
@@ -14,7 +12,7 @@
 Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char unit_id, Player * player)
 {
     // Cell (r,c) already have a unit.
-    if(getNeighbour( getCell(world -> graph_map, r, c), EDGE_CELL_UNIT ) != NULL)
+    if(getNeighbour( getMapCell(world -> map, r, c), EDGE_CELL_UNIT ) != NULL)
     {
         return NULL;
     }
@@ -36,9 +34,14 @@ Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char u
     // Adding coordinates.
     unit -> r = r;
     unit -> c = c;
-    addEdge(getCell(world -> graph_map, r, c), node, EDGE_CELL_UNIT);
+    addEdge(getMapCell(world -> map, r, c), node, EDGE_CELL_UNIT);
 
     return unit;
+}
+
+void destroyUnitNodeData(unsigned char type, void * data)
+{
+    free(data);
 }
 
 void destroyUnit(World * world, Unit * unit)
@@ -48,7 +51,7 @@ void destroyUnit(World * world, Unit * unit)
 
     // Removing unit from map.
     int r = unit -> r; int c = unit -> c;
-    Node * n = getCell(world -> graph_map, r, c);
+    Node * n = getMapCell(world -> map, r, c);
     Edge * edge;
     for(int i = 0; i < n -> edges -> length; i++)
     {
@@ -59,7 +62,7 @@ void destroyUnit(World * world, Unit * unit)
         }
     }
     // Removing node with unit.
-    destroyNode(edge -> target);
+    destroyNode(edge -> target, &destroyUnitNodeData);
     // Removing pointer to him from map.
     daRemoveByPointer(n -> edges, edge, &free);
 

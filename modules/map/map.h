@@ -65,7 +65,7 @@ void mergeRows(Node * n1, Node * n2);
 /*
     Creates map with max_r rows and max_c columns.
 */
-Map * createMap(int max_r, int max_c);
+Map * createMap(unsigned int max_r, unsigned int max_c);
 
 /*
     Destroys map. This functions doesn't use destroyGraph() function.
@@ -78,6 +78,11 @@ void destroyMap(Map * map);
 /*
     Gets cell in row r, column c (assumed that map -> head is (0,0) point).
 */
-Node * getCell(Map * map, int r, int c);
+Node * getMapCell(Map * map, int r, int c);
+
+/*
+    Gets cell in row r, column c away from cell.
+*/
+Node * getCell(Node * node, int r, int c);
 
 #endif
