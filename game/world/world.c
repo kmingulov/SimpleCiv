@@ -183,7 +183,7 @@ void destroyWorld(World * world)
     daDestroy(world -> units_info, &destroyUnitCommonInfo);
 
     // Destroy array of pointers to tech_in_tree.
-    daDestroy(world -> techs_info, &destroyTechnologyCommonInfo);
+    daDestroy(world -> techs_info, &destroyTechnology);
 
     // Destroy world.
     destroyGraph(world -> graph_players, deleted, &destroyGraphNode);
