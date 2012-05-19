@@ -1,6 +1,9 @@
 #ifndef VIEW_DEFINITIONS
 #define VIEW_DEFINITIONS
 
+/*
+    True false definitions.
+*/
 #ifndef true
     #define true 1
 #endif
@@ -12,7 +15,7 @@
 /*
     Key definitions.
 */
-#ifdef win32
+#ifdef WIN32
     #define KEY_ENTER_FIXED          (int) '\r'
 #else
     #define KEY_ENTER_FIXED          (int) '\n'

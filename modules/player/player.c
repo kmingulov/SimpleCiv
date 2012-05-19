@@ -30,8 +30,16 @@ Player * createPlayer(char * name, IntArray * available_units, IntArray * availa
 
     player -> name = name;
     player -> colour = 0;
-    player -> gold = 0;
     player -> is_computer = 0;
+
+    if(TEST_MODE)
+    {
+        player -> gold = 9000;
+    }
+    else
+    {
+        player -> gold = 0;
+    }
 
     player -> available_units = available_units;
     player -> available_techs = available_techs;

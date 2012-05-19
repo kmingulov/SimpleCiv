@@ -202,11 +202,25 @@ void elementContent(void * data, const char * s, int len)
             break;
 
             case XML_UNIT_MOVES:
-                ((UnitCommonInfo *) daGetLast(p_data -> data)) -> max_moves = atoi(temp);
+                if(TEST_MODE)
+                {
+                    ((UnitCommonInfo *) daGetLast(p_data -> data)) -> max_moves = 9000;
+                }
+                else
+                {
+                    ((UnitCommonInfo *) daGetLast(p_data -> data)) -> max_moves = atoi(temp);
+                }
             break;
 
             case XML_UNIT_HIRING_TURNS:
-                ((UnitCommonInfo *) daGetLast(p_data -> data)) -> hiring_turns = atoi(temp);
+                if(TEST_MODE)
+                {
+                    ((UnitCommonInfo *) daGetLast(p_data -> data)) -> hiring_turns = 1;
+                }
+                else
+                {
+                    ((UnitCommonInfo *) daGetLast(p_data -> data)) -> hiring_turns = atoi(temp);
+                }
             break;
 
             case XML_UNIT_GOLD_DROP:
@@ -235,7 +249,14 @@ void elementContent(void * data, const char * s, int len)
             break;
 
             case XML_TECH_TURNS:
-                ((Technology *) ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> tech_in_tree -> data) -> turns = atoi(temp);
+                if(TEST_MODE)
+                {
+                    ((Technology *) ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> tech_in_tree -> data) -> turns = 1;
+                }
+                else
+                {
+                    ((Technology *) ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> tech_in_tree -> data) -> turns = atoi(temp);
+                }
             break;
 
             case XML_TECH_PROVIDES_UNITS:

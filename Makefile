@@ -28,12 +28,19 @@ OBJ_MAIN = world.o view.o control.o message.o main.o
 # all objects
 OBJ = $(OBJ_COMMON) $(OBJ_GRAPH) $(OBJ_UNIT) $(OBJ_CITY) $(OBJ_TECH) $(OBJ_PLAYER) $(OBJ_PARSE) $(OBJ_NCURSES) $(OBJ_MAIN)
 
+# test mode
+ifeq ($(t), 1)
+	TEST_MODE = -DTEST_MODE=1
+else
+	TEST_MODE = -DTEST_MODE=0
+endif
+
 # compilation target
 ifeq ($(win32), 1)
 	CC = i686-w64-mingw32-gcc
 	LFLIB = -lexpat -lpdcurses -lm
 	BIN = simpleciv.exe
-	TARGET = -Dwin32
+	TARGET = -DWIN32
 else
 	CC = gcc
 	LFLIB = -lexpat -lncurses -lm
@@ -48,7 +55,7 @@ DEBUG = -g
 FLAGS = -std=c99 -Wall -pedantic
 
 # flags for compilation object files
-CFLAGS = $(FLAGS) -c $(DEBUG) $(TARGET)
+CFLAGS = $(FLAGS) -c $(DEBUG) $(TARGET) $(TEST_MODE)
 
 # flags for linking
 LFLAGS = $(FLAGS) $(DEBUG)

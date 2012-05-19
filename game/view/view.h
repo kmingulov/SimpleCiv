@@ -6,7 +6,6 @@
 */
 #ifndef MODULE_VIEW
 #define MODULE_VIEW
-
 #include <curses.h>
 
 #include "../../modules/graph/graph.h"
