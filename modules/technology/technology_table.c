@@ -105,7 +105,7 @@ int checkForResources(Technology * tech, Player * player)
     if(tech -> requires_resources == NULL)
     {
         // Nothing requires. Great.
-        return 1;
+        return 0;
     }
 
     // Checking for each resource.
@@ -126,8 +126,8 @@ int checkForResources(Technology * tech, Player * player)
     // You're lucky man.
     if(okay == 1)
     {
-        return 1;
+        return 0;
     }
 
-    return 0;
+    return 1;
 }

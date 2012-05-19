@@ -42,7 +42,7 @@ void updateTechnologyTable(IntArray * tech_table, Node * tech);
     Checkes available with technology or no.
     Looks for player's resources (function updateTechnologyStatus() doesn't do
     this).
-    Returns 1 if available, 0 if no.
+    Returns 0 if available, 1 if no.
 */
 int checkForResources(Technology * tech, Player * player);
 

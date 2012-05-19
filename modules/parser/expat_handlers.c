@@ -1,3 +1,24 @@
+/*
+
+    SimpleCiv is simple clone of Civilization game, using ncurses library.
+    Copyright (C) 2012 by K. Mingulov, A. Sapronov.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*/
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -39,13 +60,13 @@ const int xml_parents[] = {XML_NONE, XML_MAP, XML_MAP, XML_NONE, XML_PLAYERS,
     Auxiliary arrays for resources convertation from their names to their
     defined (in game/world/definitions.h) constants.
 */
-const char xml_res_names[][16] = {"bronze", "iron", "coal", "gunpowder", "horses",
-    "mushrooms"};
+const char xml_res_names[][16] = {"bronze", "iron", "coal", "gunpowder",
+    "horses", "mushrooms"};
 
 const int xml_res_values[] = {CELL_RES_BRONZE, CELL_RES_IRON, CELL_RES_COAL,
     CELL_RES_GUNPOWDER, CELL_RES_HORSES, CELL_RES_MUSHROOMS};
 
-int resourcesConvertation(char * str)
+int resourcesConvertation(const char * str)
 {
     for(int i = 0; i < CELL_RES_COUNT; i++)
     {
@@ -59,7 +80,7 @@ int resourcesConvertation(char * str)
 }
 
 /*
-    Auxiliary arrays for priviligies convertations from their names to their
+    Auxiliary arrays for privileges convertations from their names to their
     definied (in game/world/definitions.h) constants.
 */
 const char xml_prvl_names[][16] = {"build_city", "build_mine", "can_float",
@@ -68,7 +89,7 @@ const char xml_prvl_names[][16] = {"build_city", "build_mine", "can_float",
 const int xml_prvl_values[] = {UNIT_PRVL_BUILD_CITY, UNIT_PRVL_BUILD_MINE,
     UNIT_PRVL_CAN_FLOAT, UNIT_PRVL_CHOP_TREES};
 
-int priviligiesConvertation(char * str)
+int privilegesConvertation(const char * str)
 {
     for(int i = 0; i < UNIT_PRVL_COUNT; i++)
     {
@@ -124,7 +145,7 @@ void elementContent(void * data, const char * s, int len)
     // Remove spaces.
     strTrimSpaces(temp);
 
-    // If it is non-null string, check for parser state.
+    // If it is non-zero length string, check for parser state.
     if(strlen(temp) != 0)
     {
         // Parser data.
@@ -146,11 +167,11 @@ void elementContent(void * data, const char * s, int len)
             break;
 
             case XML_PLAYERS_NAMES:
-                ((WorldProperties *) p_data -> data) -> player_names = strSplit(',', temp, 16);
+                ((WorldProperties *) p_data -> data) -> player_names = strSplit(',', temp);
             break;
 
             case XML_PLAYERS_CITIES:
-                ((WorldProperties *) p_data -> data) -> player_cities = strSplit(',', temp, 16);
+                ((WorldProperties *) p_data -> data) -> player_cities = strSplit(',', temp);
             break;
 
             case XML_UNIT_ID:
@@ -158,6 +179,7 @@ void elementContent(void * data, const char * s, int len)
                 // It won't matter, if all ids of units in units.xml file go
                 // in ascending from 0 to (some number) without any missing
                 // numbers between.
+                // TODO Fix this. Somewhen.
                 temp_data = createUnitCommonInfo();
                 daPrepend(p_data -> data, temp_data);
             break;
@@ -180,14 +202,7 @@ void elementContent(void * data, const char * s, int len)
             break;
 
             case XML_UNIT_MOVES:
-                if(ADMIN_MODE)
-                {
-                    ((UnitCommonInfo *) daGetLast(p_data -> data)) -> max_moves = 1000;
-                }
-                else
-                {
-                    ((UnitCommonInfo *) daGetLast(p_data -> data)) -> max_moves = atoi(temp);
-                }
+                ((UnitCommonInfo *) daGetLast(p_data -> data)) -> max_moves = atoi(temp);
             break;
 
             case XML_UNIT_HIRING_TURNS:
@@ -199,7 +214,7 @@ void elementContent(void * data, const char * s, int len)
             break;
 
             case XML_UNIT_PRIVILEGES:
-                ((UnitCommonInfo *) daGetLast(p_data -> data)) -> privileges = strSplitAndConvert(',', temp, &priviligiesConvertation);
+                ((UnitCommonInfo *) daGetLast(p_data -> data)) -> privileges = strSplitAndConvert(',', temp, &privilegesConvertation);
             break;
 
             case XML_UNIT_RESOURCES:
@@ -208,6 +223,7 @@ void elementContent(void * data, const char * s, int len)
 
             case XML_TECH_ID:
                 // Same note as for XML_UNIT_ID.
+                // TODO Fix this. Somewhen.
                 temp_data = createTechnologyParseInfo();
                 daPrepend(p_data -> data, temp_data);
                 ((Technology *) ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> tech_in_tree -> data) -> id = ((DynArray *) p_data -> data) -> length - 1;

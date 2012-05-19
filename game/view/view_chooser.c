@@ -2,6 +2,7 @@
 
 #include "../../modules/player/player.h"
 #include "../../modules/technology/technology.h"
+#include "../../modules/technology/technology_table.h"
 #include "../../modules/unit/unit_common_info.h"
 #include "../world/definitions.h"
 #include "view_chooser.h"
@@ -22,39 +23,14 @@ ViewChooser * createTechChooser(World * world)
         int value = iaGetByIndex(player -> available_techs, i);
         if(value == TECH_AVAILABLE)
         {
-            Technology * t = (Technology *) ((Node *) daGetByIndex(world -> techs_info, i)) -> data;
-            // Checking for resources.
-            if(t -> requires_resources == NULL)
+            Technology * tech = (Technology *) ((Node *) daGetByIndex(world -> techs_info, i)) -> data;
+            // Adding to array, if player have enough resources.
+            if(checkForResources(tech, player) == 0)
             {
-                // Nothing requires. Great.
-                count++;
-                iaPrepend(chooser -> ids, t -> id);
-            }
-            else
-            {
-                // Checking for each resource.
-                char okay = 1;
-                for(int j = 0; j < t -> requires_resources -> length; j++)
-                {
-                    // Getting resource id.
-                    int id = iaGetByIndex(t -> requires_resources, j);
-                    // Does player have this resources?
-                    if(iaGetByIndex(player -> resources, id) == 0)
-                    {
-                        // Sad but true.
-                        okay = 0;
-                        break;
-                    }
-                }
-                // You're lucky man.
-                if(okay == 1)
-                {
-                    count++;
-                    iaPrepend(chooser -> ids, t -> id);
-                }
+                iaPrepend(chooser -> ids, tech -> id);
             }
             // It is current research?
-            if(t -> id == player -> research -> id)
+            if(tech -> id == player -> research -> id)
             {
                 chooser -> current = count - 1;
             }
