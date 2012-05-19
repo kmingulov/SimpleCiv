@@ -32,7 +32,7 @@ FogOfWar * createFog(int r, int c)
     {
         // iaLengthCreate() creates array with length c and this array is
         // already null'd (each element == 0). So there is no need in it's
-        // initialization.        
+        // initialization.
         daPrepend(fog -> rows, iaLengthCreate(c));
     }
     return fog;
@@ -52,6 +52,15 @@ void destroyFog(FogOfWar * fog)
 void updateFogCell(FogOfWar * fog, int r, int c)
 {
     iaSetByIndex(daGetByIndex(fog -> rows, r), c, 1);
+}
+
+void updateFogArea(FogOfWar * fog, int center_r, int center_c)
+{
+    iaSetByIndex(daGetByIndex(fog -> rows, center_r  ), center_c,   1);
+    iaSetByIndex(daGetByIndex(fog -> rows, center_r  ), center_c+1, 1);
+    iaSetByIndex(daGetByIndex(fog -> rows, center_r  ), center_c-1, 1);
+    iaSetByIndex(daGetByIndex(fog -> rows, center_r-1), center_c,   1);
+    iaSetByIndex(daGetByIndex(fog -> rows, center_r+1), center_c,   1);
 }
 
 int isKnownCell(FogOfWar * fog, int r, int c)
