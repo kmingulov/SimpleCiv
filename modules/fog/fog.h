@@ -13,7 +13,7 @@ typedef struct FogOfWar
 /*
     Creates fog of war.
 */
-FogOfWar * fogCreate();
+FogOfWar * fogCreate(int r, int c);
 
 
 /*

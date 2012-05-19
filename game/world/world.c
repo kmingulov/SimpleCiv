@@ -13,6 +13,8 @@
 #include "../../modules/unit/unit_common_info.h"
 #include "../../modules/technology/technology_parse_info.h"
 #include "../../modules/technology/technology_table.h"
+#include "../../modules/fog/fog.h"
+
 #include "world.h"
 
 World * createWorld()
@@ -110,6 +112,7 @@ World * createWorld()
         }
         createUnit(world, city -> r, city -> c, 14, player);
         player -> graph_map = world -> map -> head;
+        player -> fog = fogCreate(world -> properties -> map_r,world -> properties -> map_c);
         temp = addNode(temp, EDGE_NEXT_PLAYER, NODE_PLAYER, player);
         // Remembering head.
         if(world -> graph_players == NULL)

@@ -26,6 +26,7 @@
 #include "../technology/technology_research.h"
 #include "../graph/graph.h"
 #include "../int_array/int_array.h"
+#include "../fog/fog.h"
 
 typedef struct Player
 {
@@ -60,6 +61,8 @@ typedef struct Player
 
     // Array of player's resources.
     IntArray * resources;
+
+    FogOfWar * fog;
 } Player;
 
 /*

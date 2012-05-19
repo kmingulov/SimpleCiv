@@ -9,13 +9,11 @@
 FogOfWar * fogCreate(int r, int c)
 {
     FogOfWar * fog = malloc(sizeof(FogOfWar));
-
-    DynArray * da = daCreate();
+    fog -> rows = daCreate();
     for(int i = 0; i < r; i++)
     {
-        daPrepend(da, iaLengthCreate(c));
+        daPrepend(fog -> rows, iaLengthCreate(c));
     }
-    fog -> rows = da;
     return fog;
 }
 
