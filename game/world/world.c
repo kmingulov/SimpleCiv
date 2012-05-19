@@ -102,6 +102,8 @@ World * createWorld()
         Player * player = createPlayer(name, iaCopy(unit_table), iaCopy(tech_table));
         // Adding player colour.
         player -> colour = i % PLAYER_COLOURS_COUNT;
+        // Add player's fog.
+        player -> fog = createFog(world -> map -> max_r, world -> map -> max_c);
         // Creating default city.
         // createCity() function returns NULL, if nothing created. Trying create
         // city!
@@ -112,7 +114,6 @@ World * createWorld()
         }
         createUnit(world, city -> r, city -> c, 14, player);
         player -> graph_map = world -> map -> head;
-        player -> fog = fogCreate(world -> properties -> map_r,world -> properties -> map_c);
         temp = addNode(temp, EDGE_NEXT_PLAYER, NODE_PLAYER, player);
         // Remembering head.
         if(world -> graph_players == NULL)

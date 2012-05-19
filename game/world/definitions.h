@@ -23,11 +23,6 @@
 #define WORLD_DEFINITIONS_H
 
 /*
-    ADMIN MODE.
-*/
-#define ADMIN_MODE                  1
-
-/*
     BALANCE DEFINES.
 */
 // Unit's resource cost.

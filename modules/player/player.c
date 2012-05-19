@@ -22,6 +22,7 @@
 #include <stdlib.h>
 
 #include "../../game/world/definitions.h"
+#include "../fog/fog.h"
 #include "player.h"
 
 Player * createPlayer(char * name, IntArray * available_units, IntArray * available_techs)
@@ -55,6 +56,7 @@ Player * createPlayer(char * name, IntArray * available_units, IntArray * availa
 
     player -> graph_map = NULL;
     player -> current_cell = NULL;
+    player -> fog = NULL;
 
     player -> map_r = -1;
     player -> map_c = -1;
@@ -81,6 +83,11 @@ void destroyPlayer(Player * player)
     }
 
     destroyResearch(player -> research);
+
+    if(player -> fog != NULL)
+    {
+        destroyFog(player -> fog);
+    }
 
     iaDestroy(player -> resources);
 
