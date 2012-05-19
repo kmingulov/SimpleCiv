@@ -6,34 +6,39 @@
 #include "../int_array/int_array.h"
 
 
-FogOfWar * fogCreate()
+FogOfWar * fogCreate(int r, int c)
 {
     FogOfWar * fog = malloc(sizeof(FogOfWar));
 
+    DynArray * da = daCreate();
+    for(int i = 0; i < r; i++)
+    {
+        daPrepend(da, iaLengthCreate(c));
+    }
+    fog -> rows = da;
     return fog;
 }
 
 
 void DestroyFog(FogOfWar * fog)
 {
-    iaDestroy(fog -> r);
-    iaDestroy(fog -> c);
+    for (int i = 0; i < fog -> rows -> length; i++)
+    {
+        iaDestroy(daGetByIndex(fog -> rows, i));
+    }
+    daDestroy(fog -> rows,&free);
     free(fog);
 }
 
 
 void updateFog(FogOfWar * fog, int r, int c)
 {
-    iaSetByIndex(fog -> r, r, 1);
-    iaSetByIndex(fog -> c, c, 1);
+    iaSetByIndex(daGetByIndex(fog -> rows, r), c, 1);
 }
 
 int IsKnownFog(FogOfWar * fog, int r, int c)
 {
-    if(
-        iaGetByIndex(fog -> r, r) != 0  &&
-        iaGetByIndex(fog -> c, c) != 0
-    )
+    if(iaGetByIndex(daGetByIndex(fog -> rows, r),c))
     {
         return 1;
     }

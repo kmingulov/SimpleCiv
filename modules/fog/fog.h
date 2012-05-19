@@ -2,12 +2,11 @@
 #define __VIEW_FOG_H
 
 #include "../int_array/int_array.h"
+#include "../dyn_array/dyn_array.h"
 
 typedef struct FogOfWar
 {
-    IntArray * r;
-    IntArray * c;
-
+    DynArray * rows;
 } FogOfWar;
 
 
