@@ -48,19 +48,14 @@ FogOfWar * createFog(int r, int c);
 void destroyFog(FogOfWar * fog);
 
 /*
-    Updates _one_ cell.
+    Reveals _one_ cell.
 */
-void updateFogCell(FogOfWar * fog, int r, int c);
+void revealFogCell(FogOfWar * fog, int r, int c);
 
 /*
-    Updates area around cell (center_r, center_c).
+    Reveals area around cell (center_r, center_c) with radius rad.
 */
-void updateFogArea(FogOfWar * fog, int center_r, int center_c);
-
-/*
-    Updates area around cell (center_r, center_c).
-*/
-void updateFogRadius(FogOfWar * fog, int center_r, int center_c, int rad);
+void revealFogRadius(FogOfWar * fog, int center_r, int center_c, int rad);
 
 /*
     Do player know this cell or not?

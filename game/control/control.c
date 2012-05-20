@@ -425,6 +425,12 @@ List * controlProcess(World * world, View * view, Control * control, int key)
     {
         if(control -> state == CONTROL_MOVE_CURSOR || control -> state == CONTROL_MOVE_UNIT)
         {
+            // There is a fog, cannot show any info.
+            Player * player = (Player *) world -> graph_players -> data;
+            if(!isKnownCell(player -> fog, view -> map_r, view -> map_c))
+            {
+                return NULL;
+            }
             Node * n = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
             // There is no unit, cannot show any info.
             if(n == NULL)

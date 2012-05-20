@@ -323,7 +323,7 @@ int moveUnit(World * world, Node * current_cell, int direction)
     daRemoveByPointer(current_cell -> edges, edge, NULL);
     daPrepend(destination -> edges, edge);
 
-    updateFogRadius(unit -> owner -> fog, unit -> r, unit -> c, BALANCE_UNIT_VIEW_RADIUS);
+    revealFogRadius(unit -> owner -> fog, unit -> r, unit -> c, BALANCE_UNIT_VIEW_RADIUS);
 
     return 0;
 }

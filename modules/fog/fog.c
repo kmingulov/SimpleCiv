@@ -68,7 +68,7 @@ static int normalize(int x, int b)
     return x;
 }
 
-void updateFogCell(FogOfWar * fog, int r, int c)
+void revealFogCell(FogOfWar * fog, int r, int c)
 {
     // Check for bounds.
     r = normalize(r, fog -> max_r);
@@ -78,28 +78,21 @@ void updateFogCell(FogOfWar * fog, int r, int c)
     iaSetByIndex(daGetByIndex(fog -> rows, r), c, 1);
 }
 
-
-
-void updateFogRadius(FogOfWar * fog, int center_r, int center_c, int rad)
+void revealFogRadius(FogOfWar * fog, int center_r, int center_c, int rad)
 {
     for (int r = center_r - rad; r <= center_r + rad; r++)
     {
         for (int c = center_c - rad; c <= center_c + rad; c++)
         {
-            if (round( sqrt (abs(center_r - r)*abs(center_r - r)+abs(center_c - c)*abs(center_c - c))) <= rad  )
+            int dr = abs(center_r - r);
+            int dc = abs(center_c - c);
+            if(round( sqrt (dr * dr + dc * dc) ) <= rad)
             {
-                updateFogCell(fog, normalize(r, fog -> max_r),normalize(c, fog -> max_c) );
+                revealFogCell(fog, normalize(r, fog -> max_r),normalize(c, fog -> max_c) );
             }
         }
     }
 }
-
-
-void updateFogArea(FogOfWar * fog, int center_r, int center_c)
-{
-    updateFogRadius(fog, center_r,center_c, 2);
-}
-
 
 int isKnownCell(FogOfWar * fog, int r, int c)
 {

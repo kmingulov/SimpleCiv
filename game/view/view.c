@@ -450,19 +450,16 @@ void drawPlayerInfo(World * world, View * view)
 
 void drawCellInfo(World * world, View * view)
 {
-
-    // Calc deltas (for fog).
-
     int s = view -> sidebar;
     int r = view -> rows;
     int len = view -> columns - view -> sidebar - 2;
 
     Player * player = (Player *) world -> graph_players -> data;
 
+    clearBlock(SIDEBAR_CELL_BLOCK + 1, s + 1, 11, len);
+
     if(isKnownCell(player -> fog, view -> map_r, view -> map_c))
     {
-        clearBlock(SIDEBAR_CELL_BLOCK + 1, s + 1, 11, len);
-
         // Cell.
         Cell * c = (Cell *) view -> current_cell -> data;
         attron(A_BOLD);
@@ -526,12 +523,10 @@ void drawCellInfo(World * world, View * view)
             mvprintw(SIDEBAR_CELL_BLOCK + 11, s + 2, "Moves");
             putInRight(SIDEBAR_CELL_BLOCK + 11, s + 2, len - 2, "%d/%d", u -> moves, u_info -> max_moves);
         }
-
     }
     else
     {
         attron(A_BOLD);
-        clearBlock(SIDEBAR_CELL_BLOCK +1 , s + 1, 12, 30);
         mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Fog of war");
         attroff(A_BOLD);
     }
