@@ -570,6 +570,7 @@ void drawMap(World * world, View * view)
     int start_column = 1, end_column = view -> sidebar - 1;
 
     Node * current = ((Player *) world -> graph_players -> data) -> graph_map;
+    Player * player = (Player *) world -> graph_players -> data;
     Node * line = current;
 
     for(int i = start_row; i <= end_row; i++)
@@ -577,7 +578,15 @@ void drawMap(World * world, View * view)
         for(int j = start_column; j <= end_column; j++)
         {
             move(i, j);
-            drawNode(world, current);
+            if(isKnownCell(player -> fog,i,j))
+            {
+                drawNode(world, current);
+            }
+            else
+            {
+                addch(' ');
+            }
+
             current = getNeighbour(current, EDGE_CELL_RIGHT);
         }
         line = getNeighbour(line, EDGE_CELL_BOTTOM);
