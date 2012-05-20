@@ -29,9 +29,6 @@ typedef struct Node
     // Type of this node.
     unsigned char type;
 
-    // Color of this node. Used for graph traversal. 0 is white, 1 is black.
-    unsigned char color;
-
     // Data of this node.
     void * data;
 
@@ -76,15 +73,6 @@ Node * createGraph(unsigned char node_type, void * data);
     delete edges to this node! Use carefully!
 */
 void destroyNode(Node * target, void (* deleteFunc)(unsigned char type, void * data));
-
-/*
-    Destroys graph. deleteFunc is deletion function for data. unsigned char type
-    is required for user, who need to know, what type of data he received.
-    DynArray deleted is array of pointers to already deleted nodes.
-    All module structs (DynArray in struct Node and target in struct Edge) will
-    be destroyed by free() function.
-*/
-void destroyGraph(Node * head, DynArray * deleted, void (* deleteFunc)(unsigned char type, void * data));
 
 /*
     Runs function for each neighbour of Node parent.

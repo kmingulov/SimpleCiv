@@ -25,7 +25,6 @@
 #include <stdio.h>
 
 #include "../../modules/dyn_array/dyn_array.h"
-#include "../../modules/player/player.h"
 #include "../../modules/graph/graph.h"
 #include "../../modules/list/list.h"
 #include "../../modules/map/map.h"
@@ -45,9 +44,6 @@ typedef struct World
 
     // Game graph.
     List * players;
-
-    // Computer player.
-    Player * computer;
 
     // Technology tree. Type of each node is struct Technology.
     Node * tech_tree;

@@ -22,6 +22,8 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "../../game/world/world.h"
+
 #include "../list/list.h"
 #include "../technology/technology_research.h"
 #include "../graph/graph.h"
@@ -70,7 +72,12 @@ typedef struct Player
 /*
     Creates new player.
 */
-Player * createPlayer(char * name, IntArray * available_units, IntArray * available_techs);
+Player * createPlayer(World * world, int id, IntArray * available_units, IntArray * available_techs);
+
+/*
+    Create computer player.
+*/
+Player * createComputerPlayer(World * world);
 
 /*
     Destroys player.

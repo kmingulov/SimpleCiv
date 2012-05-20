@@ -74,49 +74,13 @@ World * createWorld(FILE * log)
     for(int i = 0; i < world -> properties -> players_count; i++)
     {
         // Create new player.
-        char * name = (char *) daGetByIndex(world -> properties -> player_names, i);
-        char * city_name = (char *) daGetByIndex(world -> properties -> player_cities, i);
-        Player * player = createPlayer(name, iaCopy(unit_table), iaCopy(tech_table));
-        // Add player's colour.
-        player -> colour = i % PLAYER_COLOURS_COUNT;
-        // Add player's fog.
-        player -> fog = createFog(world -> map -> max_r, world -> map -> max_c);
-        // Create default city. createCity() function returns NULL, if nothing
-        // created. Trying create city!
-        City * city = NULL;
-        while(city == NULL)
-        {
-            city = createCity(world, city_name, rand() % world -> properties -> map_r, rand() % world -> properties -> map_c, player);
-        }
-        // Create start unit (lumberjack).
-        createUnit(world, city -> r, city -> c, 14, player);
-        // Set his map head.
-        player -> graph_map = world -> map -> head;
-        // Add him to list.
+        Player * player = createPlayer(world, i, iaCopy(unit_table), iaCopy(tech_table));
         listPrepend(world -> players, player);
     }
 
     // Add computer player.
-    char * name = malloc(sizeof(char) * 8);
-    Player * player = createPlayer(strcpy(name, "Neutral"), NULL, NULL);
-    player -> is_computer = 1;
-    player -> colour = 5;
-    // Generating units.
-    int r, c, counter = 0;
-    while(counter < 2 * world -> properties -> players_count)
-    {
-        r = rand() % world -> properties -> map_r;
-        c = rand() % world -> properties -> map_c;
-        Cell * cell = (Cell *) getMapCell(world -> map, r, c) -> data;
-        if(cell -> territory != CELL_TYPE_WATER)
-        {
-            // Creating caravans.
-            createUnit(world, r, c, 13, player);
-            counter++;
-        }
-    }
+    Player * player = createComputerPlayer(world);
     listPrepend(world -> players, player);
-    world -> computer = player;
 
     // Destroy additional data.
     iaDestroy(unit_table);
