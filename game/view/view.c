@@ -634,6 +634,7 @@ int viewProcess(World * world, View * view, List * list)
                         drawMap(world, view);
                     }
                     drawCellInfo(world, view);
+                    updateFogArea(player -> fog, view -> cur_r, view -> cur_c);
                     move(view -> cur_r, view -> cur_c);
                 break;
 
@@ -650,6 +651,7 @@ int viewProcess(World * world, View * view, List * list)
                         drawMap(world, view);
                     }
                     drawCellInfo(world, view);
+                    updateFogArea(player -> fog, view -> cur_r, view -> cur_c);
                     move(view -> cur_r, view -> cur_c);
                 break;
 
@@ -666,6 +668,7 @@ int viewProcess(World * world, View * view, List * list)
                         drawMap(world, view);
                     }
                     drawCellInfo(world, view);
+                    updateFogArea(player -> fog, view -> cur_r, view -> cur_c);
                     move(view -> cur_r, view -> cur_c);
                 break;
 
@@ -683,6 +686,7 @@ int viewProcess(World * world, View * view, List * list)
                         drawMap(world, view);
                     }
                     drawCellInfo(world, view);
+                    updateFogArea(player -> fog, view -> cur_r, view -> cur_c);
                     move(view -> cur_r, view -> cur_c);
                 break;
 

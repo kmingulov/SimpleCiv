@@ -6,6 +6,7 @@
 #include "../../modules/unit/unit_common_info.h"
 #include "../../modules/technology/technology.h"
 #include "../../modules/technology/technology_table.h"
+
 #include "control.h"
 #include "definitions.h"
 
@@ -68,9 +69,9 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                 return NULL;
             }
 
-            int keys[][5] = {{KEY_UP,    EDGE_CELL_TOP,    VIEW_MOVE_CURSOR_TOP,    -1, 0},
-                             {KEY_DOWN,  EDGE_CELL_BOTTOM, VIEW_MOVE_CURSOR_BOTTOM, 1,  0},
-                             {KEY_RIGHT, EDGE_CELL_RIGHT,  VIEW_MOVE_CURSOR_RIGHT,  0,  1},
+            int keys[][5] = {{KEY_UP,    EDGE_CELL_TOP,    VIEW_MOVE_CURSOR_TOP,   -1,   0},
+                             {KEY_DOWN,  EDGE_CELL_BOTTOM, VIEW_MOVE_CURSOR_BOTTOM, 1,   0},
+                             {KEY_RIGHT, EDGE_CELL_RIGHT,  VIEW_MOVE_CURSOR_RIGHT,  0,   1},
                              {KEY_LEFT,  EDGE_CELL_LEFT,   VIEW_MOVE_CURSOR_LEFT,   0,  -1}};
             for(int i = 0; i < 4; i++)
             {
