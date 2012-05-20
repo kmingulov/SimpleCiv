@@ -51,6 +51,10 @@
 // Unit's delta health change on each turn.
 #define BALANCE_UNIT_HEALTH_DELTA   0.1f
 
+// City's and unit's view.
+#define BALANCE_CITY_VIEW_RADIUS    3
+#define BALANCE_UNIT_VIEW_RADIUS    1
+
 /*
     Definition for players colours.
 */
