@@ -58,6 +58,11 @@ void updateFogCell(FogOfWar * fog, int r, int c);
 void updateFogArea(FogOfWar * fog, int center_r, int center_c);
 
 /*
+    Updates area around cell (center_r, center_c, rad).
+*/
+void updateFogRadius(FogOfWar * fog, int center_r, int center_c, int rad);
+
+/*
     Do player know this cell or not?
 */
 int isKnownCell(FogOfWar * fog, int r, int c);
