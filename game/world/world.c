@@ -13,24 +13,25 @@
 #include "../../modules/unit/unit_common_info.h"
 #include "../../modules/technology/technology_parse_info.h"
 #include "../../modules/technology/technology_table.h"
+#include "../../modules/log/log.h"
 #include "../../modules/fog/fog.h"
 
+#include "world_errors.h"
 #include "world.h"
 
-World * createWorld()
+World * createWorld(FILE * log)
 {
     // Allocate memory for world.
     World * world = malloc(sizeof(World));
 
     // Parsing config.xml.
-    printf("Parsing config.xml… ");
+    addToLog(log, "Parsing\tconfig.xml");
     world -> properties = parseXML(XML_CONFIG);
-    if(world -> properties == NULL)
+    if(!noErrorsInWorldProperties(log, world -> properties))
     {
-        printf("Failed\n\033[1;31mError:\033[0m config.xml doesn't exist or corrupted.\n");
         return NULL;
     }
-    printf("Done\n");
+    addToLog(log, "Parsing\tdone");
 
     // Parsing units.xml.
     printf("Parsing resources/units.xml… ");

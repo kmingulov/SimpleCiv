@@ -23,6 +23,12 @@
 #define WORLD_DEFINITIONS_H
 
 /*
+    MINIMAL REQUIRMENTS.
+*/
+#define MIN_WORLD_SIZE_R            50
+#define MIN_WORLD_SIZE_C            50
+
+/*
     BALANCE DEFINES.
 */
 // Unit's resource cost.
@@ -56,12 +62,12 @@
 #define BALANCE_UNIT_VIEW_RADIUS    2
 
 /*
-    Definition for players colours.
+    DEFINES FOR PLAYERS' COLOURS.
 */
 #define PLAYER_COLOURS_COUNT        5
 
 /*
-    Defines for nodes' types.
+    DEFINES FOR NODES' TYPES.
 */
 
 // For map.
@@ -76,7 +82,7 @@
 #define NODE_TECHNOLOGY             4
 
 /*
-    Defines for edges' types.
+    DEFINES FOR EDGES' TYPES.
 */
 
 // For map.
@@ -96,20 +102,20 @@
 #define EDGE_TECH_REQUIRES          9
 
 /*
-    Defines for technologies' array.
+    DEFINES FOR TECHNOLOGIES' ARRAY.
 */
 #define TECH_NOT_AVAILABLE          0
 #define TECH_AVAILABLE              1
 #define TECH_RESEARCHED             2
 
 /*
-    Defines for units' array.
+    DEFINE FOR UNITS' ARRAY.
 */
 #define UNIT_NOT_AVAILABLE          0
 #define UNIT_AVAILABLE              1
 
 /*
-    Defines for cell's types.
+    DEFINES FOR CELL'S TYPES.
 */
 #define CELL_TYPE_WATER             1
 #define CELL_TYPE_GRASS             2
@@ -118,7 +124,7 @@
 #define CELL_TYPE_MOUNTAIN          5
 
 /*
-    Defines for resources.
+    DEFINES FOR CELL'S RESOURCES.
 */
 #define CELL_RES_COUNT              6
 #define CELL_RES_NONE               0
@@ -133,7 +139,7 @@
 #define CELL_MINE                   1
 
 /*
-    Units priviligies.
+    UNIT'S PRIVILEGES.
 */
 #define UNIT_PRVL_COUNT             4
 #define UNIT_PRVL_NONE              0

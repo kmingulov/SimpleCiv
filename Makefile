@@ -19,6 +19,9 @@ OBJ_PLAYER = player.o
 # fog
 OBJ_FOG = fog.o
 
+# errors checking and log
+OBJ_ERRORS = world_errors.o log.o
+
 # parsing
 OBJ_PARSE = string_functions.o expat_handlers.o xml.o
 
@@ -29,7 +32,7 @@ OBJ_NCURSES = draw_functions.o view_chooser.o view_textbox.o
 OBJ_MAIN = world.o view.o control.o message.o main.o
 
 # all objects
-OBJ = $(OBJ_COMMON) $(OBJ_GRAPH) $(OBJ_UNIT) $(OBJ_CITY) $(OBJ_TECH) $(OBJ_PLAYER) $(OBJ_FOG) $(OBJ_PARSE) $(OBJ_NCURSES) $(OBJ_MAIN)
+OBJ = $(OBJ_COMMON) $(OBJ_GRAPH) $(OBJ_UNIT) $(OBJ_CITY) $(OBJ_TECH) $(OBJ_PLAYER) $(OBJ_FOG) $(OBJ_ERRORS) $(OBJ_PARSE) $(OBJ_NCURSES) $(OBJ_MAIN)
 
 # test mode
 ifeq ($(t), 1)
@@ -124,6 +127,13 @@ player.o: modules/player/player.c
 # fog
 fog.o: modules/fog/fog.c
 	$(CC) $(CFLAGS) modules/fog/fog.c
+
+# errors checking and log
+world_errors.o: game/world/world_errors.c
+	$(CC) $(CFLAGS) game/world/world_errors.c
+
+log.o: modules/log/log.c
+	$(CC) $(CFLAGS) modules/log/log.c
 
 # parsing
 string_functions.o: modules/parser/string_functions.c

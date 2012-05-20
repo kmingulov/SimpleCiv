@@ -19,51 +19,24 @@
 
 */
 
-#ifndef MODEL_H
-#define MODEL_H
+#ifndef LOG_H
+#define LOG_H
 
-#include <stdio.h>
-
-#include "../../modules/dyn_array/dyn_array.h"
-#include "../../modules/player/player.h"
-#include "../../modules/graph/graph.h"
-#include "../../modules/map/map.h"
-#include "definitions.h"
-#include "world_properties.h"
+#include <stdlib.h>
 
 /*
-    Struct of world.
+    Starts log.
 */
-typedef struct World
-{
-    // Properties.
-    WorldProperties * properties;
-
-    // Game map.
-    Map * map;
-
-    // Game graph.
-    Node * graph_players;
-
-    // Computer player.
-    Player * computer;
-
-    // Technology tree. Type of each node is struct Technology.
-    Node * tech_tree;
-
-    // Common info about technologies and units.
-    DynArray * units_info; // Type — UnitCommonInfo.
-    DynArray * techs_info; // Type — Node (in tech tree).
-} World;
+FILE * startLog();
 
 /*
-    Creates world.
+    Ends log.
 */
-World * createWorld(FILE * log);
+void endLog(FILE * log);
 
 /*
-    Destroys world.
+    Logging formatted message.
 */
-void destroyWorld(World * world);
+void addToLog(FILE * log, const char * format, ...);
 
 #endif

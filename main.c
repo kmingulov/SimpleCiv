@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "modules/log/log.h"
 #include "game/world/world.h"
 #include "game/view/view.h"
 #include "game/control/control.h"
@@ -29,19 +30,26 @@
 
 int main()
 {
+    // Creating log.
+    FILE * log = startLog();
+
     // Creating world and view and control.
-    World * world = createWorld();
+    World * world = createWorld(log);
     View * view = createView(world);
     Control * control = createControl();
 
     if(world == NULL || view == NULL || control == NULL)
     {
-        printf("An error has occurred. Terminating.\n");
+        printf("An error has occurred. For details look to the LOG file.\n");
+        endLog(log);
         return 1;
     }
 
+    // Init first message.
     List * queue = listCreate();
     listPrepend(queue, createMessage(VIEW_REDRAW_ALL, NULL));
+
+    // Infinite loop.
     while(true)
     {
         // Process the view. Redraws some elements. Depends on action: control
@@ -63,6 +71,7 @@ int main()
     destroyControl(control);
     destroyView(view);
     destroyWorld(world);
+    endLog(log);
 
     return 0;
 }

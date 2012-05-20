@@ -48,6 +48,11 @@ void initColours()
 
 View * createView(World * world)
 {
+    if(world == NULL)
+    {
+        return NULL;
+    }
+
     View * result = malloc(sizeof(View));
 
     // Initialize curses.
