@@ -450,74 +450,90 @@ void drawPlayerInfo(World * world, View * view)
 
 void drawCellInfo(World * world, View * view)
 {
+
+    // Calc deltas (for fog).
+
     int s = view -> sidebar;
     int r = view -> rows;
     int len = view -> columns - view -> sidebar - 2;
 
-    clearBlock(SIDEBAR_CELL_BLOCK + 1, s + 1, 11, len);
+    Player * player = (Player *) world -> graph_players -> data;
 
-    // Cell.
-    Cell * c = (Cell *) view -> current_cell -> data;
-    attron(A_BOLD);
-
-    // Type of territory.
-    switch(c -> territory)
+    if(isKnownCell(player -> fog, view -> map_r, view -> map_c))
     {
-        case CELL_TYPE_WATER:    mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Water    "); break;
-        case CELL_TYPE_GRASS:    mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Grass    "); break;
-        case CELL_TYPE_TREE:     mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Forest   "); break;
-        case CELL_TYPE_HILL:     mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Hill     "); break;
-        case CELL_TYPE_MOUNTAIN: mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Mountains"); break;
+        clearBlock(SIDEBAR_CELL_BLOCK + 1, s + 1, 11, len);
+
+        // Cell.
+        Cell * c = (Cell *) view -> current_cell -> data;
+        attron(A_BOLD);
+
+        // Type of territory.
+        switch(c -> territory)
+        {
+            case CELL_TYPE_WATER:    mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Water    "); break;
+            case CELL_TYPE_GRASS:    mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Grass    "); break;
+            case CELL_TYPE_TREE:     mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Forest   "); break;
+            case CELL_TYPE_HILL:     mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Hill     "); break;
+            case CELL_TYPE_MOUNTAIN: mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Mountains"); break;
+        }
+
+        // Resources. Hindi code.
+        int delta = 0;
+        if(c -> mine == CELL_MINE)
+        {
+            mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "[Mine] ");
+            delta = 7;
+        }
+        switch(c -> resources)
+        {
+            case CELL_RES_BRONZE:    mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1 + delta, "Bronze"); break;
+            case CELL_RES_IRON:      mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1 + delta, "Iron"); break;
+            case CELL_RES_COAL:      mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1 + delta, "Coal"); break;
+            case CELL_RES_GUNPOWDER: mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1 + delta, "Gunpowder"); break;
+            case CELL_RES_HORSES:    mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1 + delta, "Horses"); break;
+            case CELL_RES_MUSHROOMS: mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1 + delta, "Mushrooms :O"); break;
+        }
+
+        attroff(A_BOLD);
+
+        // City.
+        Node * city = getNeighbour(view -> current_cell, EDGE_CELL_CITY);
+        if(city != NULL)
+        {
+            City * c = (City *) city -> data;
+            attron(A_BOLD); mvprintw(SIDEBAR_CELL_BLOCK + 3, s + 1, "City:  "); attroff(A_BOLD);
+            putInLeft(SIDEBAR_CELL_BLOCK + 4, s + 2, len - 2, c -> name);
+            attron(COLOR_PAIR(PLAYER_COLOURS_START + c -> owner -> colour));
+            putInLeft(SIDEBAR_CELL_BLOCK + 5, s + 2, len - 2, c -> owner -> name);
+            attroff(COLOR_PAIR(PLAYER_COLOURS_START + c -> owner -> colour));
+            mvprintw(SIDEBAR_CELL_BLOCK + 6, s + 2, "People");
+            putInRight(SIDEBAR_CELL_BLOCK + 6, s + 2, len - 2, "%d", c -> population);
+        }
+
+        // Unit.
+        Node * unit = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
+        if(unit != NULL)
+        {
+            Unit * u = (Unit *) unit -> data;
+            UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, u -> unit_id);
+            attron(A_BOLD); mvprintw(SIDEBAR_CELL_BLOCK + 7, s + 1, "Unit:  "); attroff(A_BOLD);
+            putInLeft(SIDEBAR_CELL_BLOCK + 8, s + 2, len - 2, u_info -> name);
+            attron(COLOR_PAIR(PLAYER_COLOURS_START + u -> owner -> colour));
+            putInLeft(SIDEBAR_CELL_BLOCK + 9, s + 2, len - 2, u -> owner -> name);
+            attroff(COLOR_PAIR(PLAYER_COLOURS_START + u -> owner -> colour));
+            mvprintw(SIDEBAR_CELL_BLOCK + 10, s + 2, "HP");
+            putInRight(SIDEBAR_CELL_BLOCK + 10, s + 2, len - 2, "%d/%d", u -> health, u_info -> max_health);
+            mvprintw(SIDEBAR_CELL_BLOCK + 11, s + 2, "Moves");
+            putInRight(SIDEBAR_CELL_BLOCK + 11, s + 2, len - 2, "%d/%d", u -> moves, u_info -> max_moves);
+        }
+
     }
-
-    // Resources. Hindi code.
-    int delta = 0;
-    if(c -> mine == CELL_MINE)
+    else
     {
-        mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "[Mine] ");
-        delta = 7;
-    }
-    switch(c -> resources)
-    {
-        case CELL_RES_BRONZE:    mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1 + delta, "Bronze"); break;
-        case CELL_RES_IRON:      mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1 + delta, "Iron"); break;
-        case CELL_RES_COAL:      mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1 + delta, "Coal"); break;
-        case CELL_RES_GUNPOWDER: mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1 + delta, "Gunpowder"); break;
-        case CELL_RES_HORSES:    mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1 + delta, "Horses"); break;
-        case CELL_RES_MUSHROOMS: mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1 + delta, "Mushrooms :O"); break;
-    }
-
-    attroff(A_BOLD);
-
-    // City.
-    Node * city = getNeighbour(view -> current_cell, EDGE_CELL_CITY);
-    if(city != NULL)
-    {
-        City * c = (City *) city -> data;
-        attron(A_BOLD); mvprintw(SIDEBAR_CELL_BLOCK + 3, s + 1, "City:  "); attroff(A_BOLD);
-        putInLeft(SIDEBAR_CELL_BLOCK + 4, s + 2, len - 2, c -> name);
-        attron(COLOR_PAIR(PLAYER_COLOURS_START + c -> owner -> colour));
-        putInLeft(SIDEBAR_CELL_BLOCK + 5, s + 2, len - 2, c -> owner -> name);
-        attroff(COLOR_PAIR(PLAYER_COLOURS_START + c -> owner -> colour));
-        mvprintw(SIDEBAR_CELL_BLOCK + 6, s + 2, "People");
-        putInRight(SIDEBAR_CELL_BLOCK + 6, s + 2, len - 2, "%d", c -> population);
-    }
-
-    // Unit.
-    Node * unit = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
-    if(unit != NULL)
-    {
-        Unit * u = (Unit *) unit -> data;
-        UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, u -> unit_id);
-        attron(A_BOLD); mvprintw(SIDEBAR_CELL_BLOCK + 7, s + 1, "Unit:  "); attroff(A_BOLD);
-        putInLeft(SIDEBAR_CELL_BLOCK + 8, s + 2, len - 2, u_info -> name);
-        attron(COLOR_PAIR(PLAYER_COLOURS_START + u -> owner -> colour));
-        putInLeft(SIDEBAR_CELL_BLOCK + 9, s + 2, len - 2, u -> owner -> name);
-        attroff(COLOR_PAIR(PLAYER_COLOURS_START + u -> owner -> colour));
-        mvprintw(SIDEBAR_CELL_BLOCK + 10, s + 2, "HP");
-        putInRight(SIDEBAR_CELL_BLOCK + 10, s + 2, len - 2, "%d/%d", u -> health, u_info -> max_health);
-        mvprintw(SIDEBAR_CELL_BLOCK + 11, s + 2, "Moves");
-        putInRight(SIDEBAR_CELL_BLOCK + 11, s + 2, len - 2, "%d/%d", u -> moves, u_info -> max_moves);
+        attron(A_BOLD);
+        clearBlock(SIDEBAR_CELL_BLOCK +1 , s + 1, 12, 30);
+        mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Fog of war");
+        attroff(A_BOLD);
     }
 
     // Other info.
@@ -571,7 +587,7 @@ void drawMap(World * world, View * view)
 
     Player * player = (Player *) world -> graph_players -> data;
     Node * current = player -> graph_map;
-    
+
     Node * line = current;
 
     // Calc deltas (for fog).
