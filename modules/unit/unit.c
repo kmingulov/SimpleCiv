@@ -323,5 +323,7 @@ int moveUnit(World * world, Node * current_cell, int direction)
     daRemoveByPointer(current_cell -> edges, edge, NULL);
     daPrepend(destination -> edges, edge);
 
+    updateFogArea(unit -> owner -> fog, unit -> r, unit -> c);
+
     return 0;
 }

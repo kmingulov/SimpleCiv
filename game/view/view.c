@@ -574,14 +574,22 @@ void drawMap(World * world, View * view)
     
     Node * line = current;
 
+    // Calc deltas (for fog).
+    int delta_r = view -> map_r - view -> cur_r;
+    int delta_c = view -> map_c - view -> cur_c;
+
     for(int i = start_row; i <= end_row; i++)
     {
         for(int j = start_column; j <= end_column; j++)
         {
             move(i, j);
-            if(isKnownCell(player -> fog, i, j))
+            if(isKnownCell(player -> fog, delta_r + i, delta_c + j))
             {
                 drawNode(world, current);
+            }
+            else
+            {
+                addch(' ');
             }
 
             current = getNeighbour(current, EDGE_CELL_RIGHT);
