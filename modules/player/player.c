@@ -67,8 +67,10 @@ Player * createPlayer(char * name, IntArray * available_units, IntArray * availa
     return player;
 }
 
-void destroyPlayer(Player * player)
+void destroyPlayer(void * data)
 {
+    Player * player = (Player *) data;
+
     listDestroy(player -> cities, NULL);
     listDestroy(player -> units, NULL);
 

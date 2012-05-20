@@ -61,6 +61,11 @@ void listPrepend(List * list, void * data);
 void * listGetByN(List * list, int n);
 
 /*
+    Returns head's data.
+*/
+void * listGetHead(List * list);
+
+/*
     Returns list element, which contains data.
 */
 ListElement * getListElementByPointer(List * list, void * data);
@@ -75,5 +80,10 @@ int listDeleteByPointer(List * list, void * data, void (* function)(void * data)
     Executes function for each list element.
 */
 void listForEach(List * list, void (* function)(void * data));
+
+/*
+    Scrolls list to the next element.
+*/
+void listScrollNext(List * list);
 
 #endif

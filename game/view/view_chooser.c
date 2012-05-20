@@ -15,7 +15,7 @@ ViewChooser * createTechChooser(World * world)
     chooser -> current = -1;
     chooser -> start_r = -1;
 
-    Player * player = (Player *) world -> graph_players -> data;
+    Player * player = (Player *) listGetHead(world -> players);
 
     int count = 0;
     for(int i = 0; i < player -> available_techs -> length; i++)
@@ -48,7 +48,7 @@ ViewChooser * createUnitChooser(World * world, City * city)
     chooser -> current = -1;
     chooser -> start_r = -1;
 
-    Player * player = (Player *) world -> graph_players -> data;
+    Player * player = (Player *) listGetHead(world -> players);
 
     int count = 0;
     for(int i = 0; i < player -> available_units -> length; i++)

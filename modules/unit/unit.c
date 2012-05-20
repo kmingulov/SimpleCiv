@@ -253,34 +253,9 @@ int moveUnit(World * world, Node * current_cell, int direction)
             // If prev_owner doesn't have cities any more, destroy him.
             if(prev_owner -> cities -> length == 0)
             {
-                // NOTE: We don't have right to change world -> graph_players!
-                // Get prev_owner's node.
-                Node * prev = world -> graph_players;
-                Node * current = getNeighbour(prev, EDGE_NEXT_PLAYER);
-                while(current -> data != prev_owner)
-                {
-                    prev = current;
-                    current = getNeighbour(current, EDGE_NEXT_PLAYER);
-                }
-                // Now current is prev_owner, prev is player before prev_owner.
-                // Get next player.
-                Node * next = getNeighbour(current, EDGE_NEXT_PLAYER);
-                // Remove old edge.
-                destroyEdge(prev, EDGE_NEXT_PLAYER);
-                // Add new edge.
-                addEdge(prev, next, EDGE_NEXT_PLAYER);
-                // Make all units neutral.
-                ListElement * le = prev_owner -> units -> head;
-                for(int i = 0; i < prev_owner -> units -> length; i++)
-                {
-                    Unit * u = (Unit *) le -> data;
-                    u -> owner = world -> computer;
-                    le = le -> next;
-                }
-                // Destroy old player.
-                destroyPlayer(prev_owner);
-                daDestroy(current -> edges, &free);
-                free(current);
+                // Delete player.
+                listDeleteByPointer(world -> players, prev_owner, &destroyPlayer);
+                // Decrement players' count.
                 world -> properties -> players_count -= 1;
                 // It is last player.
                 if(world -> properties -> players_count == 1)

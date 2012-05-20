@@ -24,31 +24,31 @@ World * createWorld(FILE * log)
     // Allocate memory for world.
     World * world = malloc(sizeof(World));
 
-    // Parsing config.xml.
+    // Parse config.xml.
     world -> properties = parseXML(XML_CONFIG);
     if(!noErrorsInWorldProperties(log, world -> properties))
     {
         return NULL;
     }
 
-    // Parsing units.xml.
+    // Parse units.xml.
     world -> units_info = parseXML(XML_UNITS);
     if(!noErrorsInUnitsInfo(log, world -> units_info))
     {
         return NULL;
     }
 
-    // Parsing technologies.xml.
+    // Parse technologies.xml.
     DynArray * techs_data = parseXML(XML_TECHNOLOGIES);
     if(!noErrorsInTechsData(log, techs_data))
     {
         return NULL;
     }
 
-    // Creating edges in technology tree (we already have nodes).
+    // Create edges in technology tree (we already have nodes).
     world -> tech_tree = createEdgesInTechnologyTree(techs_data);
 
-    // Creating techs_info table.
+    // Create techs_info table.
     world -> techs_info = daCreate();
     for(int i = 0; i < techs_data -> length; i++)
     {
@@ -56,50 +56,47 @@ World * createWorld(FILE * log)
         daPrepend(world -> techs_info, t -> tech_in_tree);
     }
 
-    // Creating tech tables.
+    // Create tech tables.
     IntArray * tech_table = createTechnologyTable(world -> techs_info);
 
-    // Creating unit tables.
+    // Create unit tables.
     IntArray * unit_table = createUnitTable(tech_table, world -> techs_info, world -> units_info);
 
     // Free techs_data.
     daDestroy(techs_data, &destroyTechnologyParseInfo);
 
-    // Creating map and landscape.
+    // Create map and landscape.
     world -> map = createMap(world -> properties -> map_r, world -> properties -> map_c);
     generateMap(world -> map);
 
-    // Creating players list.
-    world -> graph_players = NULL; // Graph head.
-    Node * temp = NULL;            // Temporary variable.
+    // Create players list.
+    world -> players = listCreate();
     for(int i = 0; i < world -> properties -> players_count; i++)
     {
-        // Creating new player.
+        // Create new player.
         char * name = (char *) daGetByIndex(world -> properties -> player_names, i);
         char * city_name = (char *) daGetByIndex(world -> properties -> player_cities, i);
         Player * player = createPlayer(name, iaCopy(unit_table), iaCopy(tech_table));
-        // Adding player colour.
+        // Add player's colour.
         player -> colour = i % PLAYER_COLOURS_COUNT;
         // Add player's fog.
         player -> fog = createFog(world -> map -> max_r, world -> map -> max_c);
-        // Creating default city.
-        // createCity() function returns NULL, if nothing created. Trying create
-        // city!
+        // Create default city. createCity() function returns NULL, if nothing
+        // created. Trying create city!
         City * city = NULL;
         while(city == NULL)
         {
             city = createCity(world, city_name, rand() % world -> properties -> map_r, rand() % world -> properties -> map_c, player);
         }
+        // Create start unit (lumberjack).
         createUnit(world, city -> r, city -> c, 14, player);
+        // Set his map head.
         player -> graph_map = world -> map -> head;
-        temp = addNode(temp, EDGE_NEXT_PLAYER, NODE_PLAYER, player);
-        // Remembering head.
-        if(world -> graph_players == NULL)
-        {
-            world -> graph_players = temp;
-        }
+        // Add him to list.
+        listPrepend(world -> players, player);
     }
-    // Computer player.
+
+    // Add computer player.
     char * name = malloc(sizeof(char) * 8);
     Player * player = createPlayer(strcpy(name, "Neutral"), NULL, NULL);
     player -> is_computer = 1;
@@ -118,41 +115,19 @@ World * createWorld(FILE * log)
             counter++;
         }
     }
-    temp = addNode(temp, EDGE_NEXT_PLAYER, NODE_PLAYER, player);
+    listPrepend(world -> players, player);
     world -> computer = player;
 
-    // Link list.
-    addEdge(temp, world -> graph_players, EDGE_NEXT_PLAYER);
-
+    // Destroy additional data.
     iaDestroy(unit_table);
     iaDestroy(tech_table);
 
-    printf("Done\n");
-
-    printf("All done!\n");
-
-    // Returning world.
+    // Return world.
     return world;
-}
-
-/*
-    Deletes graph's node.
-*/
-void destroyGraphNode(unsigned char type, void * data)
-{
-    switch(type)
-    {
-        case NODE_PLAYER:
-            destroyPlayer( ((Player *) data) );
-        break;
-    }
 }
 
 void destroyWorld(World * world)
 {
-    // Auxiliary array for destroyGraph();
-    DynArray * deleted = daCreate();
-
     // Destroy map.
     destroyMap(world -> map);
 
@@ -167,10 +142,9 @@ void destroyWorld(World * world)
     // Destroy array of pointers to tech_in_tree.
     daDestroy(world -> techs_info, &destroyTechnology);
 
-    // Destroy world.
-    destroyGraph(world -> graph_players, deleted, &destroyGraphNode);
-    free(world);
+    // Destroy players list.
+    listDestroy(world -> players, &destroyPlayer);
 
-    // Destroy auxiliary array.
-    daDestroy(deleted, NULL);
+    // Destroy world.
+    free(world);
 }

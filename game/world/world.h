@@ -27,6 +27,7 @@
 #include "../../modules/dyn_array/dyn_array.h"
 #include "../../modules/player/player.h"
 #include "../../modules/graph/graph.h"
+#include "../../modules/list/list.h"
 #include "../../modules/map/map.h"
 #include "definitions.h"
 #include "world_properties.h"
@@ -43,7 +44,7 @@ typedef struct World
     Map * map;
 
     // Game graph.
-    Node * graph_players;
+    List * players;
 
     // Computer player.
     Player * computer;

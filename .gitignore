@@ -10,3 +10,6 @@
 simpleciv
 simpleciv.exe
 tests/*/test
+
+# Logs.
+LOG

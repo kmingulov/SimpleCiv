@@ -97,6 +97,11 @@ void * listGetByN(List * list, int n)
     return result -> data;
 }
 
+void * listGetHead(List * list)
+{
+    return listGetByN(list, 0);
+}
+
 ListElement * getListElementByPointer(List * list, void * data)
 {
     ListElement * current = list -> head;
@@ -181,4 +186,9 @@ void listForEach(List * list, void (* function)(void * data))
         function(current -> data);
         current = next;
     }
+}
+
+void listScrollNext(List * list)
+{
+    list -> head = list -> head -> next;
 }

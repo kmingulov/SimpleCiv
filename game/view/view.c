@@ -88,7 +88,7 @@ View * createView(World * world)
     for(int i = 0; i < world -> properties -> players_count; i++)
     {
         // Get player.
-        Player * player = (Player *) world -> graph_players -> data;
+        Player * player = (Player *) listGetHead(world -> players);
         // And his city.
         City * city = (City *) player -> cities -> head -> data;
         // Focus on this city.
@@ -99,16 +99,16 @@ View * createView(World * world)
         player -> current_cell = getMapCell(world -> map, city -> r, city -> c);
         player -> graph_map = getCell(player -> current_cell, 1 - player -> cur_r, 1 - player -> cur_c);
         // Go on.
-        world -> graph_players = getNeighbour(world -> graph_players, EDGE_NEXT_PLAYER);
-        player = (Player *) world -> graph_players -> data;
+        listScrollNext(world -> players);
+        player = (Player *) listGetHead(world -> players);
         if(player -> is_computer)
         {
-            world -> graph_players = getNeighbour(world -> graph_players, EDGE_NEXT_PLAYER);
+            listScrollNext(world -> players);
         }
     }
 
     // Load first player settings.
-    Player * player = (Player *) world -> graph_players -> data;
+    Player * player = (Player *) listGetHead(world -> players);
     result -> cur_r = player -> cur_r;
     result -> cur_c = player -> cur_c;
     result -> map_r = player -> map_r;
@@ -139,7 +139,7 @@ void focusOn(World * world, View * view, int r, int c)
     view -> cur_c = view -> sidebar / 2;
 
     // Scroll player's graph_map.
-    Player * player = (Player *) world -> graph_players -> data;
+    Player * player = (Player *) listGetHead(world -> players);
     // Map in the window starts from (1, 1) point, so add 1 to r and c
     // coordinates.
     player -> graph_map = getCell(view -> current_cell, 1 - view -> cur_r, 1 - view -> cur_c);
@@ -288,7 +288,7 @@ void drawTechView(World * world, View * view)
 
     // Drawing player name and other info.
     int line = 2;
-    Player * player = (Player *) world -> graph_players -> data;
+    Player * player = (Player *) listGetHead(world -> players);
     attron(A_BOLD); mvprintw(line++, 3, "%s's researches", player -> name); attroff(A_BOLD);
     mvprintw(line++, 3, "%d gold, %d gold spents on reasearches every turn", player -> gold, player -> research -> delta);
 
@@ -365,7 +365,7 @@ void drawCityView(World * world, View * view)
 
     // Drawing player name and other info.
     int line = 2;
-    Player * player = (Player *) world -> graph_players -> data;
+    Player * player = (Player *) listGetHead(world -> players);
     City * city = (City * ) getNeighbour(view -> current_cell, EDGE_CELL_CITY) -> data;
     attron(A_BOLD); mvprintw(line++, 3, "%s's city %s", player -> name, city -> name); attroff(A_BOLD);
     mvprintw(line++, 3, "You have %d gold, %d gold spents on hiring every turn", player -> gold, city -> hiring -> delta);
@@ -420,7 +420,7 @@ void drawPlayerInfo(World * world, View * view)
     clearBlock(SIDEBAR_PLAYER_BLOCK + 1, s + 1, 7, len);
 
     // Player.
-    Player * player = (Player *) world -> graph_players -> data;
+    Player * player = (Player *) listGetHead(world -> players);
 
     // Player info.
     attron(COLOR_PAIR(PLAYER_COLOURS_START + player -> colour));
@@ -459,7 +459,7 @@ void drawCellInfo(World * world, View * view)
     int r = view -> rows;
     int len = view -> columns - view -> sidebar - 2;
 
-    Player * player = (Player *) world -> graph_players -> data;
+    Player * player = (Player *) listGetHead(world -> players);
 
     clearBlock(SIDEBAR_CELL_BLOCK + 1, s + 1, 11, len);
 
@@ -585,7 +585,7 @@ void drawMap(World * world, View * view)
     int start_row = 1,    end_row = view -> rows - 2;
     int start_column = 1, end_column = view -> sidebar - 1;
 
-    Player * player = (Player *) world -> graph_players -> data;
+    Player * player = (Player *) listGetHead(world -> players);
     Node * current = player -> graph_map;
 
     Node * line = current;
@@ -618,7 +618,7 @@ void drawMap(World * world, View * view)
 
 int viewProcess(World * world, View * view, List * list)
 {
-    Player * player = (Player *) world -> graph_players -> data;
+    Player * player = (Player *) listGetHead(world -> players);
 
     if(list != NULL)
     {

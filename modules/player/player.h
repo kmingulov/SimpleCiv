@@ -75,6 +75,6 @@ Player * createPlayer(char * name, IntArray * available_units, IntArray * availa
 /*
     Destroys player.
 */
-void destroyPlayer(Player * player);
+void destroyPlayer(void * data);
 
 #endif

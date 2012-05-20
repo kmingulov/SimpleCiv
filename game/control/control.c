@@ -63,7 +63,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             }
             Unit * unit = (Unit *) n -> data;
             // Cannot move not your unit.
-            Player * player = (Player *) world -> graph_players -> data;
+            Player * player = (Player *) listGetHead(world -> players);
             if(player != unit -> owner)
             {
                 return NULL;
@@ -162,7 +162,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         // Start research.
         if(control -> state == CONTROL_CHOOSE_TECH)
         {
-            Player * player = (Player *) world -> graph_players -> data;
+            Player * player = (Player *) listGetHead(world -> players);
             int current = view -> chooser -> current;
             // Change research.
             if(current == -1)
@@ -217,7 +217,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                     city -> hiring -> turns = 0;
                     city -> hiring -> delta = 1.5f * u_info -> hiring_turns;
                     // Decrement player's resources.
-                    Player * player = (Player *) world -> graph_players -> data;
+                    Player * player = (Player *) listGetHead(world -> players);
                     if(u_info -> resources != NULL)
                     {
                         for(int i = 0; i < u_info -> resources -> length; i++)
@@ -241,7 +241,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         // End of the turn.
         if(control -> state == CONTROL_MOVE_CURSOR || control -> state == CONTROL_MOVE_UNIT)
         {
-            Player * player = (Player *) world -> graph_players -> data;
+            Player * player = (Player *) listGetHead(world -> players);
             // Remembering player's view settings.
             player -> cur_r = view -> cur_r;
             player -> cur_c = view -> cur_c;
@@ -285,12 +285,12 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                 le = le -> next;
             }
             // Next player.
-            world -> graph_players = getNeighbour(world -> graph_players, EDGE_NEXT_PLAYER);
-            player = (Player *) world -> graph_players -> data;
+            listScrollNext(world -> players);
+            player = (Player *) listGetHead(world -> players);
             if(player -> is_computer)
             {
-                world -> graph_players = getNeighbour(world -> graph_players, EDGE_NEXT_PLAYER);
-                player = (Player *) world -> graph_players -> data;
+                listScrollNext(world -> players);
+                player = (Player *) listGetHead(world -> players);
             }
             // Getting his settings (if there are != 0).
             if(player -> cur_r != 0)  view -> cur_r = player -> cur_r; else view -> cur_r = view -> rows / 2;
@@ -318,7 +318,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         {
             // Cannot move not your unit.
             Unit * unit = (Unit *) node -> data;
-            Player * player = (Player *) world -> graph_players -> data;
+            Player * player = listGetHead(world -> players);
             if(player != unit -> owner)
             {
                 return NULL;
@@ -341,7 +341,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         {
             // Cannot open dialog for not your city.
             City * city = (City *) node -> data;
-            Player * player = (Player *) world -> graph_players -> data;
+            Player * player = (Player *) listGetHead(world -> players);
             if(player != city -> owner)
             {
                 return NULL;
@@ -426,7 +426,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         if(control -> state == CONTROL_MOVE_CURSOR || control -> state == CONTROL_MOVE_UNIT)
         {
             // There is a fog, cannot show any info.
-            Player * player = (Player *) world -> graph_players -> data;
+            Player * player = (Player *) listGetHead(world -> players);
             if(!isKnownCell(player -> fog, view -> map_r, view -> map_c))
             {
                 return NULL;
@@ -534,7 +534,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
     if((char) key == 'N' || (char) key == 'n')
     {
         // Getting player.
-        Player * player = (Player *) world -> graph_players -> data;
+        Player * player = listGetHead(world -> players);
         if(control -> state == CONTROL_MOVE_UNIT)
         {
             // Get unit.
