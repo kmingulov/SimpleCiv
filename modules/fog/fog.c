@@ -56,11 +56,11 @@ void updateFogCell(FogOfWar * fog, int r, int c)
 
 void updateFogArea(FogOfWar * fog, int center_r, int center_c)
 {
-    iaSetByIndex(daGetByIndex(fog -> rows, center_r  ), center_c,   1);
-    iaSetByIndex(daGetByIndex(fog -> rows, center_r  ), center_c+1, 1);
-    iaSetByIndex(daGetByIndex(fog -> rows, center_r  ), center_c-1, 1);
-    iaSetByIndex(daGetByIndex(fog -> rows, center_r-1), center_c,   1);
-    iaSetByIndex(daGetByIndex(fog -> rows, center_r+1), center_c,   1);
+    updateFogCell(fog, center_r  , center_c  );
+    updateFogCell(fog, center_r  , center_c+1);
+    updateFogCell(fog, center_r  , center_c-1);
+    updateFogCell(fog, center_r+1, center_c  );
+    updateFogCell(fog, center_r-1, center_c  );
 }
 
 int isKnownCell(FogOfWar * fog, int r, int c)
