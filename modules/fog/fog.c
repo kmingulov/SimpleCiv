@@ -23,6 +23,7 @@
 
 #include "fog.h"
 #include "../int_array/int_array.h"
+#include <math.h>
 
 FogOfWar * createFog(int r, int c)
 {
@@ -85,7 +86,10 @@ void updateFogRadius(FogOfWar * fog, int center_r, int center_c, int rad)
     {
         for (int c = center_c - rad; c <= center_c + rad; c++)
         {
-            updateFogCell(fog, normalize(r, fog -> max_r),normalize(c, fog -> max_c) );
+            if (round( sqrt (abs(center_r - r)*abs(center_r - r)+abs(center_c - c)*abs(center_c - c))) <= rad  )
+            {
+                updateFogCell(fog, normalize(r, fog -> max_r),normalize(c, fog -> max_c) );
+            }
         }
     }
 }

@@ -58,7 +58,7 @@ void updateFogCell(FogOfWar * fog, int r, int c);
 void updateFogArea(FogOfWar * fog, int center_r, int center_c);
 
 /*
-    Updates area around cell (center_r, center_c, rad).
+    Updates area around cell (center_r, center_c).
 */
 void updateFogRadius(FogOfWar * fog, int center_r, int center_c, int rad);
 
