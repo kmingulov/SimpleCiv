@@ -20,7 +20,6 @@
 */
 
 #include <stdio.h>
-#include <curses.h>
 
 #include "../../modules/log/log.h"
 
@@ -31,28 +30,50 @@ int noErrorsInWorldProperties(FILE * log, WorldProperties * properties)
 {
     if(properties == NULL)
     {
-        addToLog(log, "ERROR\tconfig.xml doesn't exist or corrupted");
+        addToLog(log, "ERROR (config.xml)\tFile doesn't exist or corrupted");
         return 0;
     }
 
     // Check for world sizes.
     if(properties -> map_r <= MIN_WORLD_SIZE_R || properties -> map_c <= MIN_WORLD_SIZE_C)
     {
-        addToLog(log, "ERROR\tWorld sizes is too small. %d and %d for rows and columns required at least", MIN_WORLD_SIZE_R, MIN_WORLD_SIZE_C);
+        addToLog(log, "ERROR (config.xml)\tWorld sizes is too small. %d and %d for rows and columns required at least", MIN_WORLD_SIZE_R, MIN_WORLD_SIZE_C);
         return 0;
     }
 
     // Check there is enough players' names.
     if(properties -> players_count > properties -> player_names -> length)
     {
-        addToLog(log, "ERROR\tToo few players' names");
+        addToLog(log, "ERROR (config.xml)\tToo few players' names");
         return 0;
     }
 
     // Check there is enough cities' names.
     if(properties -> players_count > properties -> player_cities -> length)
     {
-        addToLog(log, "ERROR\tToo few cities' names");
+        addToLog(log, "ERROR (config.xml)\tToo few cities' names");
+        return 0;
+    }
+
+    return 1;
+}
+
+int noErrorsInUnitsInfo(FILE * log, DynArray * units_info)
+{
+    if(units_info == NULL)
+    {
+        addToLog(log, "ERROR (resources/units.xml)\tfile doesn't exist or corrupted");
+        return 0;
+    }
+
+    return 1;
+}
+
+int noErrorsInTechsData(FILE * log, DynArray * techs_data)
+{
+    if(techs_data == NULL)
+    {
+        addToLog(log, "ERROR (resources/technologies.xml)\tfile doesn't exist or corrupted");
         return 0;
     }
 

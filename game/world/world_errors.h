@@ -22,6 +22,8 @@
 #ifndef WORLD_ERRORS_H
 #define WORLD_ERRORS_H
 
+#include "../../modules/dyn_array/dyn_array.h"
+
 #include "world_properties.h"
 
 /*
@@ -29,5 +31,17 @@
     Returns 1 if everything is ok, else 0.
 */
 int noErrorsInWorldProperties(FILE * log, WorldProperties * properties);
+
+/*
+    Checks units_info for errors.
+    Returns 1 if everything is ok, else 0.
+*/
+int noErrorsInUnitsInfo(FILE * log, DynArray * units_info);
+
+/*
+    Checks units_info for errors.
+    Returns 1 if everything is ok, else 0.
+*/
+int noErrorsInTechsData(FILE * log, DynArray * techs_data);
 
 #endif

@@ -25,39 +25,28 @@ World * createWorld(FILE * log)
     World * world = malloc(sizeof(World));
 
     // Parsing config.xml.
-    addToLog(log, "Parsing\tconfig.xml");
     world -> properties = parseXML(XML_CONFIG);
     if(!noErrorsInWorldProperties(log, world -> properties))
     {
         return NULL;
     }
-    addToLog(log, "Parsing\tdone");
 
     // Parsing units.xml.
-    printf("Parsing resources/units.xml… ");
     world -> units_info = parseXML(XML_UNITS);
-    if(world -> units_info == NULL)
+    if(!noErrorsInUnitsInfo(log, world -> units_info))
     {
-        printf("Failed\n\033[1;31mError:\033[0m resources/units.xml doesn't exist or corrupted.\n");
         return NULL;
     }
-    printf("%d units loaded\n", world -> units_info -> length);
 
     // Parsing technologies.xml.
-    printf("Parsing resources/technologies.xml… ");
     DynArray * techs_data = parseXML(XML_TECHNOLOGIES);
-    if(techs_data == NULL)
+    if(!noErrorsInTechsData(log, techs_data))
     {
-        printf("Failed\n\033[1;31mError:\033[0m resources/technologies.xml doesn't exist or corrupted.\n");
         return NULL;
     }
-    printf("%d technologies loaded\n", techs_data -> length);
 
-    // Going through techs_data and creating tech tree.
-    printf("Creating technology tree… ");
-    // Creates edges in technology tree (we already have nodes).
+    // Creating edges in technology tree (we already have nodes).
     world -> tech_tree = createEdgesInTechnologyTree(techs_data);
-    printf("Done\n");
 
     // Creating techs_info table.
     world -> techs_info = daCreate();
@@ -68,31 +57,19 @@ World * createWorld(FILE * log)
     }
 
     // Creating tech tables.
-    printf("Creating technology table… ");
     IntArray * tech_table = createTechnologyTable(world -> techs_info);
-    printf("Done\n");
 
     // Creating unit tables.
-    printf("Creating units table… ");
     IntArray * unit_table = createUnitTable(tech_table, world -> techs_info, world -> units_info);
-    printf("Done\n");
 
     // Free techs_data.
-    printf("Freeing auxiliary data… ");
     daDestroy(techs_data, &destroyTechnologyParseInfo);
-    printf("Done\n");
 
-    // Creating map.
-    printf("Creating map %dx%d… ", world -> properties -> map_r, world -> properties -> map_c);
+    // Creating map and landscape.
     world -> map = createMap(world -> properties -> map_r, world -> properties -> map_c);
-    printf("Done\n");
-
-    printf("Creating landscape… ");
     generateMap(world -> map);
-    printf("Done\n");
 
     // Creating players list.
-    printf("Creating list of %d players… ", world -> properties -> players_count);
     world -> graph_players = NULL; // Graph head.
     Node * temp = NULL;            // Temporary variable.
     for(int i = 0; i < world -> properties -> players_count; i++)
