@@ -81,9 +81,9 @@ void updateFogCell(FogOfWar * fog, int r, int c)
 
 void updateFogRadius(FogOfWar * fog, int center_r, int center_c, int rad)
 {
-    for (int r = center_r - rad; r < center_r + rad; r++)
+    for (int r = center_r - rad; r <= center_r + rad; r++)
     {
-        for (int c = center_c - rad; c < center_c + rad; c++)
+        for (int c = center_c - rad; c <= center_c + rad; c++)
         {
             updateFogCell(fog, normalize(r, fog -> max_r),normalize(c, fog -> max_c) );
         }
