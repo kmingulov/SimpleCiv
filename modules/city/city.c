@@ -25,6 +25,7 @@
 #include "../unit/unit_common_info.h"
 #include "../unit/unit.h"
 #include "../map/map.h"
+#include "../fog/fog.h"
 #include "city.h"
 
 City * createCity(World * world, char * name, int r, int c, Player * player)
@@ -86,6 +87,9 @@ City * createCity(World * world, char * name, int r, int c, Player * player)
     city -> r = r;
     city -> c = c;
     addEdge(getMapCell(world -> map, r, c), node, EDGE_CELL_CITY);
+
+    // Update fog.
+    updateFogArea(player -> fog, r, c);
 
     return city;
 }

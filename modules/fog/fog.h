@@ -30,6 +30,9 @@
 */
 typedef struct FogOfWar
 {
+    // Sizes.
+    int max_r, max_c;
+
     // Array of pointers to rows. Each row = IntArray with column elements.
     DynArray * rows;
 } FogOfWar;

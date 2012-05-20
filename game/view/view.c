@@ -569,8 +569,9 @@ void drawMap(World * world, View * view)
     int start_row = 1,    end_row = view -> rows - 2;
     int start_column = 1, end_column = view -> sidebar - 1;
 
-    Node * current = ((Player *) world -> graph_players -> data) -> graph_map;
     Player * player = (Player *) world -> graph_players -> data;
+    Node * current = player -> graph_map;
+    
     Node * line = current;
 
     for(int i = start_row; i <= end_row; i++)
@@ -578,13 +579,9 @@ void drawMap(World * world, View * view)
         for(int j = start_column; j <= end_column; j++)
         {
             move(i, j);
-            if(isKnownCell(player -> fog,i,j))
+            if(isKnownCell(player -> fog, i, j))
             {
                 drawNode(world, current);
-            }
-            else
-            {
-                addch(' ');
             }
 
             current = getNeighbour(current, EDGE_CELL_RIGHT);
@@ -643,7 +640,6 @@ int viewProcess(World * world, View * view, List * list)
                         drawMap(world, view);
                     }
                     drawCellInfo(world, view);
-                    updateFogArea(player -> fog, view -> cur_r, view -> cur_c);
                     move(view -> cur_r, view -> cur_c);
                 break;
 
@@ -660,7 +656,6 @@ int viewProcess(World * world, View * view, List * list)
                         drawMap(world, view);
                     }
                     drawCellInfo(world, view);
-                    updateFogArea(player -> fog, view -> cur_r, view -> cur_c);
                     move(view -> cur_r, view -> cur_c);
                 break;
 
@@ -677,7 +672,6 @@ int viewProcess(World * world, View * view, List * list)
                         drawMap(world, view);
                     }
                     drawCellInfo(world, view);
-                    updateFogArea(player -> fog, view -> cur_r, view -> cur_c);
                     move(view -> cur_r, view -> cur_c);
                 break;
 
@@ -695,7 +689,6 @@ int viewProcess(World * world, View * view, List * list)
                         drawMap(world, view);
                     }
                     drawCellInfo(world, view);
-                    updateFogArea(player -> fog, view -> cur_r, view -> cur_c);
                     move(view -> cur_r, view -> cur_c);
                 break;
 

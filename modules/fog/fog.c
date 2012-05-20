@@ -28,6 +28,8 @@ FogOfWar * createFog(int r, int c)
 {
     FogOfWar * fog = malloc(sizeof(FogOfWar));
     fog -> rows = daCreate();
+    fog -> max_r = r;
+    fog -> max_c = c;
     for(int i = 0; i < r; i++)
     {
         // iaLengthCreate() creates array with length c and this array is
@@ -49,23 +51,48 @@ void destroyFog(FogOfWar * fog)
     free(fog);
 }
 
+static int normalize(int x, int b)
+{
+    // Check for bounds.
+    while(x < 0)
+    {
+        x += b;
+    }
+
+    while(x >= b)
+    {
+        x -= b;
+    }
+
+    return x;
+}
+
 void updateFogCell(FogOfWar * fog, int r, int c)
 {
+    // Check for bounds.
+    r = normalize(r, fog -> max_r);
+    c = normalize(c, fog -> max_c);
+
+    // Set as visited.
     iaSetByIndex(daGetByIndex(fog -> rows, r), c, 1);
 }
 
 void updateFogArea(FogOfWar * fog, int center_r, int center_c)
 {
-    updateFogCell(fog, center_r  , center_c  );
-    updateFogCell(fog, center_r  , center_c+1);
-    updateFogCell(fog, center_r  , center_c-1);
-    updateFogCell(fog, center_r+1, center_c  );
-    updateFogCell(fog, center_r-1, center_c  );
+    updateFogCell(fog, center_r   , center_c  );
+    updateFogCell(fog, center_r   , center_c + 1);
+    updateFogCell(fog, center_r   , center_c - 1);
+    updateFogCell(fog, center_r + 1, center_c);
+    updateFogCell(fog, center_r - 1, center_c);
 }
 
 int isKnownCell(FogOfWar * fog, int r, int c)
 {
-    if(iaGetByIndex(daGetByIndex(fog -> rows, r),c))
+    // Check for bounds.
+    r = normalize(r, fog -> max_r);
+    c = normalize(c, fog -> max_c);
+
+    if(iaGetByIndex(daGetByIndex(fog -> rows, r), c))
     {
         return 1;
     }
