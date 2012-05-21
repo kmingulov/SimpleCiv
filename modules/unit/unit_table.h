@@ -24,6 +24,9 @@
 
 #include "../int_array/int_array.h"
 #include "../dyn_array/dyn_array.h"
+#include "../player/player.h"
+
+#include "unit_common_info.h"
 
 /*
     Creates unit table.
@@ -34,5 +37,12 @@ IntArray * createUnitTable(IntArray * tech_table, DynArray * techs_info, DynArra
     Updates unit table.
 */
 void updateUnitTable(IntArray * unit_table, IntArray * tech_table, DynArray * techs_info);
+
+/*
+    Checkes available this unit or no.
+    Looks for player's resources (function updateUnitTable() doesn't do this).
+    Returns 0 if available, 1 if no.
+*/
+int checkUnitForResources(UnitCommonInfo * u_info, Player * player);
 
 #endif

@@ -39,11 +39,11 @@ IntArray * createTechnologyTable(DynArray * techs_info);
 void updateTechnologyTable(IntArray * tech_table, Node * tech);
 
 /*
-    Checkes available with technology or no.
-    Looks for player's resources (function updateTechnologyStatus() doesn't do
+    Checkes available this technology or no.
+    Looks for player's resources (function updateTechnologyTable() doesn't do
     this).
     Returns 0 if available, 1 if no.
 */
-int checkForResources(Technology * tech, Player * player);
+int checkTechForResources(Technology * tech, Player * player);
 
 #endif

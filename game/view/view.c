@@ -446,7 +446,7 @@ void drawPlayerInfo(World * world, View * view)
     putInRight(SIDEBAR_PLAYER_BLOCK + 3, s + 1, len, "%d-%d", player -> gold, player -> research -> delta);
     // Resources.
     const char res_names[][10] = {"", "Bronze", "Iron", "Coal", "Gunpowder", "Horses"};
-    for(int i = 1; i <= CELL_RES_COUNT - 1; i++)
+    for(int i = 1; i < CELL_RES_COUNT; i++)
     {
         mvprintw(SIDEBAR_PLAYER_BLOCK + 3 + i, s + 1, res_names[i]);
         putInRight(SIDEBAR_PLAYER_BLOCK + 3 + i, s + 1, len, "%d", iaGetByIndex(player -> resources, i));
@@ -530,8 +530,7 @@ void drawCellInfo(World * world, View * view)
             }
             else
             {
-                //putInLeft(SIDEBAR_CELL_BLOCK + 9, s + 2, len - 2, "Neutral");
-                mvprintw(0, 0, "xsdasd");
+                putInLeft(SIDEBAR_CELL_BLOCK + 9, s + 2, len - 2, "Neutral");
             }
             mvprintw(SIDEBAR_CELL_BLOCK + 10, s + 2, "HP");
             putInRight(SIDEBAR_CELL_BLOCK + 10, s + 2, len - 2, "%d/%d", u -> health, u_info -> max_health);

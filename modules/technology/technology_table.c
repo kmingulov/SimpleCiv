@@ -99,7 +99,7 @@ void updateTechnologyTable(IntArray * tech_table, Node * tech)
     }
 }
 
-int checkForResources(Technology * tech, Player * player)
+int checkTechForResources(Technology * tech, Player * player)
 {
     // Checking for resources.
     if(tech -> requires_resources == NULL)
@@ -109,7 +109,6 @@ int checkForResources(Technology * tech, Player * player)
     }
 
     // Checking for each resource.
-    char okay = 1;
     for(int i = 0; i < tech -> requires_resources -> length; i++)
     {
         // Getting resource id.
@@ -118,16 +117,9 @@ int checkForResources(Technology * tech, Player * player)
         if(iaGetByIndex(player -> resources, id) == 0)
         {
             // Sad but true.
-            okay = 0;
-            break;
+            return 1;
         }
     }
 
-    // You're lucky man.
-    if(okay == 1)
-    {
-        return 0;
-    }
-
-    return 1;
+    return 0;
 }

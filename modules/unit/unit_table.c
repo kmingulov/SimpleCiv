@@ -54,3 +54,26 @@ void updateUnitTable(IntArray * unit_table, IntArray * tech_table, DynArray * te
         }
     }
 }
+
+int checkUnitForResources(UnitCommonInfo * u_info, Player * player)
+{
+    if(u_info -> resources == NULL)
+    {
+        return 0;
+    }
+
+    // Checking for each resource.
+    for(int j = 0; j < u_info -> resources -> length; j++)
+    {
+        // Getting resource id.
+        int id = iaGetByIndex(u_info -> resources, j);
+        // Does player have this resources?
+        if(iaGetByIndex(player -> resources, id) == 0)
+        {
+            // Sad but true.
+            return 1;
+        }
+    }
+
+    return 0;
+}
