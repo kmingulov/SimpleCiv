@@ -88,7 +88,7 @@ void revealFogRadius(FogOfWar * fog, int center_r, int center_c, int rad)
             int dc = abs(center_c - c);
             if(round( sqrt (dr * dr + dc * dc) ) <= rad)
             {
-                revealFogCell(fog, normalize(r, fog -> max_r),normalize(c, fog -> max_c) );
+                revealFogCell(fog, normalize(r, fog -> max_r), normalize(c, fog -> max_c));
             }
         }
     }

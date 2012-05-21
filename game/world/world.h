@@ -28,8 +28,8 @@
 #include "../../modules/graph/graph.h"
 #include "../../modules/list/list.h"
 #include "../../modules/map/map.h"
-#include "definitions.h"
 #include "world_properties.h"
+#include "definitions.h"
 
 /*
     Struct of world.

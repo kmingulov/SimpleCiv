@@ -89,7 +89,10 @@ void destroyUnit(World * world, Unit * unit)
     daRemoveByPointer(n -> edges, edge, &free);
 
     // Removing pointer to him from owner's list.
-    listDeleteByPointer(player -> units, unit, NULL);
+    if(player != NULL)
+    {
+        listDeleteByPointer(player -> units, unit, NULL);
+    }
 }
 
 void unitsFight(World * world, Unit ** unit1, Unit ** unit2)
@@ -102,7 +105,8 @@ void unitsFight(World * world, Unit ** unit1, Unit ** unit2)
     float damage1 = (float) (* unit1) -> health / u1 -> max_health * u1 -> max_damage;
     float damage2 = (float) (* unit2) -> health / u2 -> max_health * u2 -> max_damage;
 
-    // Random damage between 70% and 100% of damage1/damage2.
+    // Random damage between BALANCE_UNIT_DAMAGE_MIN% and
+    // BALANCE_UNIT_DAMAGE_MAX% of damage1/damage2.
     int delta = BALANCE_UNIT_DAMAGE_MAX - BALANCE_UNIT_DAMAGE_MIN;
     damage1 *= (float) (rand() % delta + BALANCE_UNIT_DAMAGE_MIN) / 100.0f;
     damage2 *= (float) (rand() % delta + BALANCE_UNIT_DAMAGE_MIN) / 100.0f;
@@ -111,7 +115,10 @@ void unitsFight(World * world, Unit ** unit1, Unit ** unit2)
     if( (* unit1) -> health <= ceil(damage2) )
     {
         // Player2 gets drop.
-        (* unit2) -> owner -> gold += u1 -> gold_drop;
+        if((* unit2) -> owner != NULL)
+        {
+            (* unit2) -> owner -> gold += u1 -> gold_drop;
+        }
         // Destroy unit.
         destroyUnit(world, * unit1);
         * unit1 = NULL;
@@ -124,7 +131,10 @@ void unitsFight(World * world, Unit ** unit1, Unit ** unit2)
     if( (* unit2) -> health <= ceil(damage1) )
     {
         // Player1 gets drop.
-        (* unit1) -> owner -> gold += u2 -> gold_drop;
+        if((* unit1) -> owner != NULL)
+        {
+            (* unit1) -> owner -> gold += u2 -> gold_drop;
+        }
         // Destroy unit.
         destroyUnit(world, * unit2);
         * unit2 = NULL;
@@ -170,6 +180,13 @@ void developUnit(void * data, DynArray * info)
     }
 
     unit -> moves = unit_info -> max_moves;
+}
+
+void makeUnitNeutral(void * data)
+{
+    Unit * u = (Unit *) data;
+
+    u -> owner = NULL;
 }
 
 int moveUnit(World * world, Node * current_cell, int direction)
@@ -253,6 +270,8 @@ int moveUnit(World * world, Node * current_cell, int direction)
             // If prev_owner doesn't have cities any more, destroy him.
             if(prev_owner -> cities -> length == 0)
             {
+                // Make all units neutral.
+                listForEach(prev_owner -> units, &makeUnitNeutral);
                 // Delete player.
                 listDeleteByPointer(world -> players, prev_owner, &destroyPlayer);
                 // Decrement players' count.

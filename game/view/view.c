@@ -518,11 +518,21 @@ void drawCellInfo(World * world, View * view)
         {
             Unit * u = (Unit *) unit -> data;
             UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, u -> unit_id);
+
             attron(A_BOLD); mvprintw(SIDEBAR_CELL_BLOCK + 7, s + 1, "Unit:  "); attroff(A_BOLD);
             putInLeft(SIDEBAR_CELL_BLOCK + 8, s + 2, len - 2, u_info -> name);
-            attron(COLOR_PAIR(PLAYER_COLOURS_START + u -> owner -> colour));
-            putInLeft(SIDEBAR_CELL_BLOCK + 9, s + 2, len - 2, u -> owner -> name);
-            attroff(COLOR_PAIR(PLAYER_COLOURS_START + u -> owner -> colour));
+
+            if(u -> owner != NULL)
+            {
+                attron(COLOR_PAIR(PLAYER_COLOURS_START + u -> owner -> colour));
+                putInLeft(SIDEBAR_CELL_BLOCK + 9, s + 2, len - 2, u -> owner -> name);
+                attroff(COLOR_PAIR(PLAYER_COLOURS_START + u -> owner -> colour));
+            }
+            else
+            {
+                //putInLeft(SIDEBAR_CELL_BLOCK + 9, s + 2, len - 2, "Neutral");
+                mvprintw(0, 0, "xsdasd");
+            }
             mvprintw(SIDEBAR_CELL_BLOCK + 10, s + 2, "HP");
             putInRight(SIDEBAR_CELL_BLOCK + 10, s + 2, len - 2, "%d/%d", u -> health, u_info -> max_health);
             mvprintw(SIDEBAR_CELL_BLOCK + 11, s + 2, "Moves");
@@ -557,11 +567,17 @@ void drawNode(World * world, Node * current)
         // Getting unit's char.
         Unit * unit = (Unit *) getNeighbour(current, EDGE_CELL_UNIT) -> data;
         UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, unit -> unit_id);
-        attron(COLOR_PAIR(PLAYER_COLOURS_START + unit -> owner -> colour));
+        if(unit -> owner != NULL)
+        {
+            attron(COLOR_PAIR(PLAYER_COLOURS_START + unit -> owner -> colour));
+        }
         attron(A_BOLD);
         addch(u_info -> c);
         attroff(A_BOLD);
-        attroff(COLOR_PAIR(PLAYER_COLOURS_START + unit -> owner -> colour));
+        if(unit -> owner != NULL)
+        {
+            attroff(COLOR_PAIR(PLAYER_COLOURS_START + unit -> owner -> colour));
+        }
     }
     else
     {

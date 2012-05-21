@@ -58,7 +58,7 @@
 #define BALANCE_UNIT_HEALTH_DELTA   0.1f
 
 // City's and unit's view.
-#define BALANCE_CITY_VIEW_RADIUS    30
+#define BALANCE_CITY_VIEW_RADIUS    5
 #define BALANCE_UNIT_VIEW_RADIUS    2
 
 /*

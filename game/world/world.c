@@ -1,20 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <assert.h>
 
 #include "../../modules/parser/xml.h"
 #include "../../modules/map/map.h"
 #include "../../modules/landscape/landscape.h"
-#include "../../modules/player/player.h"
-#include "../../modules/city/city.h"
-#include "../../modules/unit/unit.h"
 #include "../../modules/unit/unit_table.h"
 #include "../../modules/unit/unit_common_info.h"
 #include "../../modules/technology/technology_parse_info.h"
 #include "../../modules/technology/technology_table.h"
-#include "../../modules/log/log.h"
-#include "../../modules/fog/fog.h"
+#include "../../modules/technology/technology.h"
 
 #include "world_errors.h"
 #include "world.h"
@@ -77,10 +71,6 @@ World * createWorld(FILE * log)
         Player * player = createPlayer(world, i, iaCopy(unit_table), iaCopy(tech_table));
         listPrepend(world -> players, player);
     }
-
-    // Add computer player.
-    Player * player = createComputerPlayer(world);
-    listPrepend(world -> players, player);
 
     // Destroy additional data.
     iaDestroy(unit_table);

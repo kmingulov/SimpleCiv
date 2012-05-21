@@ -55,7 +55,7 @@ Player * createPlayer(World * world, int id, IntArray * available_units, IntArra
     // are resources really, 0 is CELL_RES_NONE).
     player -> resources = iaLengthCreate(CELL_RES_COUNT + 1);
 
-    // Coordinates and etc.
+    // Cursor and map coordinates.
     player -> cur_r = 0;
     player -> cur_c = 0;
     player -> graph_map = world -> map -> head;
