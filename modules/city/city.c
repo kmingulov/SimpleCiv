@@ -89,7 +89,14 @@ City * createCity(World * world, char * name, int r, int c, Player * player)
     addEdge(getMapCell(world -> map, r, c), node, EDGE_CELL_CITY);
 
     // Update fog.
-    revealFogRadius(player -> fog, r, c, BALANCE_CITY_VIEW_RADIUS);
+    if(TEST_MODE)
+    {
+        revealFogRadius(player -> fog, r, c, BALANCE_TEST_MODE_VIEW_RADIUS);
+    }
+    else
+    {
+        revealFogRadius(player -> fog, r, c, BALANCE_CITY_VIEW_RADIUS);
+    }
 
     return city;
 }
