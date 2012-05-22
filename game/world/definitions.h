@@ -60,7 +60,6 @@
 // City's and unit's view.
 #define BALANCE_CITY_VIEW_RADIUS    5
 #define BALANCE_UNIT_VIEW_RADIUS    2
-#define BALANCE_TEST_MODE_VIEW_RADIUS    100
 
 /*
     DEFINES FOR PLAYERS' COLOURS.

@@ -36,7 +36,17 @@ FogOfWar * createFog(int r, int c)
         // iaLengthCreate() creates array with length c and this array is
         // already null'd (each element == 0). So there is no need in it's
         // initialization.
-        daPrepend(fog -> rows, iaLengthCreate(c));
+        IntArray * row = iaLengthCreate(c);
+        // Reveal all fog in test mode.
+        if(TEST_MODE)
+        {
+            for(int j = 0; j < c; j++)
+            {
+                iaSetByIndex(row, j, 1);
+            }
+        }
+        // Prepend row.
+        daPrepend(fog -> rows, row);
     }
     return fog;
 }
