@@ -29,6 +29,8 @@
 #include "../../modules/graph/graph.h"
 #include "../world/definitions.h"
 #include "../message/message.h"
+
+#include "view_settings.h"
 #include "view.h"
 
 /*
@@ -51,19 +53,22 @@ const int VIEW_PRVL_VALUES[] = {UNIT_PRVL_BUILD_CITY, UNIT_PRVL_BUILD_MINE,
 */
 void initColours()
 {
+    // Default colour pair.
     init_pair(0, COLOR_WHITE, COLOR_BLACK);
-    init_pair(CELL_TYPE_WATER, COLOR_BLUE,  COLOR_BLACK);
-    init_pair(CELL_TYPE_GRASS, COLOR_GREEN, COLOR_BLACK);
-    init_pair(CELL_TYPE_HILL, COLOR_WHITE, COLOR_BLACK);
-    init_pair(CELL_TYPE_TREE, COLOR_GREEN, COLOR_BLACK);
+
+    // Colour pairs for cells.
+    init_pair(CELL_TYPE_WATER,    COLOR_BLUE,  COLOR_BLACK);
+    init_pair(CELL_TYPE_GRASS,    COLOR_GREEN, COLOR_BLACK);
+    init_pair(CELL_TYPE_HILL,     COLOR_WHITE, COLOR_BLACK);
+    init_pair(CELL_TYPE_TREE,     COLOR_GREEN, COLOR_BLACK);
     init_pair(CELL_TYPE_MOUNTAIN, COLOR_WHITE, COLOR_BLACK);
 
+    // Players.
     init_pair(PLAYER_COLOURS_START + 0, 1, 0);
     init_pair(PLAYER_COLOURS_START + 1, 3, 0);
     init_pair(PLAYER_COLOURS_START + 2, 5, 0);
     init_pair(PLAYER_COLOURS_START + 3, 6, 0);
     init_pair(PLAYER_COLOURS_START + 4, 7, 0);
-    init_pair(PLAYER_COLOURS_START + 5, COLOR_WHITE, COLOR_BLACK);
 }
 
 View * createView(World * world)
@@ -83,10 +88,10 @@ View * createView(World * world)
     keypad(stdscr, TRUE);
     start_color();
     attroff(A_BOLD);
-    attron(COLOR_PAIR(0));
 
     // Colour pairs.
     initColours();
+    attron(COLOR_PAIR(0));
 
     // Get sizes.
     getmaxyx(stdscr, result -> rows, result -> columns);
@@ -103,37 +108,20 @@ View * createView(World * world)
     result -> chooser = NULL;
     result -> textbox = NULL;
 
-    // Go through player's list and set for each player his cur_*, map_* and
-    // current_cell.
+    // Go through player's list and init his view settings.
     for(int i = 0; i < world -> properties -> players_count; i++)
     {
         // Get player.
         Player * player = (Player *) listGetHead(world -> players);
-        // And his city.
-        City * city = (City *) player -> cities -> head -> data;
-        // Focus on this city.
-        player -> cur_r = result -> rows / 2;
-        player -> cur_c = result -> sidebar / 2;
-        player -> map_r = city -> r;
-        player -> map_c = city -> c;
-        player -> current_cell = getMapCell(world -> map, city -> r, city -> c);
-        player -> graph_map = getCell(player -> current_cell, 1 - player -> cur_r, 1 - player -> cur_c);
+        // Init his view settings.
+        initPlayerSettings(world, result, player);
         // Go on.
         listScrollNext(world -> players);
-        player = (Player *) listGetHead(world -> players);
-        if(player -> is_computer)
-        {
-            listScrollNext(world -> players);
-        }
     }
 
     // Load first player settings.
     Player * player = (Player *) listGetHead(world -> players);
-    result -> cur_r = player -> cur_r;
-    result -> cur_c = player -> cur_c;
-    result -> map_r = player -> map_r;
-    result -> map_c = player -> map_c;
-    result -> current_cell = player -> current_cell;
+    loadPlayerSettings(result, player);
 
     return result;
 }

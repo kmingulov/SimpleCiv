@@ -26,7 +26,7 @@ OBJ_ERRORS = world_errors.o log.o
 OBJ_PARSE = string_functions.o expat_handlers.o xml.o
 
 # helpful for ncurses and view
-OBJ_NCURSES = curses_draws.o curses_chooser.o curses_textbox.o
+OBJ_NCURSES = curses_draws.o curses_chooser.o curses_textbox.o view_settings.o
 
 # main modules
 OBJ_MAIN = world.o view.o control.o message.o main.o
@@ -154,6 +154,9 @@ curses_chooser.o: modules/widgets/curses_chooser.c
 
 curses_textbox.o: modules/widgets/curses_textbox.c
 	$(CC) $(CFLAGS) modules/widgets/curses_textbox.c
+
+view_settings.o: game/view/view_settings.c
+	$(CC) $(CFLAGS) game/view/view_settings.c
 
 # main
 world.o: game/world/world.c
