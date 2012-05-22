@@ -24,7 +24,7 @@
 #include <math.h>
 #include <curses.h>
 
-#include "draw_functions.h"
+#include "curses_draws.h"
 
 void clearBlock(int start_r, int start_c, int r, int c)
 {

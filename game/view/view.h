@@ -1,20 +1,43 @@
 /*
-    View module.
 
-    Ncurses has "memory leaks". Read more at:
+    SimpleCiv is simple clone of Civilization game, using ncurses library.
+    Copyright (C) 2012 by K. Mingulov, A. Sapronov.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+    ****************************************************************************
+
+    Ncurses has «memory leaks». Read more at:
     http://invisible-island.net/ncurses/ncurses.faq.html#config_leaks
+
 */
-#ifndef MODULE_VIEW
-#define MODULE_VIEW
+
+#ifndef VIEW_H
+#define VIEW_H
+
 #include <curses.h>
 
 #include "../../modules/graph/graph.h"
 #include "../../modules/list/list.h"
 #include "../../modules/map/map.h"
 #include "../world/world.h"
-#include "view_chooser.h"
-#include "view_textbox.h"
-#include "draw_functions.h"
+
+#include "../../modules/widgets/curses_draws.h"
+#include "../../modules/widgets/curses_chooser.h"
+#include "../../modules/widgets/curses_textbox.h"
+
 #include "definitions.h"
 
 /*
@@ -25,16 +48,20 @@ typedef struct View
     // Number of rows and columns and distance between left edge of screen and
     // sidebar (in columns).
     int rows, columns, sidebar;
+
     // Cursor coordinates (in the ncurses).
     int cur_r, cur_c;
     // Cursor coordinates (in the world).
     int map_r, map_c;
+
     // Current cell.
     Node * current_cell;
+
     // Current chooser.
-    ViewChooser * chooser;
+    Chooser * chooser;
+
     // Current textbox.
-    ViewTextbox * textbox;
+    Textbox * textbox;
 } View;
 
 /*
@@ -46,9 +73,9 @@ void destroyView(View * view);
 /*
     Information adders for ViewTextbox.
 */
-void addHelpInfoToTextbox(ViewTextbox * tb);
-void addUnitInfoToTextbox(ViewTextbox * tb, World * world, View * view);
-void addWinInfoToTextbox(ViewTextbox * tb);
+void addHelpInfoToTextbox(Textbox * tb);
+void addUnitInfoToTextbox(Textbox * tb, World * world, View * view);
+void addWinInfoToTextbox(Textbox * tb);
 
 /*
     Focus on the (r, c) cell of the map.

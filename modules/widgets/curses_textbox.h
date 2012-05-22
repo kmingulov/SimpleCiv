@@ -19,37 +19,55 @@
 
 */
 
-#ifndef VIEW_CHOOSER_H
-#define VIEW_CHOOSER_H
+#ifndef CURSES_TEXTBOX_H
+#define CURSES_TEXTBOX_H
 
-#include "../../modules/int_array/int_array.h"
-#include "../../modules/city/city.h"
-#include "../world/world.h"
+#include "../dyn_array/dyn_array.h"
+#include "../int_array/int_array.h"
 
-/*
-    Struct of view chooser (for some menus).
-*/
-typedef struct ViewChooser
+typedef struct Textbox
 {
-    // Array of ids.
-    IntArray * ids;
+    // Start point.
+    int start_r, start_c;
 
-    // Current id.
-    int current;
+    // Sizes.
+    int r, c;
 
-    // First row of the list with items.
-    int start_r;
-} ViewChooser;
+    // Page count.
+    int pages_count;
+
+    // Current page.
+    int current_page;
+
+    // Lines per page.
+    int lines_per_page;
+
+    // Array of char strings.
+    DynArray * lines;
+
+    // Array of line's properties: bold or not.
+    IntArray * properties;
+} Textbox;
 
 /*
-    Functions of creation chooser.
+    Creates new textbox.
 */
-ViewChooser * createTechChooser(World * world);
-ViewChooser * createUnitChooser(World * world, City * city);
+Textbox * createTextbox(int start_r, int start_c, int r, int c);
 
 /*
-    Destroys chooser.
+    Adds formatted string to textbox (bold or not).
 */
-void destroyChooser(ViewChooser * chooser);
+void addString(Textbox * tb, const char * format, ...);
+void addBoldString(Textbox * tb, const char * format, ...);
+
+/*
+    Draws textbox.
+*/
+void drawTextbox(Textbox * tb);
+
+/*
+    Destroys textbox.
+*/
+void destroyTextbox(Textbox * textbox);
 
 #endif

@@ -1,3 +1,24 @@
+/*
+
+    SimpleCiv is simple clone of Civilization game, using ncurses library.
+    Copyright (C) 2012 by K. Mingulov, A. Sapronov.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*/
+
 #include <stdlib.h>
 
 #include "../../modules/player/player.h"
@@ -8,7 +29,6 @@
 #include "../../modules/graph/graph.h"
 #include "../world/definitions.h"
 #include "../message/message.h"
-#include "view_textbox.h"
 #include "view.h"
 
 /*
@@ -164,7 +184,7 @@ void drawGeneralView(World * world, View * view)
     putInMiddle(r - 4, s + 1, c - s - 2, "Press h for help");
 }
 
-void addHelpInfoToTextbox(ViewTextbox * tb)
+void addHelpInfoToTextbox(Textbox * tb)
 {
     addBoldString(tb, "Help");
     addString(tb, "Use up/down arrow keys to scroll this text.");
@@ -201,7 +221,7 @@ void addHelpInfoToTextbox(ViewTextbox * tb)
     addString(tb, "");
 }
 
-void addUnitInfoToTextbox(ViewTextbox * tb, World * world, View * view)
+void addUnitInfoToTextbox(Textbox * tb, World * world, View * view)
 {
     // Getting unit.
     Node * n = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
@@ -270,7 +290,7 @@ void addUnitInfoToTextbox(ViewTextbox * tb, World * world, View * view)
     }
 }
 
-void addWinInfoToTextbox(ViewTextbox * tb)
+void addWinInfoToTextbox(Textbox * tb)
 {
     addBoldString(tb, "       Congratulations!       ");
     addString(tb,     "           You win!           ");
@@ -760,7 +780,7 @@ int viewProcess(World * world, View * view, List * list)
                 break;
 
                 case VIEW_REDRAW_TEXTBOX:
-                    drawViewTextbox(view -> textbox);
+                    drawTextbox(view -> textbox);
                 break;
             }
             le = le -> next;

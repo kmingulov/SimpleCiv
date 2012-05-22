@@ -19,35 +19,38 @@
 
 */
 
-#ifndef DRAW_FUNCTIONS_H
-#define DRAW_FUNCTIONS_H
+#ifndef CURSES_CHOOSER_H
+#define CURSES_CHOOSER_H
+
+#include "../../game/world/world.h"
+
+#include "../int_array/int_array.h"
+#include "../city/city.h"
 
 /*
-    Clears block from (start_r, start_c) to (start_r + r, start_c + c) point.
+    Struct of view chooser (for some menus).
 */
-void clearBlock(int start_r, int start_c, int r, int c);
+typedef struct Chooser
+{
+    // Array of ids.
+    IntArray * ids;
+
+    // Current id.
+    int current;
+
+    // First row of the list with items.
+    int start_r;
+} Chooser;
 
 /*
-    Draws box (start_r, start_c) to (start_r + r, start_c + c) point.
+    Functions of creation chooser.
 */
-void drawBox(int start_r, int start_c, int r, int c);
+Chooser * createTechChooser(World * world);
+Chooser * createUnitChooser(World * world, City * city);
 
 /*
-    Draws vertical line from (start_r, c) to (start_r + r, c) point
+    Destroys chooser.
 */
-void drawVertLine(int start_r, int r, int c);
-
-/*
-    Draws horizontal line from (r, start_c) to (r, start_c + c) point
-*/
-void drawHorizLine(int start_r, int r, int c);
-
-/*
-    Put char string into the middle/right/left of row. Syntax is similar to
-    printf function.
-*/
-void putInMiddle(int start_r, int start_c, int length, const char * format, ...);
-void putInRight(int start_r, int start_c, int length, const char * format, ...);
-void putInLeft(int start_r, int start_c, int length, const char * format, ...);
+void destroyChooser(Chooser * chooser);
 
 #endif

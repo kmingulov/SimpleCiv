@@ -1,14 +1,35 @@
+/*
+
+    SimpleCiv is simple clone of Civilization game, using ncurses library.
+    Copyright (C) 2012 by K. Mingulov, A. Sapronov.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*/
+
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include <curses.h>
 
-#include "draw_functions.h"
-#include "view_textbox.h"
+#include "curses_draws.h"
+#include "curses_textbox.h"
 
-ViewTextbox * createViewTextbox(int start_r, int start_c, int r, int c)
+Textbox * createTextbox(int start_r, int start_c, int r, int c)
 {
-    ViewTextbox * textbox = malloc(sizeof(ViewTextbox));
+    Textbox * textbox = malloc(sizeof(Textbox));
 
     textbox -> lines_per_page = r - 4;
     textbox -> pages_count = 1;
@@ -23,7 +44,7 @@ ViewTextbox * createViewTextbox(int start_r, int start_c, int r, int c)
     return textbox;
 }
 
-void addString(ViewTextbox * tb, const char * format, ...)
+void addString(Textbox * tb, const char * format, ...)
 {
     // Buffer and args list.
     va_list args;
@@ -41,7 +62,7 @@ void addString(ViewTextbox * tb, const char * format, ...)
     tb -> pages_count = ceil((float) tb -> lines -> length / tb -> lines_per_page);
 }
 
-void addBoldString(ViewTextbox * tb, const char * format, ...)
+void addBoldString(Textbox * tb, const char * format, ...)
 {
     // Args list.
     va_list args;
@@ -54,7 +75,7 @@ void addBoldString(ViewTextbox * tb, const char * format, ...)
     tb -> properties -> data[tb -> properties -> length - 1] = 1;
 }
 
-void drawViewTextbox(ViewTextbox * tb)
+void drawTextbox(Textbox * tb)
 {
     clearBlock(tb -> start_r, tb -> start_c, tb -> r, tb -> c);
     drawBox(tb -> start_r, tb -> start_c, tb -> r, tb -> c);
@@ -79,7 +100,7 @@ void drawViewTextbox(ViewTextbox * tb)
     }
 }
 
-void destroyViewTextbox(ViewTextbox * textbox)
+void destroyTextbox(Textbox * textbox)
 {
     daDestroy(textbox -> lines, &free);
     iaDestroy(textbox -> properties);

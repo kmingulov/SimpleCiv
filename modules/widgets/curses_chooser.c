@@ -21,17 +21,19 @@
 
 #include <stdlib.h>
 
-#include "../../modules/player/player.h"
-#include "../../modules/technology/technology.h"
-#include "../../modules/technology/technology_table.h"
-#include "../../modules/unit/unit_common_info.h"
-#include "../../modules/unit/unit_table.h"
-#include "../world/definitions.h"
-#include "view_chooser.h"
+#include "../../game/world/definitions.h"
 
-ViewChooser * createTechChooser(World * world)
+#include "../player/player.h"
+#include "../technology/technology.h"
+#include "../technology/technology_table.h"
+#include "../unit/unit_common_info.h"
+#include "../unit/unit_table.h"
+
+#include "curses_chooser.h"
+
+Chooser * createTechChooser(World * world)
 {
-    ViewChooser * chooser = malloc(sizeof(ViewChooser));
+    Chooser * chooser = malloc(sizeof(Chooser));
 
     // Initiale values.
     chooser -> ids = iaCreate();
@@ -67,9 +69,9 @@ ViewChooser * createTechChooser(World * world)
     return chooser;
 }
 
-ViewChooser * createUnitChooser(World * world, City * city)
+Chooser * createUnitChooser(World * world, City * city)
 {
-    ViewChooser * chooser = malloc(sizeof(ViewChooser));
+    Chooser * chooser = malloc(sizeof(Chooser));
 
     // Initiale values.
     chooser -> ids = iaCreate();
@@ -105,7 +107,7 @@ ViewChooser * createUnitChooser(World * world, City * city)
     return chooser;
 }
 
-void destroyChooser(ViewChooser * chooser)
+void destroyChooser(Chooser * chooser)
 {
     iaDestroy(chooser -> ids);
     free(chooser);
