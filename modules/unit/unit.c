@@ -189,30 +189,11 @@ void makeUnitNeutral(void * data)
     u -> owner = NULL;
 }
 
-int moveUnit(World * world, Node * current_cell, int direction)
+
+
+
+int unitMoveShip(Unit * unit,UnitCommonInfo * u_info, Node * destination)
 {
-    // Getting edge to unit.
-    Edge * edge;
-    for(int i = 0; i < current_cell -> edges -> length; i++)
-    {
-        edge = current_cell -> edges -> data[i];
-        if(edge -> type == EDGE_CELL_UNIT)
-        {
-            break;
-        }
-    }
-
-    // Getting unit, his info and destination.
-    Unit * unit = (Unit *) edge -> target -> data;
-    UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, unit -> unit_id);
-    Node * destination = getNeighbour(current_cell, direction);
-
-    // Unit cannot go any more.
-    if(unit -> moves == 0)
-    {
-        return 3;
-    }
-
     // Unit is a ship?
     if(u_info -> privileges != NULL && iaSearchForData(u_info -> privileges, UNIT_PRVL_CAN_FLOAT) != -1)
     {
@@ -222,17 +203,11 @@ int moveUnit(World * world, Node * current_cell, int direction)
             return 3;
         }
     }
+}
 
-    // Cannot go to the water.
-    if(((Cell *) destination -> data) -> territory == CELL_TYPE_WATER)
-    {
-        // Not a ship.
-        if(u_info -> privileges == NULL || iaSearchForData(u_info -> privileges, UNIT_PRVL_CAN_FLOAT) == -1)
-        {
-            return 3;
-        }
-    }
 
+int unitMoveAnotherUnit(World * world, Unit * unit,UnitCommonInfo * u_info, Node * destination)
+{
     // There is another unit?
     if(getNeighbour(destination, EDGE_CELL_UNIT) != NULL)
     {
@@ -247,46 +222,52 @@ int moveUnit(World * world, Node * current_cell, int direction)
         }
         return 3;
     }
+}
 
-    // There is a city?
-    if(getNeighbour(destination, EDGE_CELL_CITY) != NULL)
+
+
+int unitMoveCity(World * world, Unit * unit, Node * destination)
+{
+    Node * neighbour = getNeighbour(destination, EDGE_CELL_CITY);
+    City * city = (City *) neighbour -> data;
+    // Capture!
+    if(city -> owner != unit -> owner)
     {
-        Node * neighbour = getNeighbour(destination, EDGE_CELL_CITY);
-        City * city = (City *) neighbour -> data;
-        // Capture!
-        if(city -> owner != unit -> owner)
+        unit -> moves = 0;
+        Player * prev_owner = city -> owner;
+        Player * new_owner = unit -> owner;
+
+        // Change owner.
+        city -> owner = new_owner;
+        // Remove city from old owner's cities list.
+        listDeleteByPointer(prev_owner -> cities, city, NULL);
+        // Add to new owner.
+        listPrepend(new_owner -> cities, city);
+
+        // If prev_owner doesn't have cities any more, destroy him.
+        if(prev_owner -> cities -> length == 0)
         {
-            unit -> moves = 0;
-            Player * prev_owner = city -> owner;
-            Player * new_owner = unit -> owner;
-
-            // Change owner.
-            city -> owner = new_owner;
-            // Remove city from old owner's cities list.
-            listDeleteByPointer(prev_owner -> cities, city, NULL);
-            // Add to new owner.
-            listPrepend(new_owner -> cities, city);
-
-            // If prev_owner doesn't have cities any more, destroy him.
-            if(prev_owner -> cities -> length == 0)
+            // Make all units neutral.
+            listForEach(prev_owner -> units, &makeUnitNeutral);
+            // Delete player.
+            listDeleteByPointer(world -> players, prev_owner, &destroyPlayer);
+            // Decrement players' count.
+            world -> properties -> players_count -= 1;
+            // It is last player.
+            if(world -> properties -> players_count == 1)
             {
-                // Make all units neutral.
-                listForEach(prev_owner -> units, &makeUnitNeutral);
-                // Delete player.
-                listDeleteByPointer(world -> players, prev_owner, &destroyPlayer);
-                // Decrement players' count.
-                world -> properties -> players_count -= 1;
-                // It is last player.
-                if(world -> properties -> players_count == 1)
-                {
-                    return 2;
-                }
+                return 2;
             }
-            return 0;
         }
+        unit -> r = city -> r;
+        unit -> c = city -> c;
+        return 0;
     }
+}
 
-    // Motion.
+void unitMoveMotion(World * world, Node * current_cell, Node * destination, int direction, Unit * unit, Edge * edge)
+{
+        // Motion.
     unit -> moves--;
     switch(direction)
     {
@@ -318,6 +299,67 @@ int moveUnit(World * world, Node * current_cell, int direction)
     daPrepend(destination -> edges, edge);
 
     revealFogRadius(unit -> owner -> fog, unit -> r, unit -> c, BALANCE_UNIT_VIEW_RADIUS);
+}
+
+
+int moveUnit(World * world, Node * current_cell, int direction)
+{
+    // Getting edge to unit.
+    Edge * edge;
+    for(int i = 0; i < current_cell -> edges -> length; i++)
+    {
+        edge = current_cell -> edges -> data[i];
+        if(edge -> type == EDGE_CELL_UNIT)
+        {
+            break;
+        }
+    }
+
+    // Getting unit, his info and destination.
+    Unit * unit = (Unit *) edge -> target -> data;
+    UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, unit -> unit_id);
+    Node * destination = getNeighbour(current_cell, direction);
+
+    // Unit cannot go any more.
+    if(unit -> moves == 0)
+    {
+        return 3;
+    }
+
+    // There is another unit?
+    if (getNeighbour(destination, EDGE_CELL_UNIT) != NULL)
+    {
+        if (unitMoveAnotherUnit(world, unit , u_info, destination) == 3) return 3;
+        else return 1;
+    }
+
+    // There is a city?
+    if(getNeighbour(destination, EDGE_CELL_CITY) != NULL)
+    {
+        if (unitMoveCity(world, unit, destination) == 2) return 2;
+        else return 1;
+    }
+
+    if(u_info -> privileges != NULL && iaSearchForData(u_info -> privileges, UNIT_PRVL_CAN_FLOAT) != -1)
+    {
+        if (unitMoveShip(unit, u_info, destination) == 3)
+            return 3;
+    }
+
+    // Cannot go to the water.
+    if(((Cell *) destination -> data) -> territory == CELL_TYPE_WATER)
+    {
+        // Not a ship.
+        if(u_info -> privileges == NULL || iaSearchForData(u_info -> privileges, UNIT_PRVL_CAN_FLOAT) == -1)
+        {
+            return 3;
+        }
+    }
+
+    unitMoveMotion(world, current_cell, destination, direction, unit, edge);
+
+
 
     return 0;
 }
+
