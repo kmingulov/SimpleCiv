@@ -203,16 +203,16 @@ int unitMoveShip(Unit * unit,UnitCommonInfo * u_info, Node * destination)
 int unitMoveAnotherUnit(World * world, Unit * unit,UnitCommonInfo * u_info, Node * destination)
 {
     // There is another unit?
-        Node * neighbour = getNeighbour(destination, EDGE_CELL_UNIT);
-        Unit * another_unit = (Unit *) neighbour -> data;
-        // Fight!
-        if(another_unit -> owner != unit -> owner)
-        {
-            unit -> moves = 0;
-            unitsFight(world, &unit, &another_unit);
-            return 1;
-        }
-        return 3;
+    Node * neighbour = getNeighbour(destination, EDGE_CELL_UNIT);
+    Unit * another_unit = (Unit *) neighbour -> data;
+    // Fight!
+    if(another_unit -> owner != unit -> owner)
+    {
+        unit -> moves = 0;
+        unitsFight(world, &unit, &another_unit);
+        return 1;
+    }
+    return 3;
 }
 
 
