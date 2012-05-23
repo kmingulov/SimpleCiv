@@ -36,19 +36,19 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             switch (key)
             {
                 case KEY_UP   :
-                    listPrepend(list, createMessage(VIEW_MOVE_CURSOR_TOP, NULL));
+                    listPrepend(list, createMessage(VIEW_MOVE_CURSOR_TOP));
                 break;
 
                 case KEY_DOWN :
-                    listPrepend(list, createMessage(VIEW_MOVE_CURSOR_BOTTOM, NULL));
+                    listPrepend(list, createMessage(VIEW_MOVE_CURSOR_BOTTOM));
                 break;
 
                 case KEY_RIGHT:
-                    listPrepend(list, createMessage(VIEW_MOVE_CURSOR_RIGHT, NULL));
+                    listPrepend(list, createMessage(VIEW_MOVE_CURSOR_RIGHT));
                 break;
 
                 case KEY_LEFT :
-                    listPrepend(list, createMessage(VIEW_MOVE_CURSOR_LEFT, NULL));
+                    listPrepend(list, createMessage(VIEW_MOVE_CURSOR_LEFT));
                 break;
             }
             return list;
@@ -84,15 +84,15 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                     if(res == 0)
                     {
                         List * list = listCreate();
-                        listPrepend(list, createMessage(VIEW_REDRAW_MAP, NULL));
+                        listPrepend(list, createMessage(VIEW_REDRAW_MAP));
                         // Moving cursor.
-                        listPrepend(list, createMessage(keys[i][2], NULL));
+                        listPrepend(list, createMessage(keys[i][2]));
                         return list;
                     }
                     else if(res == 1)
                     {
                         List * list = listCreate();
-                        listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+                        listPrepend(list, createMessage(VIEW_REDRAW_ALL));
                         return list;
                     }
                     else if(res == 2)
@@ -105,8 +105,8 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                         control -> state = CONTROL_TEXTBOX;
                         // Redrawing.
                         List * list = listCreate();
-                        listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
-                        listPrepend(list, createMessage(VIEW_REDRAW_TEXTBOX, NULL));
+                        listPrepend(list, createMessage(VIEW_REDRAW_ALL));
+                        listPrepend(list, createMessage(VIEW_REDRAW_TEXTBOX));
                         return list;
                     }
                     return NULL;
@@ -121,11 +121,11 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             switch(key)
             {
                 case KEY_UP  :
-                    listPrepend(list, createMessage(VIEW_CHOOSER_MOVE_CURSOR_TOP, NULL));
+                    listPrepend(list, createMessage(VIEW_CHOOSER_MOVE_CURSOR_TOP));
                 break;
 
                 case KEY_DOWN:
-                    listPrepend(list, createMessage(VIEW_CHOOSER_MOVE_CURSOR_BOTTOM, NULL));
+                    listPrepend(list, createMessage(VIEW_CHOOSER_MOVE_CURSOR_BOTTOM));
                 break;
             }
             return list;
@@ -153,7 +153,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                 break;
             }
             List * list = listCreate();
-            listPrepend(list, createMessage(VIEW_REDRAW_TEXTBOX, NULL));
+            listPrepend(list, createMessage(VIEW_REDRAW_TEXTBOX));
             return list;
         }
     }
@@ -190,7 +190,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             destroyChooser(view -> chooser);
             view -> chooser = NULL;
             List * list = listCreate();
-            listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+            listPrepend(list, createMessage(VIEW_REDRAW_ALL));
             return list;
         }
 
@@ -236,7 +236,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             destroyChooser(view -> chooser);
             view -> chooser = NULL;
             List * list = listCreate();
-            listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+            listPrepend(list, createMessage(VIEW_REDRAW_ALL));
             return list;
         }
 
@@ -305,7 +305,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             //view -> current_cell = getCell(player -> graph_map, view -> map_r, view -> map_c);
             // Send redrawing message.
             List * list = listCreate();
-            listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+            listPrepend(list, createMessage(VIEW_REDRAW_ALL));
             return list;
         }
     }
@@ -355,7 +355,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                 // Create chooser.
                 view -> chooser = createUnitChooser(world, city);
                 List * list = listCreate();
-                listPrepend(list, createMessage(VIEW_REDRAW_CITY_DIALOG, NULL));
+                listPrepend(list, createMessage(VIEW_REDRAW_CITY_DIALOG));
                 return list;
             }
         }
@@ -372,7 +372,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             view -> chooser = createTechChooser(world);
             // Send message.
             List * list = listCreate();
-            listPrepend(list, createMessage(VIEW_REDRAW_TECH_DIALOG, NULL));
+            listPrepend(list, createMessage(VIEW_REDRAW_TECH_DIALOG));
             return list;
         }
     }
@@ -383,7 +383,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         if(control -> state == CONTROL_MOVE_CURSOR || control -> state == CONTROL_MOVE_UNIT)
         {
             List * list = listCreate();
-            listPrepend(list, createMessage(VIEW_ESCAPE, NULL));
+            listPrepend(list, createMessage(VIEW_ESCAPE));
             return list;
         }
 
@@ -393,7 +393,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             destroyTextbox(view -> textbox);
             view -> textbox = NULL;
             List * list = listCreate();
-            listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+            listPrepend(list, createMessage(VIEW_REDRAW_ALL));
             return list;
         }
 
@@ -403,7 +403,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             destroyChooser(view -> chooser);
             view -> chooser = NULL;
             List * list = listCreate();
-            listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+            listPrepend(list, createMessage(VIEW_REDRAW_ALL));
             return list;
         }
     }
@@ -417,7 +417,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             addHelpInfoToTextbox(view -> textbox);
             control -> state = CONTROL_TEXTBOX;
             List * list = listCreate();
-            listPrepend(list, createMessage(VIEW_REDRAW_TEXTBOX, NULL));
+            listPrepend(list, createMessage(VIEW_REDRAW_TEXTBOX));
             return list;
         }
     }
@@ -443,7 +443,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             addUnitInfoToTextbox(view -> textbox, world, view);
             control -> state = CONTROL_TEXTBOX;
             List * list = listCreate();
-            listPrepend(list, createMessage(VIEW_REDRAW_TEXTBOX, NULL));
+            listPrepend(list, createMessage(VIEW_REDRAW_TEXTBOX));
             return list;
         }
     }
@@ -469,7 +469,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                 control -> state = CONTROL_MOVE_CURSOR;
 
                 List * list = listCreate();
-                listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+                listPrepend(list, createMessage(VIEW_REDRAW_ALL));
                 return list;
             }
             return NULL;
@@ -494,7 +494,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                 unit -> owner -> gold += BALANCE_CHOPPING_GAIN;
                 unit -> moves = 0;
                 List * list = listCreate();
-                listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+                listPrepend(list, createMessage(VIEW_REDRAW_ALL));
                 return list;
             }
             return NULL;
@@ -525,7 +525,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
                 control -> state = CONTROL_MOVE_CURSOR;
                 destroyUnit(world, unit);
                 List * list = listCreate();
-                listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+                listPrepend(list, createMessage(VIEW_REDRAW_ALL));
                 return list;
             }
             return NULL;
@@ -552,7 +552,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             focusOn(world, view, unit -> r, unit -> c);
             // Send message.
             List * list = listCreate();
-            listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+            listPrepend(list, createMessage(VIEW_REDRAW_ALL));
             return list;
         }
 
@@ -571,7 +571,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
             focusOn(world, view, city -> r, city -> c);
             // Send message.
             List * list = listCreate();
-            listPrepend(list, createMessage(VIEW_REDRAW_ALL, NULL));
+            listPrepend(list, createMessage(VIEW_REDRAW_ALL));
             return list;
         }
 
