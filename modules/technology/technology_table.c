@@ -27,6 +27,16 @@
 IntArray * createTechnologyTable(DynArray * techs_info)
 {
     IntArray * result = iaLengthCreate(techs_info -> length);
+
+    if(TEST_MODE)
+    {
+        for(int i = 0; i < result -> length; i++)
+        {
+            iaSetByIndex(result, i, TECH_RESEARCHED);
+        }
+        return result;
+    }
+
     for(int i = 0; i < result -> length; i++)
     {
         // Getting node of technology.

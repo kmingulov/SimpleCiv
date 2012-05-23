@@ -249,14 +249,7 @@ void elementContent(void * data, const char * s, int len)
             break;
 
             case XML_TECH_TURNS:
-                if(TEST_MODE)
-                {
-                    ((Technology *) ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> tech_in_tree -> data) -> turns = 1;
-                }
-                else
-                {
-                    ((Technology *) ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> tech_in_tree -> data) -> turns = atoi(temp);
-                }
+                ((Technology *) ((TechnologyParseInfo *) daGetLast(p_data -> data)) -> tech_in_tree -> data) -> turns = atoi(temp);
             break;
 
             case XML_TECH_PROVIDES_UNITS:
