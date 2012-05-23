@@ -76,9 +76,9 @@ void destroyView(View * view);
 void focusOn(World * world, View * view, int r, int c);
 
 /*
-    Draws basic view (for map).
+    Draws basic map ui.
 */
-void drawGeneralView(World * world, View * view);
+void drawBasicMapUI(World * world, View * view);
 
 /*
     Draws tech view.

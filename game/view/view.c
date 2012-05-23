@@ -138,7 +138,7 @@ void focusOn(World * world, View * view, int r, int c)
     player -> graph_map = getCell(view -> current_cell, 1 - view -> cur_r, 1 - view -> cur_c);
 }
 
-void drawGeneralView(World * world, View * view)
+void drawBasicMapUI(World * world, View * view)
 {
     erase();
 
@@ -167,7 +167,7 @@ void drawTechView(World * world, View * view)
     // Drawing player name and other info.
     int line = 2;
     Player * player = (Player *) listGetHead(world -> players);
-    attron(A_BOLD); mvprintw(line++, 3, "%s's researches", player -> name); attroff(A_BOLD);
+    attron(A_BOLD); mvprintw(line++, 3, "%s's research", player -> name); attroff(A_BOLD);
     mvprintw(line++, 3, "%d gold, %d gold spents on reasearches every turn", player -> gold, player -> research -> delta);
 
     // Drawing space.
@@ -527,7 +527,7 @@ int viewProcess(World * world, View * view, List * list)
                 break;
 
                 case VIEW_REDRAW_ALL:
-                    drawGeneralView(world, view);
+                    drawBasicMapUI(world, view);
                     drawPlayerInfo(world, view);
                     drawCellInfo(world, view);
                     drawMap(world, view);

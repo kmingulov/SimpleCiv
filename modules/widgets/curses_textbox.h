@@ -38,7 +38,7 @@ typedef struct Textbox
     // Sizes.
     int r, c;
 
-    // Page count.
+    // Pages count.
     int pages_count;
 
     // Current page.

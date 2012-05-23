@@ -27,11 +27,16 @@
 #include "../int_array/int_array.h"
 #include "../city/city.h"
 
+#include "curses_textbox.h"
+
 /*
     Struct of view chooser (for some menus).
 */
 typedef struct Chooser
 {
+    // Textbox with lines.
+    Textbox * text;
+
     // Array of ids.
     IntArray * ids;
 
@@ -41,6 +46,16 @@ typedef struct Chooser
     // First row of the list with items.
     int start_r;
 } Chooser;
+
+/*
+    Creates new chooser.
+*/
+Chooser * createChooser(int start_r, int start_c, int r, int c);
+
+/*
+    Adds non-choosable bold string.
+    Return length of added strings.
+*/
 
 /*
     Functions of creation chooser.
