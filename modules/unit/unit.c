@@ -190,43 +190,34 @@ void makeUnitNeutral(void * data)
 }
 
 
-
-
 int unitMoveShip(Unit * unit,UnitCommonInfo * u_info, Node * destination)
 {
-    // Unit is a ship?
-    if(u_info -> privileges != NULL && iaSearchForData(u_info -> privileges, UNIT_PRVL_CAN_FLOAT) != -1)
+    // Cannot go to the land, if there is no city.
+    if( ((Cell *) destination -> data) -> territory != CELL_TYPE_WATER && getNeighbour(destination, EDGE_CELL_CITY) == NULL )
     {
-        // Cannot go to the land, if there is no city.
-        if( ((Cell *) destination -> data) -> territory != CELL_TYPE_WATER && getNeighbour(destination, EDGE_CELL_CITY) == NULL )
-        {
-            return 3;
-        }
+        return 3;
     }
+    return 0;
 }
-
 
 int unitMoveAnotherUnit(World * world, Unit * unit,UnitCommonInfo * u_info, Node * destination)
 {
     // There is another unit?
-    if(getNeighbour(destination, EDGE_CELL_UNIT) != NULL)
+    Node * neighbour = getNeighbour(destination, EDGE_CELL_UNIT);
+    Unit * another_unit = (Unit *) neighbour -> data;
+    // Fight!
+    if(another_unit -> owner != unit -> owner)
     {
-        Node * neighbour = getNeighbour(destination, EDGE_CELL_UNIT);
-        Unit * another_unit = (Unit *) neighbour -> data;
-        // Fight!
-        if(another_unit -> owner != unit -> owner)
-        {
-            unit -> moves = 0;
-            unitsFight(world, &unit, &another_unit);
-            return 1;
-        }
-        return 3;
+        unit -> moves = 0;
+        unitsFight(world, &unit, &another_unit);
+        return 1;
     }
+    return 3;
 }
 
 
 
-int unitMoveCity(World * world, Unit * unit, Node * destination)
+int unitMoveToCity(World * world, Unit * unit, Node * destination)
 {
     Node * neighbour = getNeighbour(destination, EDGE_CELL_CITY);
     City * city = (City *) neighbour -> data;
@@ -259,13 +250,12 @@ int unitMoveCity(World * world, Unit * unit, Node * destination)
                 return 2;
             }
         }
-        unit -> r = city -> r;
-        unit -> c = city -> c;
         return 0;
     }
+    return 0;
 }
 
-void unitMoveMotion(World * world, Node * current_cell, Node * destination, int direction, Unit * unit, Edge * edge)
+void unitMotion(World * world, Node * current_cell, Node * destination, int direction, Unit * unit, Edge * edge)
 {
         // Motion.
     unit -> moves--;
@@ -328,23 +318,15 @@ int moveUnit(World * world, Node * current_cell, int direction)
 
     // There is another unit?
     if (getNeighbour(destination, EDGE_CELL_UNIT) != NULL)
-    {
-        if (unitMoveAnotherUnit(world, unit , u_info, destination) == 3) return 3;
-        else return 1;
-    }
+        return unitMoveAnotherUnit(world, unit , u_info, destination);
+
 
     // There is a city?
     if(getNeighbour(destination, EDGE_CELL_CITY) != NULL)
-    {
-        if (unitMoveCity(world, unit, destination) == 2) return 2;
-        else return 1;
-    }
+        return unitMoveToCity(world, unit, destination);
 
     if(u_info -> privileges != NULL && iaSearchForData(u_info -> privileges, UNIT_PRVL_CAN_FLOAT) != -1)
-    {
-        if (unitMoveShip(unit, u_info, destination) == 3)
-            return 3;
-    }
+        return unitMoveShip(unit, u_info, destination);
 
     // Cannot go to the water.
     if(((Cell *) destination -> data) -> territory == CELL_TYPE_WATER)
@@ -356,7 +338,7 @@ int moveUnit(World * world, Node * current_cell, int direction)
         }
     }
 
-    unitMoveMotion(world, current_cell, destination, direction, unit, edge);
+    unitMotion(world, current_cell, destination, direction, unit, edge);
 
 
 

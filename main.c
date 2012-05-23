@@ -47,7 +47,7 @@ int main()
 
     // Init first message.
     List * queue = listCreate();
-    listPrepend(queue, createMessage(VIEW_REDRAW_ALL, NULL));
+    listPrepend(queue, createMessage(VIEW_REDRAW_ALL));
 
     // Infinite loop.
     while(true)

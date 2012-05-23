@@ -522,7 +522,7 @@ int viewProcess(World * world, View * view, List * list)
             switch(message -> type)
             {
                 case VIEW_ESCAPE:
-                    listDestroy(list, &destroyMessage);
+                    listDestroy(list, &free);
                     return 0;
                 break;
 
@@ -643,7 +643,7 @@ int viewProcess(World * world, View * view, List * list)
             }
             le = le -> next;
         }
-        listDestroy(list, &destroyMessage);
+        listDestroy(list, &free);
     }
 
     // No need in terminating.
