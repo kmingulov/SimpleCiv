@@ -136,7 +136,8 @@ void drawTextbox(Textbox * tb)
 
                 if(b) attroff(A_BOLD);
             }
-            else
+            // Don't draw newline if there are no lines.
+            else if(line != tb -> start_r + 1 + TEXTBOX_TOP_INDENT)
             {
                 line++;
             }

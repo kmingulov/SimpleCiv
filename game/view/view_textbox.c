@@ -38,9 +38,18 @@ const int VIEW_PRVL_VALUES[] = {UNIT_PRVL_BUILD_CITY, UNIT_PRVL_BUILD_MINE,
 
 void addHelpInfoToTextbox(Textbox * tb)
 {
-    addBoldString(tb, "Help");
-    addString(tb, "Use up/down arrow keys to scroll this text.");
+    addBoldString(tb, "Welcome to SimpleCiv help!");
+    addString(tb, "This is simple guide for this game. Use up/down arrow keys to scroll this text.");
+    addString(tb, "More info about game you can find here: http://melkogotto.github.com/SimpleCiv/");
     addString(tb, "Press q to hide this help.");
+    addEnter(tb);
+
+    addBoldString(tb, "SimpleCiv in nutshell:");
+    addString(tb, "* SimpleCiv is Civilization game clone. You can build cities, hire units, explore new lands and fight!");
+    addString(tb, "* Main window is map window. You can scroll map, choose your units and move them. Also you can select any your city.");
+    addString(tb, "* By pressing Space key on the city you can open city hiring dialog, where you can hire units in this city.");
+    addString(tb, "* By pressing T key you can open research dialog, where you can start researhes.");
+    addString(tb, "* All keys' bindings you can find below.");
     addEnter(tb);
 
     // Map window.
@@ -70,7 +79,6 @@ void addHelpInfoToTextbox(Textbox * tb)
     addString(tb, "Up/down keys     Choose technology.");
     addString(tb, "Enter            Start research (will terminate current research).");
     addString(tb, "q                Quit to map.");
-    addEnter(tb);
 }
 
 void addUnitInfoToTextbox(Textbox * tb, World * world, View * view)
