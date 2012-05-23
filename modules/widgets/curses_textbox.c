@@ -31,7 +31,7 @@ Textbox * createTextbox(int start_r, int start_c, int r, int c)
 {
     Textbox * textbox = malloc(sizeof(Textbox));
 
-    textbox -> lines_per_page = r - 4;
+    textbox -> lines_per_page = r - TEXTBOX_BOTTOM_INDENT - TEXTBOX_TOP_INDENT - 2;
     textbox -> pages_count = 1;
     textbox -> current_page = 0;
     textbox -> lines = daCreate();
@@ -44,7 +44,17 @@ Textbox * createTextbox(int start_r, int start_c, int r, int c)
     return textbox;
 }
 
-void addString(Textbox * tb, const char * format, ...)
+void addEnter(Textbox * tb)
+{
+    // Add string.
+    daPrepend(tb -> lines, NULL);
+    iaPrepend(tb -> properties, 0);
+
+    // Update pages count.
+    tb -> pages_count = ceil((float) tb -> lines -> length / tb -> lines_per_page);
+}
+
+int addString(Textbox * tb, const char * format, ...)
 {
     // Buffer and args list.
     va_list args;
@@ -52,27 +62,53 @@ void addString(Textbox * tb, const char * format, ...)
     va_start(args, format);
     vsnprintf(buffer, sizeof(buffer) - 1, format, args);
 
-    // Cut buffer.
-    buffer[tb -> c - 5] = '\0';
+    // Max string length. 2 for borders.
+    int max_length = tb -> c - 2 - TEXTBOX_LEFT_INDENT - TEXTBOX_RIGHT_INDENT;
 
-    // Add string.
-    char * s = malloc(sizeof(char) * (tb -> c - 4));
-    daPrepend(tb -> lines, strcpy(s, &buffer[0]));
-    iaPrepend(tb -> properties, 0);
+    // Split buffer to few strings.
+    int index = 0;
+    int count = 0;
+    while(index < strlen(buffer))
+    {
+        // Allocate new string.
+        char * s = malloc(sizeof(char) * (max_length + 1));
+
+        // Copy string.
+        memcpy(s, &buffer[index], max_length);
+        s[max_length] = '\0';
+
+        // Add to array.
+        daPrepend(tb -> lines, s);
+        iaPrepend(tb -> properties, 0);
+        count += 1;
+
+        // Go on.
+        index += max_length;
+    }
+
+    // Update pages count.
     tb -> pages_count = ceil((float) tb -> lines -> length / tb -> lines_per_page);
+
+    return count;
 }
 
-void addBoldString(Textbox * tb, const char * format, ...)
+int addBoldString(Textbox * tb, const char * format, ...)
 {
     // Args list.
     va_list args;
     va_start(args, format);
 
     // Add string.
-    addString(tb, format, args);
+    int count = addString(tb, format, args);
 
     // Make it bold!
-    tb -> properties -> data[tb -> properties -> length - 1] = 1;
+    int start_i = tb -> properties -> length - count;
+    for(int i = 0; i < count; i++)
+    {
+        tb -> properties -> data[start_i + i] = 1;
+    }
+
+    return count;
 }
 
 void drawTextbox(Textbox * tb)
@@ -83,19 +119,27 @@ void drawTextbox(Textbox * tb)
     int start_line = tb -> current_page * tb -> lines_per_page;
     int end_line = start_line + tb -> lines_per_page;
 
-    int line = tb -> start_r + 2;
+    int line = tb -> start_r + 1 + TEXTBOX_TOP_INDENT;
     for(int i = start_line; i < end_line; i++)
     {
         if(i < tb -> lines -> length)
         {
             char * t = (char *) daGetByIndex(tb -> lines, i);
-            int b = iaGetByIndex(tb -> properties, i);
 
-            if(b) attron(A_BOLD);
+            if(t != NULL)
+            {
+                int b = iaGetByIndex(tb -> properties, i);
 
-            mvprintw(line++, tb -> start_c + 3, t);
+                if(b) attron(A_BOLD);
 
-            if(b) attroff(A_BOLD);
+                mvprintw(line++, tb -> start_c + 1 + TEXTBOX_LEFT_INDENT, t);
+
+                if(b) attroff(A_BOLD);
+            }
+            else
+            {
+                line++;
+            }
         }
     }
 }

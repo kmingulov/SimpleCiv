@@ -41,7 +41,7 @@ void addHelpInfoToTextbox(Textbox * tb)
     addBoldString(tb, "Help");
     addString(tb, "Use up/down arrow keys to scroll this text.");
     addString(tb, "Press q to hide this help.");
-    addString(tb, "");
+    addEnter(tb);
 
     // Map window.
     addBoldString(tb, "Map:");
@@ -56,21 +56,21 @@ void addHelpInfoToTextbox(Textbox * tb)
     addString(tb, "i                Show unit information.");
     addString(tb, "n                Show next unit (if selected) or next city.");
     addString(tb, "q                Quit game.");
-    addString(tb, "");
+    addEnter(tb);
 
     // Hiring dialog.
     addBoldString(tb, "Hiring dialog:");
     addString(tb, "Up/down keys     Choose unit.");
     addString(tb, "Enter            Start hiring (will terminate current hiring).");
     addString(tb, "q                Quit to map.");
-    addString(tb, "");
+    addEnter(tb);
 
     // Research dialog.
     addBoldString(tb, "Research dialog:");
     addString(tb, "Up/down keys     Choose technology.");
     addString(tb, "Enter            Start research (will terminate current research).");
     addString(tb, "q                Quit to map.");
-    addString(tb, "");
+    addEnter(tb);
 }
 
 void addUnitInfoToTextbox(Textbox * tb, World * world, View * view)
@@ -80,22 +80,23 @@ void addUnitInfoToTextbox(Textbox * tb, World * world, View * view)
     Unit * u = (Unit *) n -> data;
     UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, u -> unit_id);
 
+    // Add unit info.
     addBoldString(tb, u_info -> name);
-    addString(tb, "");
+    addEnter(tb);
 
     addString(tb, "Symbol       %c", u_info -> c);
-    addString(tb, "");
+    addEnter(tb);
 
     addString(tb, "Health       %d", u_info -> max_health);
     addString(tb, "Damage       %d", u_info -> max_damage);
     addString(tb, "Moves        %d", u_info -> max_moves);
-    addString(tb, "");
+    addEnter(tb);
 
     addString(tb, "Hiring turns %d", u_info -> hiring_turns);
-    addString(tb, "");
+    addEnter(tb);
 
     addString(tb, "Gold drop    %d", u_info -> gold_drop);
-    addString(tb, "");
+    addEnter(tb);
 
     addString(tb, "Requires for hiring:");
     if(u_info -> resources == NULL || u_info -> resources -> length == 0)
@@ -118,7 +119,7 @@ void addUnitInfoToTextbox(Textbox * tb, World * world, View * view)
         }
     }
 
-    addString(tb, "");
+    addEnter(tb);
 
     addString(tb, "Privileges:");
     if(u_info -> privileges == NULL || u_info -> privileges -> length == 0)

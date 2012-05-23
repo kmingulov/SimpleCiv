@@ -22,6 +22,11 @@
 #ifndef CURSES_TEXTBOX_H
 #define CURSES_TEXTBOX_H
 
+#define TEXTBOX_LEFT_INDENT   20
+#define TEXTBOX_RIGHT_INDENT  20
+#define TEXTBOX_TOP_INDENT    10
+#define TEXTBOX_BOTTOM_INDENT 10
+
 #include "../dyn_array/dyn_array.h"
 #include "../int_array/int_array.h"
 
@@ -55,10 +60,16 @@ typedef struct Textbox
 Textbox * createTextbox(int start_r, int start_c, int r, int c);
 
 /*
-    Adds formatted string to textbox (bold or not).
+    Add enter.
 */
-void addString(Textbox * tb, const char * format, ...);
-void addBoldString(Textbox * tb, const char * format, ...);
+void addEnter(Textbox * tb);
+
+/*
+    Adds formatted string to textbox (bold or not).
+    Returns amount of added strings.
+*/
+int addString(Textbox * tb, const char * format, ...);
+int addBoldString(Textbox * tb, const char * format, ...);
 
 /*
     Draws textbox.
