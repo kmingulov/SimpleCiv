@@ -7,6 +7,8 @@
 #include "../../modules/technology/technology.h"
 #include "../../modules/technology/technology_table.h"
 
+#include "../view/view_textbox.h"
+
 #include "control.h"
 #include "definitions.h"
 

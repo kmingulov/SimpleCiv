@@ -71,13 +71,6 @@ View * createView(World * world);
 void destroyView(View * view);
 
 /*
-    Information adders for ViewTextbox.
-*/
-void addHelpInfoToTextbox(Textbox * tb);
-void addUnitInfoToTextbox(Textbox * tb, World * world, View * view);
-void addWinInfoToTextbox(Textbox * tb);
-
-/*
     Focus on the (r, c) cell of the map.
 */
 void focusOn(World * world, View * view, int r, int c);
