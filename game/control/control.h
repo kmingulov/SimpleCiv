@@ -6,6 +6,7 @@
 #include "../world/world.h"
 #include "../view/view.h"
 
+
 typedef struct Control
 {
     // State of the control.
