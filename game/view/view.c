@@ -39,8 +39,14 @@
 // Players' colours. COLOURS_START if magic constant: from which id colour pairs
 // in ncurses will start.
 #define COLOURS_START 30
-unsigned char COLOURS[] = {COLOURS_START + 0, COLOURS_START + 1, COLOURS_START + 2,
-    COLOURS_START + 3, COLOURS_START + 4};
+const unsigned char COLOURS[] = {COLOURS_START + 0, COLOURS_START + 1, COLOURS_START + 2, COLOURS_START + 3, COLOURS_START + 4};
+
+// Names of resources.
+const char RES_NAMES[][15] = {"", "Bronze", "Iron", "Coal", "Gunpowder", "Horses", "Mushrooms :O"};
+const char RES_MINE_NAMES[][15] = {"", "Bronze mine", "Iron mine", "Coal mine", "", "", ""};
+
+// Names of territories.
+const char TER_NAMES[][10] = {"", """Water", "Grass", "Forest", "Hill", "Mountains"};
 
 //******************************************************************************
 // FUNCTIONS OF CREATION AND DESTROYING.
@@ -187,10 +193,10 @@ void drawUIPlayerInfo(World * world, View * view)
     printInMiddle(SB_PLAYER_BLOCK + 1, s + 1, len, "%s", player -> name);
     propsOff(COLOURS[player -> colour]);
 
-    // Researching.
+    // Research.
     if(player -> research -> id == -1)
     {
-        printInLeft(SB_PLAYER_BLOCK + 2, s + 1, len, "No researches");
+        printInLeft(SB_PLAYER_BLOCK + 2, s + 1, len, "No research");
     }
     else
     {
@@ -198,18 +204,81 @@ void drawUIPlayerInfo(World * world, View * view)
         Node * n = (Node *) daGetByIndex(world -> techs_info, player -> research -> id);
         Technology * t = (Technology *) n -> data;
         // Printing it.
-        printInLeft(SB_PLAYER_BLOCK + 2, s + 1, len, "%d/%d %s", player -> research -> turns, t -> turns, t -> name);
+        printInLeft(SB_PLAYER_BLOCK + 2, s + 1, len,
+            "%d/%d %s", player -> research -> turns, t -> turns, t -> name);
     }
+
     // Gold.
-    mvprintw(SB_PLAYER_BLOCK + 3, s + 1, "Gold");
-    printInRight(SB_PLAYER_BLOCK + 3, s + 1, len, "%d-%d", player -> gold, player -> research -> delta);
+    printInLeft(SB_PLAYER_BLOCK + 3, s + 1, len, "Gold");
+    printInRight(SB_PLAYER_BLOCK + 3, s + 1, len, "%d", player -> gold);
+
     // Resources.
-    const char res_names[][10] = {"", "Bronze", "Iron", "Coal", "Gunpowder", "Horses"};
     for(int i = 1; i < CELL_RES_COUNT; i++)
     {
-        mvprintw(SB_PLAYER_BLOCK + 3 + i, s + 1, res_names[i]);
-        printInRight(SB_PLAYER_BLOCK + 3 + i, s + 1, len, "%d", iaGetByIndex(player -> resources, i));
+        printInLeft(SB_PLAYER_BLOCK + 3 + i, s + 1, len, RES_NAMES[i]);
+        printInRight(SB_PLAYER_BLOCK + 3 + i, s + 1, len,
+            "%d", iaGetByIndex(player -> resources, i));
     }
+}
+
+void drawUICityInfo(View * view, City * city)
+{
+    int s = view -> sidebar;
+    int len = view -> columns - view -> sidebar - 2;
+
+    // Print title.
+    propsOn(0, true);
+    printInLeft(SB_CELL_BLOCK + 3, s + 1, len, "City:");
+    propsOff(0);
+
+    // Print name.
+    printInLeft(SB_CELL_BLOCK + 4, s + 2, len - 2, city -> name);
+
+    // Print owner name.
+    propsOn(COLOURS[city -> owner -> colour], false);
+    printInLeft(SB_CELL_BLOCK + 5, s + 2, len - 2, city -> owner -> name);
+    propsOff(COLOURS[city -> owner -> colour]);
+
+    // Print population.
+    printInLeft(SB_CELL_BLOCK + 6, s + 2, len - 2, "People");
+    printInRight(SB_CELL_BLOCK + 6, s + 2, len - 2, "%d", city -> population);
+}
+
+void drawUIUnitInfo(World * world, View * view, Unit * unit)
+{
+    int s = view -> sidebar;
+    int len = view -> columns - view -> sidebar - 2;
+
+    // Get unit common info.
+    UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, unit -> unit_id);
+
+    // Print title.
+    propsOn(0, true);
+    printInLeft(SB_CELL_BLOCK + 7, s + 1, len, "Unit:");
+    propsOff(0);
+
+    // Print name.
+    printInLeft(SB_CELL_BLOCK + 8, s + 2, len - 2, u_info -> name);
+
+    // Print owner.
+    if(unit -> owner != NULL)
+    {
+        propsOn(COLOURS[unit -> owner -> colour], false);
+        printInLeft(SB_CELL_BLOCK + 9, s + 2, len - 2, unit -> owner -> name);
+        propsOff(COLOURS[unit -> owner -> colour]);
+    }
+    else
+    {
+        printInLeft(SB_CELL_BLOCK + 9, s + 2, len - 2, "Neutral");
+    }
+
+    // Print hp and moves.
+    printInLeft(SB_CELL_BLOCK + 10, s + 2, len - 2, "HP");
+    printInRight(SB_CELL_BLOCK + 10, s + 2, len - 2,
+        "%d/%d", unit -> health, u_info -> max_health);
+    printInLeft(SB_CELL_BLOCK + 11, s + 2, len - 2, "Moves");
+    printInRight(SB_CELL_BLOCK + 11, s + 2, len - 2,
+        "%d/%d", unit -> moves, u_info -> max_moves);
 }
 
 void drawUICellInfo(World * world, View * view)
@@ -218,90 +287,54 @@ void drawUICellInfo(World * world, View * view)
     int r = view -> rows;
     int len = view -> columns - view -> sidebar - 2;
 
+    // Get player.
     Player * player = (Player *) listGetHead(world -> players);
 
     clearBlock(SB_CELL_BLOCK + 1, s + 1, 11, len);
 
     if(isKnownCell(player -> fog, view -> map_r, view -> map_c))
     {
-        // Cell.
+        // Get cell.
         Cell * c = (Cell *) view -> current_cell -> data;
-        attron(A_BOLD);
+        Node * n = NULL;
+
+        // Default colour, style — bold.
+        propsOn(0, true);
 
         // Type of territory.
-        switch(c -> territory)
-        {
-            case CELL_TYPE_WATER:    mvprintw(SB_CELL_BLOCK + 1, s + 1, "Water    "); break;
-            case CELL_TYPE_GRASS:    mvprintw(SB_CELL_BLOCK + 1, s + 1, "Grass    "); break;
-            case CELL_TYPE_TREE:     mvprintw(SB_CELL_BLOCK + 1, s + 1, "Forest   "); break;
-            case CELL_TYPE_HILL:     mvprintw(SB_CELL_BLOCK + 1, s + 1, "Hill     "); break;
-            case CELL_TYPE_MOUNTAIN: mvprintw(SB_CELL_BLOCK + 1, s + 1, "Mountains"); break;
-        }
+        printInLeft(SB_CELL_BLOCK + 1, s + 1, len, TER_NAMES[c -> territory]);
 
-        // Resources. Hindi code.
-        int delta = 0;
+        // Resources.
         if(c -> mine == CELL_MINE)
         {
-            mvprintw(SB_CELL_BLOCK + 2, s + 1, "[Mine] ");
-            delta = 7;
+            printInLeft(SB_CELL_BLOCK + 2, s + 1, len, RES_MINE_NAMES[c -> resources]);
         }
-        switch(c -> resources)
+        else
         {
-            case CELL_RES_BRONZE:    mvprintw(SB_CELL_BLOCK + 2, s + 1 + delta, "Bronze"); break;
-            case CELL_RES_IRON:      mvprintw(SB_CELL_BLOCK + 2, s + 1 + delta, "Iron"); break;
-            case CELL_RES_COAL:      mvprintw(SB_CELL_BLOCK + 2, s + 1 + delta, "Coal"); break;
-            case CELL_RES_GUNPOWDER: mvprintw(SB_CELL_BLOCK + 2, s + 1 + delta, "Gunpowder"); break;
-            case CELL_RES_HORSES:    mvprintw(SB_CELL_BLOCK + 2, s + 1 + delta, "Horses"); break;
-            case CELL_RES_MUSHROOMS: mvprintw(SB_CELL_BLOCK + 2, s + 1 + delta, "Mushrooms :O"); break;
+            printInLeft(SB_CELL_BLOCK + 2, s + 1, len, RES_NAMES[c -> resources]);
         }
 
-        attroff(A_BOLD);
+        propsOff(0);
 
         // City.
-        Node * city = getNeighbour(view -> current_cell, EDGE_CELL_CITY);
-        if(city != NULL)
+        n = getNeighbour(view -> current_cell, EDGE_CELL_CITY);
+        if(n != NULL)
         {
-            City * c = (City *) city -> data;
-            attron(A_BOLD); mvprintw(SB_CELL_BLOCK + 3, s + 1, "City:  "); attroff(A_BOLD);
-            printInLeft(SB_CELL_BLOCK + 4, s + 2, len - 2, c -> name);
-            attron(COLOR_PAIR(COLOURS[c -> owner -> colour]));
-            printInLeft(SB_CELL_BLOCK + 5, s + 2, len - 2, c -> owner -> name);
-            attroff(COLOR_PAIR(COLOURS[c -> owner -> colour]));
-            mvprintw(SB_CELL_BLOCK + 6, s + 2, "People");
-            printInRight(SB_CELL_BLOCK + 6, s + 2, len - 2, "%d", c -> population);
+            drawUICityInfo(view, n -> data);
         }
 
         // Unit.
-        Node * unit = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
-        if(unit != NULL)
+        n = getNeighbour(view -> current_cell, EDGE_CELL_UNIT);
+        if(n != NULL)
         {
-            Unit * u = (Unit *) unit -> data;
-            UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, u -> unit_id);
-
-            attron(A_BOLD); mvprintw(SB_CELL_BLOCK + 7, s + 1, "Unit:  "); attroff(A_BOLD);
-            printInLeft(SB_CELL_BLOCK + 8, s + 2, len - 2, u_info -> name);
-
-            if(u -> owner != NULL)
-            {
-                attron(COLOR_PAIR(COLOURS[u -> owner -> colour]));
-                printInLeft(SB_CELL_BLOCK + 9, s + 2, len - 2, u -> owner -> name);
-                attroff(COLOR_PAIR(COLOURS[u -> owner -> colour]));
-            }
-            else
-            {
-                printInLeft(SB_CELL_BLOCK + 9, s + 2, len - 2, "Neutral");
-            }
-            mvprintw(SB_CELL_BLOCK + 10, s + 2, "HP");
-            printInRight(SB_CELL_BLOCK + 10, s + 2, len - 2, "%d/%d", u -> health, u_info -> max_health);
-            mvprintw(SB_CELL_BLOCK + 11, s + 2, "Moves");
-            printInRight(SB_CELL_BLOCK + 11, s + 2, len - 2, "%d/%d", u -> moves, u_info -> max_moves);
+            drawUIUnitInfo(world, view, n -> data);
         }
     }
     else
     {
-        attron(A_BOLD);
+        propsOn(0, true);
         mvprintw(SB_CELL_BLOCK + 1, s + 1, "Fog of war");
-        attroff(A_BOLD);
+        propsOff(0);
     }
 
     // Other info.
