@@ -45,8 +45,15 @@ const unsigned char COLOURS[] = {COLOURS_START + 0, COLOURS_START + 1, COLOURS_S
 const char RES_NAMES[][15] = {"", "Bronze", "Iron", "Coal", "Gunpowder", "Horses", "Mushrooms :O"};
 const char RES_MINE_NAMES[][15] = {"", "Bronze mine", "Iron mine", "Coal mine", "", "", ""};
 
-// Names of territories.
-const char TER_NAMES[][10] = {"", """Water", "Grass", "Forest", "Hill", "Mountains"};
+// Names and chars of territories.
+const char TER_NAMES[][10] = {"", "Water", "Grass", "Forest", "Hill", "Mountains"};
+const char TER_CHARS[] = {" ._T-^"};
+
+// Auxiliary arrays for directions.
+const unsigned char DIRS_CELL_EDGES[] = {EDGE_CELL_TOP, EDGE_CELL_BOTTOM,
+    EDGE_CELL_RIGHT, EDGE_CELL_LEFT};
+const unsigned char DIRS_MAP_CELLS[] = {VIEW_MOVE_CURSOR_TOP,
+    VIEW_MOVE_CURSOR_BOTTOM, VIEW_MOVE_CURSOR_RIGHT, VIEW_MOVE_CURSOR_LEFT};
 
 //******************************************************************************
 // FUNCTIONS OF CREATION AND DESTROYING.
@@ -475,48 +482,43 @@ void drawCityView(World * world, View * view)
     move(view -> chooser -> start_r + view -> chooser -> current + 1, 4);
 }
 
+//******************************************************************************
+// FUNCTIONS FOR MAP DRAWING.
+//******************************************************************************
 void drawNode(World * world, Node * current)
 {
     if(getNeighbour(current, EDGE_CELL_CITY) != NULL)
     {
+        // Get city.
         City * city = (City *) getNeighbour(current, EDGE_CELL_CITY) -> data;
-        attron(COLOR_PAIR(COLOURS[city -> owner -> colour]));
-        attron(A_BOLD);
+
+        propsOn(COLOURS[city -> owner -> colour], true);
         addch('M');
-        attroff(A_BOLD);
-        attroff(COLOR_PAIR(COLOURS[city -> owner -> colour]));
+        propsOff(COLOURS[city -> owner -> colour]);
     }
     else if(getNeighbour(current, EDGE_CELL_UNIT) != NULL)
     {
         // Getting unit's char.
         Unit * unit = (Unit *) getNeighbour(current, EDGE_CELL_UNIT) -> data;
         UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, unit -> unit_id);
+
+        // Print char.
         if(unit -> owner != NULL)
         {
-            attron(COLOR_PAIR(COLOURS[unit -> owner -> colour]));
+            propsOn(COLOURS[unit -> owner -> colour], true);
         }
-        attron(A_BOLD);
         addch(u_info -> c);
-        attroff(A_BOLD);
         if(unit -> owner != NULL)
         {
-            attroff(COLOR_PAIR(COLOURS[unit -> owner -> colour]));
+            propsOff(COLOURS[unit -> owner -> colour]);
         }
     }
     else
     {
         unsigned char type = ((Cell *) current -> data) -> territory;
-        attron(COLOR_PAIR(type));
-        switch ( type )
-        {
-            case CELL_TYPE_WATER    : addch('.'); break;
-            case CELL_TYPE_GRASS    : addch('_'); break;
-            case CELL_TYPE_HILL     : addch('-'); break;
-            case CELL_TYPE_TREE     : addch('T'); break;
-            case CELL_TYPE_MOUNTAIN : addch('^'); break;
-            default                 : addch('E'); break;
-        }
-        attroff(COLOR_PAIR(type));
+        propsOn(type, false);
+        addch(TER_CHARS[type]);
+        propsOff(type);
     }
 }
 
@@ -556,143 +558,197 @@ void drawMap(World * world, View * view)
     move(view -> cur_r, view -> cur_c);
 }
 
+//******************************************************************************
+// VIEW PROCESS FUNCTION AND HELPFUL.
+//******************************************************************************
+// Returns true if type is main window redraw message.
+int isMainWindowRedraw(int type)
+{
+    switch(type)
+    {
+        case VIEW_REDRAW_ALL:
+        case VIEW_REDRAW_MAP:
+        case VIEW_REDRAW_INFO:
+            return true;
+        break;
+    }
+
+    return false;
+}
+
+// Returns true if type is main window cursor move message.
+int isMainWindowCursorMove(int type)
+{
+    switch(type)
+    {
+        case VIEW_MOVE_CURSOR_BOTTOM:
+        case VIEW_MOVE_CURSOR_LEFT:
+        case VIEW_MOVE_CURSOR_TOP:
+        case VIEW_MOVE_CURSOR_RIGHT:
+            return true;
+        break;
+    }
+
+    return false;
+}
+
+// Returns true if type is chooser cursor move message.
+int isChooserCursorMove(int type)
+{
+    switch(type)
+    {
+        case VIEW_CHOOSER_MOVE_CURSOR_BOTTOM:
+        case VIEW_CHOOSER_MOVE_CURSOR_TOP:
+            return true;
+        break;
+    }
+
+    return false;
+}
+
 int viewProcess(World * world, View * view, List * list)
 {
     Player * player = (Player *) listGetHead(world -> players);
 
-    if(list != NULL)
+    if(list == NULL)
     {
-        ListElement * le = list -> head;
-        for (int i = 0; i < list -> length; i++)
-        {
-            Message * message = (Message *) le -> data;
-            switch(message -> type)
-            {
-                case VIEW_ESCAPE:
-                    listDestroy(list, &free);
-                    return 0;
-                break;
-
-                case VIEW_REDRAW_ALL:
-                    drawUIMap(world, view);
-                    drawUIPlayerInfo(world, view);
-                    drawUICellInfo(world, view);
-                    drawMap(world, view);
-                    move(view -> cur_r, view -> cur_c);
-                break;
-
-                case VIEW_REDRAW_INFO:
-                    drawUIPlayerInfo(world, view);
-                    drawUICellInfo(world, view);
-                    move(view -> cur_r, view -> cur_c);
-                break;
-
-                case VIEW_REDRAW_MAP:
-                    drawMap(world, view);
-                break;
-
-                case VIEW_MOVE_CURSOR_TOP:
-                    view -> current_cell = getNeighbour(view -> current_cell, EDGE_CELL_TOP);
-                    view -> map_r--; view -> map_r = view -> map_r < 0 ? view -> map_r + world -> properties -> map_r : view -> map_r;
-                    if(view -> cur_r > 5)
-                    {
-                        view -> cur_r--;
-                    }
-                    else
-                    {
-                        player -> graph_map = getNeighbour(player -> graph_map, EDGE_CELL_TOP);
-                        drawMap(world, view);
-                    }
-                    drawUICellInfo(world, view);
-                    move(view -> cur_r, view -> cur_c);
-                break;
-
-                case VIEW_MOVE_CURSOR_BOTTOM:
-                    view -> current_cell = getNeighbour(view -> current_cell, EDGE_CELL_BOTTOM);
-                    view -> map_r = (view -> map_r + 1) % world -> properties -> map_r;
-                    if(view -> cur_r < view -> rows - 5)
-                    {
-                        view -> cur_r++;
-                    }
-                    else
-                    {
-                        player -> graph_map = getNeighbour(player -> graph_map, EDGE_CELL_BOTTOM);
-                        drawMap(world, view);
-                    }
-                    drawUICellInfo(world, view);
-                    move(view -> cur_r, view -> cur_c);
-                break;
-
-                case VIEW_MOVE_CURSOR_RIGHT:
-                    view -> current_cell = getNeighbour(view -> current_cell, EDGE_CELL_RIGHT);
-                    view -> map_c = (view -> map_c + 1) % world -> properties -> map_c;
-                    if(view -> cur_c < view -> sidebar - 5)
-                    {
-                        view -> cur_c++;
-                    }
-                    else
-                    {
-                        player -> graph_map = getNeighbour(player -> graph_map, EDGE_CELL_RIGHT);
-                        drawMap(world, view);
-                    }
-                    drawUICellInfo(world, view);
-                    move(view -> cur_r, view -> cur_c);
-                break;
-
-                case VIEW_MOVE_CURSOR_LEFT:
-                    view -> current_cell = getNeighbour(view -> current_cell, EDGE_CELL_LEFT);
-                    view -> map_c--; view -> map_c = view -> map_c < 0 ? view -> map_c + world -> properties -> map_c : view -> map_c;
-                    if(view -> cur_c > 5)
-                    {
-                        view -> cur_c--;
-                        move(view -> cur_r, view -> cur_c);
-                    }
-                    else
-                    {
-                        player -> graph_map = getNeighbour(player -> graph_map, EDGE_CELL_LEFT);
-                        drawMap(world, view);
-                    }
-                    drawUICellInfo(world, view);
-                    move(view -> cur_r, view -> cur_c);
-                break;
-
-                case VIEW_REDRAW_TECH_DIALOG:
-                    drawTechView(world, view);
-                break;
-
-                case VIEW_CHOOSER_MOVE_CURSOR_TOP:
-                    if(view -> chooser -> current > -1)
-                    {
-                        addch(' ');
-                        (view -> chooser -> current)--;
-                        mvaddch(view -> chooser -> start_r + view -> chooser -> current + 1, 4, '*');
-                        move(view -> chooser -> start_r + view -> chooser -> current + 1, 4);
-                    }
-                break;
-
-                case VIEW_CHOOSER_MOVE_CURSOR_BOTTOM:
-                    if(view -> chooser -> current < view -> chooser -> ids -> length - 1)
-                    {
-                        addch(' ');
-                        (view -> chooser -> current)++;
-                        mvaddch(view -> chooser -> start_r + view -> chooser -> current + 1, 4, '*');
-                        move(view -> chooser -> start_r + view -> chooser -> current + 1, 4);
-                    }
-                break;
-
-                case VIEW_REDRAW_CITY_DIALOG:
-                    drawCityView(world, view);
-                break;
-
-                case VIEW_REDRAW_TEXTBOX:
-                    drawTextbox(view -> textbox);
-                break;
-            }
-            le = le -> next;
-        }
-        listDestroy(list, &free);
+        return 1;
     }
 
-    // No need in terminating.
-    return 1;
+    ListElement * le = list -> head;
+    for (int i = 0; i < list -> length; i++)
+    {
+        Message * message = (Message *) le -> data;
+        unsigned char t = message -> type;
+
+        if(t == VIEW_ESCAPE)
+        {
+            listDestroy(list, &free);
+            return 0;
+        }
+
+        if(isMainWindowRedraw(t))
+        {
+            if(t == VIEW_REDRAW_ALL)
+            {
+                drawUIMap(world, view);
+                drawUIPlayerInfo(world, view);
+                drawUICellInfo(world, view);
+                drawMap(world, view);
+            }
+
+            if(t == VIEW_REDRAW_INFO)
+            {
+                drawUIPlayerInfo(world, view);
+                drawUICellInfo(world, view);
+            }
+
+            if(t == VIEW_REDRAW_MAP)
+            {
+                drawMap(world, view);
+            }
+
+            move(view -> cur_r, view -> cur_c);
+        }
+
+        if(isMainWindowCursorMove(t))
+        {
+            // Find direction.
+            int i;
+            for(i = 0; i < 4; i++)
+            {
+                if(t == DIRS_MAP_CELLS[i])
+                {
+                    break;
+                }
+            }
+
+            // Change cell.
+            view -> current_cell = getNeighbour(view -> current_cell, DIRS_CELL_EDGES[i]);
+
+            // Update map and cursor coordinates.
+            char move_map = false;
+            if(t == VIEW_MOVE_CURSOR_TOP)
+            {
+                view -> map_r -= 1;
+                if(view -> map_r < 0) view -> map_r += world -> map -> max_r;
+
+                if(view -> cur_r > 5) view -> cur_r -= 1;
+                else move_map = true;
+            }
+
+            if(t == VIEW_MOVE_CURSOR_BOTTOM)
+            {
+                view -> map_r += 1;
+                view -> map_r %= world -> map -> max_r;
+
+                if(view -> cur_r < view -> rows - 5) view -> cur_r += 1;
+                else move_map = true;
+            }
+
+            if(t == VIEW_MOVE_CURSOR_LEFT)
+            {
+                view -> map_c -= 1;
+                if(view -> map_c < 0) view -> map_c += world -> map -> max_c;
+
+                if(view -> cur_c > 5) view -> cur_c -= 1;
+                else move_map = true;
+            }
+
+            if(t == VIEW_MOVE_CURSOR_RIGHT)
+            {
+                view -> map_c += 1;
+                view -> map_c %= world -> map -> max_c;
+
+                if(view -> cur_c < view -> sidebar - 5) view -> cur_c += 1;
+                else move_map = true;
+            }
+
+            if(move_map)
+            {
+                // Move map.
+                player -> graph_map = getNeighbour(player -> graph_map, DIRS_CELL_EDGES[i]);
+                drawMap(world, view);
+            }
+
+            // Update info.
+            drawUICellInfo(world, view);
+            move(view -> cur_r, view -> cur_c);
+        }
+
+        if(t == VIEW_REDRAW_TECH_DIALOG)
+        {
+            drawTechView(world, view);
+        }
+
+        if(t == VIEW_REDRAW_CITY_DIALOG)
+        {
+            drawCityView(world, view);
+        }
+
+        if(t == VIEW_REDRAW_TEXTBOX)
+        {
+            drawTextbox(view -> textbox);
+        }
+
+        if(isChooserCursorMove(t))
+        {
+            addch(' ');
+
+            if(t == VIEW_CHOOSER_MOVE_CURSOR_TOP && view -> chooser -> current > -1)
+            {
+                view -> chooser -> current -= 1;
+            }
+
+            if(t == VIEW_CHOOSER_MOVE_CURSOR_BOTTOM && view -> chooser -> current < view -> chooser -> ids -> length - 1)
+            {
+                view -> chooser -> current += 1;
+            }
+
+            mvaddch(view -> chooser -> start_r + view -> chooser -> current + 1, 4, '*');
+            move(view -> chooser -> start_r + view -> chooser -> current + 1, 4);
+        }
+        le = le -> next;
+    }
+    listDestroy(list, &free);
 }
