@@ -155,7 +155,7 @@ List * pushKeyB (World * world, View * view,  Control * control)
     }
     return NULL;
 }
-List * pushKeyN (World * world, View * view,  Control * control)
+List * pushKeyM (World * world, View * view,  Control * control)
 {
     if(control -> state == CONTROL_MOVE_UNIT)
     {
@@ -186,7 +186,7 @@ List * pushKeyN (World * world, View * view,  Control * control)
     return NULL;
 }
 
-List * pushKeyM (World * world, View * view,  Control * control)
+List * pushKeyN (World * world, View * view,  Control * control)
 {
     // Getting player.
     Player * player = listGetHead(world -> players);

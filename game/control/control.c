@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "../../modules/unit/unit.h"
 #include "../../modules/unit/unit_table.h"
@@ -19,15 +20,6 @@ Control * createControl()
     control -> state = CONTROL_MOVE_CURSOR;
     return control;
 }
-
-
-char lower ( char s )
-{
-    if ( s >= 65 && s <= 91 )
-            s += 32;
-    return s;
-}
-
 
 void destroyControl(Control * control)
 {
@@ -307,7 +299,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
     if(key == KEY_ENTER_FIXED)
     {
         // Start research.
-        if(control -> state == CONTROL_TEXTBOX)
+        if(control -> state == CONTROL_CHOOSE_TECH)
             return researching(world, view, control, key);
 
         // Start hiring.
@@ -371,8 +363,8 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         }
     }
 
-    char charkey = lower((char) key);
-    switch (charkey)
+    char c = (char) tolower(key);
+    switch (c)
     {
         case 't': return(pushKeyT(world, view, control));        break;
         case 'q': return(pushKeyQ(view, control));               break;
@@ -382,7 +374,8 @@ List * controlProcess(World * world, View * view, Control * control, int key)
         case 'b': return(pushKeyB(world, view, control));        break; // Cut the forest.
         case 'n': return(pushKeyN(world, view, control));        break;
         case 'm': return(pushKeyM(world, view, control));        break;
-    };
+    }
+
     return NULL;
 }
 

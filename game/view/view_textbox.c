@@ -156,6 +156,6 @@ void addWinInfoToTextbox(Textbox * tb)
     addBoldString(tb, "       Congratulations!       ");
     addString(tb,     "           You win!           ");
     addString(tb,     "You can continue game or quit.");
-    addString(tb,     "");
+    addEnter(tb);
     addString(tb,     "(press q to hide this message)");
 }
