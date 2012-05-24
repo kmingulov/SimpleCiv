@@ -187,11 +187,6 @@ List * turning(World * world, View * view, Control * control)
     // Next player.
     listScrollNext(world -> players);
     player = (Player *) listGetHead(world -> players);
-    if(player -> is_computer)
-    {
-        listScrollNext(world -> players);
-        player = (Player *) listGetHead(world -> players);
-    }
     // Getting his settings (if there are != 0).
     if(player -> cur_r != 0)  view -> cur_r = player -> cur_r; else view -> cur_r = view -> rows / 2;
     if(player -> cur_c != 0)  view -> cur_c = player -> cur_c; else view -> cur_c = view -> sidebar / 2;

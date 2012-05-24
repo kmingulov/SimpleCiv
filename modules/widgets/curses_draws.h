@@ -23,6 +23,12 @@
 #define CURSES_DRAWS_H
 
 /*
+    Toogle curses print props.
+*/
+void propsOn(unsigned char colour_pair, unsigned char bold);
+void propsOff(unsigned char colour_pair);
+
+/*
     Clears block from (start_r, start_c) to (start_r + r, start_c + c) point.
 */
 void clearBlock(int start_r, int start_c, int r, int c);
@@ -46,8 +52,8 @@ void drawHorizLine(int start_r, int r, int c);
     Put char string into the middle/right/left of row. Syntax is similar to
     printf function.
 */
-void putInMiddle(int start_r, int start_c, int length, const char * format, ...);
-void putInRight(int start_r, int start_c, int length, const char * format, ...);
-void putInLeft(int start_r, int start_c, int length, const char * format, ...);
+void printInMiddle(int start_r, int start_c, int length, const char * format, ...);
+void printInRight(int start_r, int start_c, int length, const char * format, ...);
+void printInLeft(int start_r, int start_c, int length, const char * format, ...);
 
 #endif

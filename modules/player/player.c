@@ -35,7 +35,6 @@ Player * createPlayer(World * world, int id, IntArray * available_units, IntArra
     // Basic.
     player -> name = (char *) daGetByIndex(world -> properties -> player_names, id);
     player -> colour = id % PLAYER_COLOURS_COUNT;
-    player -> is_computer = 0;
 
     if(TEST_MODE)
     {
@@ -81,52 +80,6 @@ Player * createPlayer(World * world, int id, IntArray * available_units, IntArra
 
     // Create start unit (lumberjack).
     createUnit(world, city -> r, city -> c, 14, player);
-
-    return player;
-}
-
-Player * createComputerPlayer(World * world)
-{
-    Player * player = malloc(sizeof(Player));
-
-    // Basic.
-    char * name = malloc(sizeof(char) * 8);
-    player -> name = strcpy(name, "Neutral");
-    player -> is_computer = 1;
-    player -> colour = 5;
-
-    // Units and cities lists.
-    player -> cities = listCreate();
-    player -> units = listCreate();
-
-    // Generating units.
-    int r, c, counter = 0;
-    while(counter < 2 * world -> properties -> players_count)
-    {
-        r = rand() % world -> properties -> map_r;
-        c = rand() % world -> properties -> map_c;
-        Cell * cell = (Cell *) getMapCell(world -> map, r, c) -> data;
-        if(cell -> territory != CELL_TYPE_WATER)
-        {
-            // Creating caravans.
-            createUnit(world, r, c, 13, player);
-            counter++;
-        }
-    }
-
-    // Nulling everything else.
-    player -> gold = 0;
-    player -> graph_map = NULL;
-    player -> current_cell = NULL;
-    player -> cur_r = 0;
-    player -> cur_c = 0;
-    player -> map_r = 0;
-    player -> map_c = 0;
-    player -> available_units = NULL;
-    player -> available_techs = NULL;
-    player -> research = NULL;
-    player -> resources = NULL;
-    player -> fog = NULL;
 
     return player;
 }

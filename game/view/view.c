@@ -34,6 +34,15 @@
 #include "view.h"
 
 //******************************************************************************
+// GLOBAL CONSTANTS
+//******************************************************************************
+// Players' colours. COLOURS_START if magic constant: from which id colour pairs
+// in ncurses will start.
+#define COLOURS_START 30
+unsigned char COLOURS[] = {COLOURS_START + 0, COLOURS_START + 1, COLOURS_START + 2,
+    COLOURS_START + 3, COLOURS_START + 4};
+
+//******************************************************************************
 // FUNCTIONS OF CREATION AND DESTROYING.
 //******************************************************************************
 void initColours()
@@ -49,11 +58,11 @@ void initColours()
     init_pair(CELL_TYPE_MOUNTAIN, COLOR_WHITE, COLOR_BLACK);
 
     // Players.
-    init_pair(PLAYER_COLOURS_START + 0, 1, 0);
-    init_pair(PLAYER_COLOURS_START + 1, 3, 0);
-    init_pair(PLAYER_COLOURS_START + 2, 5, 0);
-    init_pair(PLAYER_COLOURS_START + 3, 6, 0);
-    init_pair(PLAYER_COLOURS_START + 4, 7, 0);
+    init_pair(COLOURS[0], 1, 0);
+    init_pair(COLOURS[1], 3, 0);
+    init_pair(COLOURS[2], 5, 0);
+    init_pair(COLOURS[3], 6, 0);
+    init_pair(COLOURS[4], 7, 0);
 }
 
 View * createView(World * world)
@@ -156,33 +165,32 @@ void drawUIMap(World * world, View * view)
     // Drawing main interface.
     drawBox(0, 0, r, c);
     drawVertLine(0, r, s);
-    drawHorizLine(s, c - s, SIDEBAR_CELL_BLOCK);
+    drawHorizLine(s, c - s, SB_CELL_BLOCK);
     drawHorizLine(s, c - s, r - 3);
 
     // Some static strings.
-    putInMiddle(r - 4, s + 1, c - s - 2, "Press h for help");
+    printInMiddle(r - 4, s + 1, c - s - 2, "Press h for help");
 }
 
-void drawPlayerInfo(World * world, View * view)
+void drawUIPlayerInfo(World * world, View * view)
 {
     int s = view -> sidebar;
     int len = view -> columns - view -> sidebar - 2;
 
-    clearBlock(SIDEBAR_PLAYER_BLOCK + 1, s + 1, 7, len);
+    clearBlock(SB_PLAYER_BLOCK + 1, s + 1, 7, len);
 
     // Getting player.
     Player * player = (Player *) listGetHead(world -> players);
 
     // Player info.
-    attron(COLOR_PAIR(PLAYER_COLOURS_START + player -> colour));
-    attron(A_BOLD);
-    putInMiddle(SIDEBAR_PLAYER_BLOCK + 1, s + 1, len, "%s", player -> name);
-    attroff(A_BOLD);
-    attroff(COLOR_PAIR(PLAYER_COLOURS_START + player -> colour));
+    propsOn(COLOURS[player -> colour], true);
+    printInMiddle(SB_PLAYER_BLOCK + 1, s + 1, len, "%s", player -> name);
+    propsOff(COLOURS[player -> colour]);
+
     // Researching.
     if(player -> research -> id == -1)
     {
-        mvprintw(SIDEBAR_PLAYER_BLOCK + 2, s + 1, "No researches");
+        printInLeft(SB_PLAYER_BLOCK + 2, s + 1, len, "No researches");
     }
     else
     {
@@ -190,21 +198,21 @@ void drawPlayerInfo(World * world, View * view)
         Node * n = (Node *) daGetByIndex(world -> techs_info, player -> research -> id);
         Technology * t = (Technology *) n -> data;
         // Printing it.
-        putInLeft(SIDEBAR_PLAYER_BLOCK + 2, s + 1, len, "%d/%d %s", player -> research -> turns, t -> turns, t -> name);
+        printInLeft(SB_PLAYER_BLOCK + 2, s + 1, len, "%d/%d %s", player -> research -> turns, t -> turns, t -> name);
     }
     // Gold.
-    mvprintw(SIDEBAR_PLAYER_BLOCK + 3, s + 1, "Gold");
-    putInRight(SIDEBAR_PLAYER_BLOCK + 3, s + 1, len, "%d-%d", player -> gold, player -> research -> delta);
+    mvprintw(SB_PLAYER_BLOCK + 3, s + 1, "Gold");
+    printInRight(SB_PLAYER_BLOCK + 3, s + 1, len, "%d-%d", player -> gold, player -> research -> delta);
     // Resources.
     const char res_names[][10] = {"", "Bronze", "Iron", "Coal", "Gunpowder", "Horses"};
     for(int i = 1; i < CELL_RES_COUNT; i++)
     {
-        mvprintw(SIDEBAR_PLAYER_BLOCK + 3 + i, s + 1, res_names[i]);
-        putInRight(SIDEBAR_PLAYER_BLOCK + 3 + i, s + 1, len, "%d", iaGetByIndex(player -> resources, i));
+        mvprintw(SB_PLAYER_BLOCK + 3 + i, s + 1, res_names[i]);
+        printInRight(SB_PLAYER_BLOCK + 3 + i, s + 1, len, "%d", iaGetByIndex(player -> resources, i));
     }
 }
 
-void drawCellInfo(World * world, View * view)
+void drawUICellInfo(World * world, View * view)
 {
     int s = view -> sidebar;
     int r = view -> rows;
@@ -212,7 +220,7 @@ void drawCellInfo(World * world, View * view)
 
     Player * player = (Player *) listGetHead(world -> players);
 
-    clearBlock(SIDEBAR_CELL_BLOCK + 1, s + 1, 11, len);
+    clearBlock(SB_CELL_BLOCK + 1, s + 1, 11, len);
 
     if(isKnownCell(player -> fog, view -> map_r, view -> map_c))
     {
@@ -223,28 +231,28 @@ void drawCellInfo(World * world, View * view)
         // Type of territory.
         switch(c -> territory)
         {
-            case CELL_TYPE_WATER:    mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Water    "); break;
-            case CELL_TYPE_GRASS:    mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Grass    "); break;
-            case CELL_TYPE_TREE:     mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Forest   "); break;
-            case CELL_TYPE_HILL:     mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Hill     "); break;
-            case CELL_TYPE_MOUNTAIN: mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Mountains"); break;
+            case CELL_TYPE_WATER:    mvprintw(SB_CELL_BLOCK + 1, s + 1, "Water    "); break;
+            case CELL_TYPE_GRASS:    mvprintw(SB_CELL_BLOCK + 1, s + 1, "Grass    "); break;
+            case CELL_TYPE_TREE:     mvprintw(SB_CELL_BLOCK + 1, s + 1, "Forest   "); break;
+            case CELL_TYPE_HILL:     mvprintw(SB_CELL_BLOCK + 1, s + 1, "Hill     "); break;
+            case CELL_TYPE_MOUNTAIN: mvprintw(SB_CELL_BLOCK + 1, s + 1, "Mountains"); break;
         }
 
         // Resources. Hindi code.
         int delta = 0;
         if(c -> mine == CELL_MINE)
         {
-            mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1, "[Mine] ");
+            mvprintw(SB_CELL_BLOCK + 2, s + 1, "[Mine] ");
             delta = 7;
         }
         switch(c -> resources)
         {
-            case CELL_RES_BRONZE:    mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1 + delta, "Bronze"); break;
-            case CELL_RES_IRON:      mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1 + delta, "Iron"); break;
-            case CELL_RES_COAL:      mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1 + delta, "Coal"); break;
-            case CELL_RES_GUNPOWDER: mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1 + delta, "Gunpowder"); break;
-            case CELL_RES_HORSES:    mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1 + delta, "Horses"); break;
-            case CELL_RES_MUSHROOMS: mvprintw(SIDEBAR_CELL_BLOCK + 2, s + 1 + delta, "Mushrooms :O"); break;
+            case CELL_RES_BRONZE:    mvprintw(SB_CELL_BLOCK + 2, s + 1 + delta, "Bronze"); break;
+            case CELL_RES_IRON:      mvprintw(SB_CELL_BLOCK + 2, s + 1 + delta, "Iron"); break;
+            case CELL_RES_COAL:      mvprintw(SB_CELL_BLOCK + 2, s + 1 + delta, "Coal"); break;
+            case CELL_RES_GUNPOWDER: mvprintw(SB_CELL_BLOCK + 2, s + 1 + delta, "Gunpowder"); break;
+            case CELL_RES_HORSES:    mvprintw(SB_CELL_BLOCK + 2, s + 1 + delta, "Horses"); break;
+            case CELL_RES_MUSHROOMS: mvprintw(SB_CELL_BLOCK + 2, s + 1 + delta, "Mushrooms :O"); break;
         }
 
         attroff(A_BOLD);
@@ -254,13 +262,13 @@ void drawCellInfo(World * world, View * view)
         if(city != NULL)
         {
             City * c = (City *) city -> data;
-            attron(A_BOLD); mvprintw(SIDEBAR_CELL_BLOCK + 3, s + 1, "City:  "); attroff(A_BOLD);
-            putInLeft(SIDEBAR_CELL_BLOCK + 4, s + 2, len - 2, c -> name);
-            attron(COLOR_PAIR(PLAYER_COLOURS_START + c -> owner -> colour));
-            putInLeft(SIDEBAR_CELL_BLOCK + 5, s + 2, len - 2, c -> owner -> name);
-            attroff(COLOR_PAIR(PLAYER_COLOURS_START + c -> owner -> colour));
-            mvprintw(SIDEBAR_CELL_BLOCK + 6, s + 2, "People");
-            putInRight(SIDEBAR_CELL_BLOCK + 6, s + 2, len - 2, "%d", c -> population);
+            attron(A_BOLD); mvprintw(SB_CELL_BLOCK + 3, s + 1, "City:  "); attroff(A_BOLD);
+            printInLeft(SB_CELL_BLOCK + 4, s + 2, len - 2, c -> name);
+            attron(COLOR_PAIR(COLOURS[c -> owner -> colour]));
+            printInLeft(SB_CELL_BLOCK + 5, s + 2, len - 2, c -> owner -> name);
+            attroff(COLOR_PAIR(COLOURS[c -> owner -> colour]));
+            mvprintw(SB_CELL_BLOCK + 6, s + 2, "People");
+            printInRight(SB_CELL_BLOCK + 6, s + 2, len - 2, "%d", c -> population);
         }
 
         // Unit.
@@ -270,35 +278,35 @@ void drawCellInfo(World * world, View * view)
             Unit * u = (Unit *) unit -> data;
             UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, u -> unit_id);
 
-            attron(A_BOLD); mvprintw(SIDEBAR_CELL_BLOCK + 7, s + 1, "Unit:  "); attroff(A_BOLD);
-            putInLeft(SIDEBAR_CELL_BLOCK + 8, s + 2, len - 2, u_info -> name);
+            attron(A_BOLD); mvprintw(SB_CELL_BLOCK + 7, s + 1, "Unit:  "); attroff(A_BOLD);
+            printInLeft(SB_CELL_BLOCK + 8, s + 2, len - 2, u_info -> name);
 
             if(u -> owner != NULL)
             {
-                attron(COLOR_PAIR(PLAYER_COLOURS_START + u -> owner -> colour));
-                putInLeft(SIDEBAR_CELL_BLOCK + 9, s + 2, len - 2, u -> owner -> name);
-                attroff(COLOR_PAIR(PLAYER_COLOURS_START + u -> owner -> colour));
+                attron(COLOR_PAIR(COLOURS[u -> owner -> colour]));
+                printInLeft(SB_CELL_BLOCK + 9, s + 2, len - 2, u -> owner -> name);
+                attroff(COLOR_PAIR(COLOURS[u -> owner -> colour]));
             }
             else
             {
-                putInLeft(SIDEBAR_CELL_BLOCK + 9, s + 2, len - 2, "Neutral");
+                printInLeft(SB_CELL_BLOCK + 9, s + 2, len - 2, "Neutral");
             }
-            mvprintw(SIDEBAR_CELL_BLOCK + 10, s + 2, "HP");
-            putInRight(SIDEBAR_CELL_BLOCK + 10, s + 2, len - 2, "%d/%d", u -> health, u_info -> max_health);
-            mvprintw(SIDEBAR_CELL_BLOCK + 11, s + 2, "Moves");
-            putInRight(SIDEBAR_CELL_BLOCK + 11, s + 2, len - 2, "%d/%d", u -> moves, u_info -> max_moves);
+            mvprintw(SB_CELL_BLOCK + 10, s + 2, "HP");
+            printInRight(SB_CELL_BLOCK + 10, s + 2, len - 2, "%d/%d", u -> health, u_info -> max_health);
+            mvprintw(SB_CELL_BLOCK + 11, s + 2, "Moves");
+            printInRight(SB_CELL_BLOCK + 11, s + 2, len - 2, "%d/%d", u -> moves, u_info -> max_moves);
         }
     }
     else
     {
         attron(A_BOLD);
-        mvprintw(SIDEBAR_CELL_BLOCK + 1, s + 1, "Fog of war");
+        mvprintw(SB_CELL_BLOCK + 1, s + 1, "Fog of war");
         attroff(A_BOLD);
     }
 
     // Other info.
     clearBlock(r - 2, s + 1, 1, len);
-    putInMiddle(r - 2, s + 1, len, "(%d,%d)", view -> map_r, view -> map_c);
+    printInMiddle(r - 2, s + 1, len, "(%d,%d)", view -> map_r, view -> map_c);
 }
 
 void drawTechView(World * world, View * view)
@@ -439,11 +447,11 @@ void drawNode(World * world, Node * current)
     if(getNeighbour(current, EDGE_CELL_CITY) != NULL)
     {
         City * city = (City *) getNeighbour(current, EDGE_CELL_CITY) -> data;
-        attron(COLOR_PAIR(PLAYER_COLOURS_START + city -> owner -> colour));
+        attron(COLOR_PAIR(COLOURS[city -> owner -> colour]));
         attron(A_BOLD);
         addch('M');
         attroff(A_BOLD);
-        attroff(COLOR_PAIR(PLAYER_COLOURS_START + city -> owner -> colour));
+        attroff(COLOR_PAIR(COLOURS[city -> owner -> colour]));
     }
     else if(getNeighbour(current, EDGE_CELL_UNIT) != NULL)
     {
@@ -452,14 +460,14 @@ void drawNode(World * world, Node * current)
         UnitCommonInfo * u_info = (UnitCommonInfo *) daGetByIndex(world -> units_info, unit -> unit_id);
         if(unit -> owner != NULL)
         {
-            attron(COLOR_PAIR(PLAYER_COLOURS_START + unit -> owner -> colour));
+            attron(COLOR_PAIR(COLOURS[unit -> owner -> colour]));
         }
         attron(A_BOLD);
         addch(u_info -> c);
         attroff(A_BOLD);
         if(unit -> owner != NULL)
         {
-            attroff(COLOR_PAIR(PLAYER_COLOURS_START + unit -> owner -> colour));
+            attroff(COLOR_PAIR(COLOURS[unit -> owner -> colour]));
         }
     }
     else
@@ -534,15 +542,15 @@ int viewProcess(World * world, View * view, List * list)
 
                 case VIEW_REDRAW_ALL:
                     drawUIMap(world, view);
-                    drawPlayerInfo(world, view);
-                    drawCellInfo(world, view);
+                    drawUIPlayerInfo(world, view);
+                    drawUICellInfo(world, view);
                     drawMap(world, view);
                     move(view -> cur_r, view -> cur_c);
                 break;
 
                 case VIEW_REDRAW_INFO:
-                    drawPlayerInfo(world, view);
-                    drawCellInfo(world, view);
+                    drawUIPlayerInfo(world, view);
+                    drawUICellInfo(world, view);
                     move(view -> cur_r, view -> cur_c);
                 break;
 
@@ -562,7 +570,7 @@ int viewProcess(World * world, View * view, List * list)
                         player -> graph_map = getNeighbour(player -> graph_map, EDGE_CELL_TOP);
                         drawMap(world, view);
                     }
-                    drawCellInfo(world, view);
+                    drawUICellInfo(world, view);
                     move(view -> cur_r, view -> cur_c);
                 break;
 
@@ -578,7 +586,7 @@ int viewProcess(World * world, View * view, List * list)
                         player -> graph_map = getNeighbour(player -> graph_map, EDGE_CELL_BOTTOM);
                         drawMap(world, view);
                     }
-                    drawCellInfo(world, view);
+                    drawUICellInfo(world, view);
                     move(view -> cur_r, view -> cur_c);
                 break;
 
@@ -594,7 +602,7 @@ int viewProcess(World * world, View * view, List * list)
                         player -> graph_map = getNeighbour(player -> graph_map, EDGE_CELL_RIGHT);
                         drawMap(world, view);
                     }
-                    drawCellInfo(world, view);
+                    drawUICellInfo(world, view);
                     move(view -> cur_r, view -> cur_c);
                 break;
 
@@ -611,7 +619,7 @@ int viewProcess(World * world, View * view, List * list)
                         player -> graph_map = getNeighbour(player -> graph_map, EDGE_CELL_LEFT);
                         drawMap(world, view);
                     }
-                    drawCellInfo(world, view);
+                    drawUICellInfo(world, view);
                     move(view -> cur_r, view -> cur_c);
                 break;
 

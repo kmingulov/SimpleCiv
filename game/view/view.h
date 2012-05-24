@@ -76,9 +76,11 @@ void destroyView(View * view);
 void focusOn(World * world, View * view, int r, int c);
 
 /*
-    Draws basic map ui.
+    UI drawing functions.
 */
 void drawUIMap(World * world, View * view);
+void drawUIPlayerInfo(World * world, View * view);
+void drawUICellInfo(World * world, View * view);
 
 /*
     Draws tech view.
@@ -89,16 +91,6 @@ void drawTechView(World * world, View * view);
     Draws city view.
 */
 void drawCityView(World * world, View * view);
-
-/*
-    Draws player info.
-*/
-void drawPlayerInfo(World * world, View * view);
-
-/*
-    Draws cell info.
-*/
-void drawCellInfo(World * world, View * view);
 
 /*
     Draws map.

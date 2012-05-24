@@ -26,6 +26,23 @@
 
 #include "curses_draws.h"
 
+void propsOn(unsigned char colour_pair, unsigned char bold)
+{
+    attron(COLOR_PAIR(colour_pair));
+
+    if(bold)
+    {
+        attron(A_BOLD);
+    }
+}
+
+void propsOff(unsigned char colour_pair)
+{
+    attroff(COLOR_PAIR(colour_pair));
+
+    attroff(A_BOLD);
+}
+
 void clearBlock(int start_r, int start_c, int r, int c)
 {
     for(int i = start_r; i < start_r + r; i++)
@@ -79,7 +96,7 @@ void drawHorizLine(int start_c, int c, int r)
     mvaddch(r, start_c + c - 1, ACS_RTEE);
 }
 
-void putInMiddle(int start_r, int start_c, int length, const char * format, ...)
+void printInMiddle(int start_r, int start_c, int length, const char * format, ...)
 {
     // Preparing buffer string.
     va_list args;
@@ -106,7 +123,7 @@ void putInMiddle(int start_r, int start_c, int length, const char * format, ...)
     free(s);
 }
 
-void putInLeft(int start_r, int start_c, int length, const char * format, ...)
+void printInLeft(int start_r, int start_c, int length, const char * format, ...)
 {
     va_list args;
     char buffer[1024];
@@ -125,7 +142,7 @@ void putInLeft(int start_r, int start_c, int length, const char * format, ...)
     refresh();
 }
 
-void putInRight(int start_r, int start_c, int length, const char * format, ...)
+void printInRight(int start_r, int start_c, int length, const char * format, ...)
 {
     va_list args;
     char buffer[1024];

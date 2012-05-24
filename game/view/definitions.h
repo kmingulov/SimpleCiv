@@ -45,11 +45,6 @@
 #define KEY_SPACE                       32
 
 /*
-    Definition for init_pair() function.
-*/
-#define PLAYER_COLOURS_START            30
-
-/*
     View process definitions.
 */
 #define VIEW_REDRAW_ALL                 0
@@ -72,7 +67,7 @@
 /*
     Interface definitions.
 */
-#define SIDEBAR_PLAYER_BLOCK            0
-#define SIDEBAR_CELL_BLOCK              9
+#define SB_PLAYER_BLOCK                 0
+#define SB_CELL_BLOCK                   9
 
 #endif

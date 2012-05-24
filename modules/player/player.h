@@ -34,10 +34,7 @@ typedef struct Player
 {
     // Name and color of player, used only for gamer's convenience.
     char * name;
-    char colour;
-
-    // Player is a computer.
-    char is_computer;
+    unsigned char colour;
 
     // Gold.
     int gold;
@@ -73,11 +70,6 @@ typedef struct Player
     Creates new player.
 */
 Player * createPlayer(World * world, int id, IntArray * available_units, IntArray * available_techs);
-
-/*
-    Create computer player.
-*/
-Player * createComputerPlayer(World * world);
 
 /*
     Destroys player.
