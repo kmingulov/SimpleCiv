@@ -313,7 +313,7 @@ List * controlProcess(World * world, View * view, Control * control, int key)
     {
         // Start research.
         if(control -> state == CONTROL_TEXTBOX)
-            researching(world, view, control, key);
+            return researching(world, view, control, key);
 
         // Start hiring.
         if(control -> state == CONTROL_CHOOSE_UNIT)
