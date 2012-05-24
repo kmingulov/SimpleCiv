@@ -189,17 +189,6 @@ void makeUnitNeutral(void * data)
     u -> owner = NULL;
 }
 
-
-int unitMoveShip(Unit * unit,UnitCommonInfo * u_info, Node * destination)
-{
-    // Cannot go to the land, if there is no city.
-    if( ((Cell *) destination -> data) -> territory != CELL_TYPE_WATER && getNeighbour(destination, EDGE_CELL_CITY) == NULL )
-    {
-        return 3;
-    }
-    return 0;
-}
-
 int unitMoveAnotherUnit(World * world, Unit * unit,UnitCommonInfo * u_info, Node * destination)
 {
     // There is another unit?
@@ -214,8 +203,6 @@ int unitMoveAnotherUnit(World * world, Unit * unit,UnitCommonInfo * u_info, Node
     }
     return 3;
 }
-
-
 
 int unitMoveToCity(World * world, Unit * unit, Node * destination)
 {
@@ -252,12 +239,13 @@ int unitMoveToCity(World * world, Unit * unit, Node * destination)
         }
         return 0;
     }
+
     return 0;
 }
 
 void unitMotion(World * world, Node * current_cell, Node * destination, int direction, Unit * unit, Edge * edge)
 {
-        // Motion.
+    // Motion.
     unit -> moves--;
     switch(direction)
     {
@@ -323,10 +311,22 @@ int moveUnit(World * world, Node * current_cell, int direction)
 
     // There is a city?
     if(getNeighbour(destination, EDGE_CELL_CITY) != NULL)
-        return unitMoveToCity(world, unit, destination);
+    {
+        City * city = (City *) getNeighbour(destination, EDGE_CELL_CITY) -> data;
+        if(city -> owner != unit -> owner)
+        {
+            return unitMoveToCity(world, unit, destination);
+        }
+    }
 
     if(u_info -> privileges != NULL && iaSearchForData(u_info -> privileges, UNIT_PRVL_CAN_FLOAT) != -1)
-        return unitMoveShip(unit, u_info, destination);
+    {
+        // Cannot go to the land, if there is no city.
+        if( ((Cell *) destination -> data) -> territory != CELL_TYPE_WATER && getNeighbour(destination, EDGE_CELL_CITY) == NULL )
+        {
+            return 3;
+        }
+    }
 
     // Cannot go to the water.
     if(((Cell *) destination -> data) -> territory == CELL_TYPE_WATER)
@@ -339,8 +339,6 @@ int moveUnit(World * world, Node * current_cell, int direction)
     }
 
     unitMotion(world, current_cell, destination, direction, unit, edge);
-
-
 
     return 0;
 }

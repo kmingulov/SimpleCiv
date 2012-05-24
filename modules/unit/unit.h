@@ -66,6 +66,8 @@ void unitsFight(World * world, Unit ** unit1, Unit ** unit2);
 */
 void developUnit(void * data, DynArray * info);
 
+void unitMotion(World * world, Node * current_cell, Node * destination, int direction, Unit * unit, Edge * edge);
+
 /*
     Moves unit. Returns 0 if moved succefully, 1 if there was a fight, 2 if
     player win the game, 3 if failed.
