@@ -78,7 +78,7 @@ void focusOn(World * world, View * view, int r, int c);
 /*
     Draws basic map ui.
 */
-void drawBasicMapUI(World * world, View * view);
+void drawUIMap(World * world, View * view);
 
 /*
     Draws tech view.

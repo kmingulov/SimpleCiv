@@ -47,14 +47,14 @@ OBJ_PARSE = string_functions.o expat_handlers.o xml.o
 # helpful for ncurses and view
 OBJ_NCURSES = curses_draws.o curses_chooser.o curses_textbox.o view_settings.o view_textbox.o
 
-# control modules
-OBJ_CONTROL = controlkeys.o control.o
+# helpful for control
+OBJ_CONTROL = controlkeys.o 
 
 # main modules
-OBJ_MAIN = world.o view.o  message.o main.o
+OBJ_MAIN = world.o view.o control.o message.o main.o
 
 # all objects
-OBJ = $(OBJ_COMMON) $(OBJ_GRAPH) $(OBJ_UNIT) $(OBJ_CITY) $(OBJ_TECH) $(OBJ_PLAYER) $(OBJ_CONTROL) $(OBJ_FOG) $(OBJ_ERRORS) $(OBJ_PARSE) $(OBJ_NCURSES) $(OBJ_MAIN)
+OBJ = $(OBJ_COMMON) $(OBJ_GRAPH) $(OBJ_UNIT) $(OBJ_CITY) $(OBJ_TECH) $(OBJ_PLAYER) $(OBJ_FOG) $(OBJ_ERRORS) $(OBJ_PARSE) $(OBJ_NCURSES) $(OBJ_MAIN) $(OBJ_CONTROL) 
 
 # test mode
 ifeq ($(t), 1)
@@ -183,18 +183,19 @@ view_settings.o: game/view/view_settings.c
 view_textbox.o: game/view/view_textbox.c
 	$(CC) $(CFLAGS) game/view/view_textbox.c
 
-# control
-control.o: game/control/control.c
-	$(CC) $(CFLAGS) game/control/control.c
-
+# helpful control
 controlkeys.o: game/control/controlkeys.c
 	$(CC) $(CFLAGS) game/control/controlkeys.c
+
 # main
 world.o: game/world/world.c
 	$(CC) $(CFLAGS) game/world/world.c
 
 view.o: game/view/view.c
 	$(CC) $(CFLAGS) game/view/view.c
+
+control.o: game/control/control.c
+	$(CC) $(CFLAGS) game/control/control.c
 
 message.o: game/message/message.c
 	$(CC) $(CFLAGS) game/message/message.c
