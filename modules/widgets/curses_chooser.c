@@ -31,25 +31,11 @@
 
 #include "curses_chooser.h"
 
-Chooser * createChooser(int start_r, int start_c, int r, int c)
-{
-    Chooser * chooser = malloc(sizeof(Chooser));
-
-    // Initialize values.
-    chooser -> text = createTextbox(start_r, start_c, r, c);
-    chooser -> ids = iaCreate();
-    chooser -> current = -1;
-    chooser -> start_r = -1;
-
-    return chooser;
-}
-
 Chooser * createTechChooser(World * world)
 {
     Chooser * chooser = malloc(sizeof(Chooser));
 
     // Initiale values.
-    chooser -> text = NULL;
     chooser -> ids = iaCreate();
     chooser -> current = -1;
     chooser -> start_r = -1;
@@ -88,7 +74,6 @@ Chooser * createUnitChooser(World * world, City * city)
     Chooser * chooser = malloc(sizeof(Chooser));
 
     // Initiale values.
-    chooser -> text = NULL;
     chooser -> ids = iaCreate();
     chooser -> current = -1;
     chooser -> start_r = -1;
@@ -124,11 +109,6 @@ Chooser * createUnitChooser(World * world, City * city)
 
 void destroyChooser(Chooser * chooser)
 {
-    if(chooser -> text != NULL)
-    {
-        destroyTextbox(chooser -> text);
-    }
-
     iaDestroy(chooser -> ids);
     free(chooser);
 }

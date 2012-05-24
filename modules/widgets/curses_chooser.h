@@ -34,9 +34,6 @@
 */
 typedef struct Chooser
 {
-    // Textbox with lines.
-    Textbox * text;
-
     // Array of ids.
     IntArray * ids;
 

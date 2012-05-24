@@ -751,4 +751,6 @@ int viewProcess(World * world, View * view, List * list)
         le = le -> next;
     }
     listDestroy(list, &free);
+
+    return 1;
 }
