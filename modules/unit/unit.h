@@ -38,6 +38,10 @@ typedef struct Unit
     int r, c;                // X and Y coordinates.
     unsigned int health;     // Current health.
     unsigned int moves;      // Available moves.
+
+    // Move target.
+    int target_r;
+    int target_c;
 } Unit;
 
 /*
@@ -64,7 +68,7 @@ void unitsFight(World * world, Unit ** unit1, Unit ** unit2);
 /*
     Developes units at the end of a course.
 */
-void developUnit(void * data, DynArray * info);
+void developUnit(World * world, void * data, DynArray * info);
 
 void unitMotion(World * world, Node * current_cell, Node * destination, int direction, Unit * unit, Edge * edge);
 

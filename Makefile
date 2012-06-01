@@ -33,7 +33,7 @@ OBJ_CITY = city.o
 OBJ_TECH = technology.o technology_parse_info.o technology_research.o technology_table.o
 
 # player
-OBJ_PLAYER = player.o
+OBJ_PLAYER = player.o ssp.o
 
 # fog
 OBJ_FOG = fog.o
@@ -54,7 +54,7 @@ OBJ_CONTROL = controlkeys.o
 OBJ_MAIN = world.o view.o control.o message.o main.o
 
 # all objects
-OBJ = $(OBJ_COMMON) $(OBJ_GRAPH) $(OBJ_UNIT) $(OBJ_CITY) $(OBJ_TECH) $(OBJ_PLAYER) $(OBJ_FOG) $(OBJ_ERRORS) $(OBJ_PARSE) $(OBJ_NCURSES) $(OBJ_MAIN) $(OBJ_CONTROL) 
+OBJ = $(OBJ_COMMON) $(OBJ_GRAPH) $(OBJ_UNIT) $(OBJ_CITY) $(OBJ_TECH) $(OBJ_PLAYER) $(OBJ_FOG) $(OBJ_ERRORS) $(OBJ_PARSE) $(OBJ_NCURSES) $(OBJ_MAIN) $(OBJ_CONTROL)
 
 # test mode
 ifeq ($(t), 1)
@@ -71,7 +71,7 @@ ifeq ($(win32), 1)
 	TARGET = -DWIN32
 else
 	CC = gcc
-	LFLIB = -lexpat -lncurses -lm
+	LFLIB = -lexpat -lncursesw -lm
 	BIN = simpleciv
 	TARGET =
 endif
@@ -145,6 +145,9 @@ technology_table.o: modules/technology/technology_table.c
 # player
 player.o: modules/player/player.c
 	$(CC) $(CFLAGS) modules/player/player.c
+
+ssp.o: modules/ssp/ssp.c
+	$(CC) $(CFLAGS) modules/ssp/ssp.c
 
 # fog
 fog.o: modules/fog/fog.c

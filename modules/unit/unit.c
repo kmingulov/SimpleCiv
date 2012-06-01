@@ -55,6 +55,8 @@ Unit * createUnit(World * world, unsigned int r, unsigned int c, unsigned char u
     // Adding coordinates.
     unit -> r = r;
     unit -> c = c;
+    unit -> target_r = -1;
+    unit -> target_c = -1;
     addEdge(getMapCell(world -> map, r, c), node, EDGE_CELL_UNIT);
 
     return unit;
@@ -145,13 +147,63 @@ void unitsFight(World * world, Unit ** unit1, Unit ** unit2)
     }
 }
 
-void developUnit(void * data, DynArray * info)
+static int getValue(DynArray * path_finder, int r, int c)
+{
+    IntArray * row = daGetByIndex(path_finder, r);
+    return iaGetByIndex(row, c);
+}
+
+void developUnit(World * world, void * data, DynArray * info)
 {
     Unit * unit = (Unit *) data;
     UnitCommonInfo * unit_info = (UnitCommonInfo *) daGetByIndex(info, unit -> unit_id);
 
+    // Move unit, if he has a target.
+    if(unit -> target_r != -1 && unit -> target_c != -1)
+    {
+        // Path finder.
+        DynArray * path_finder = unit -> owner -> path_finder;
+
+        // Map r and c.
+        int map_r = path_finder -> length;
+        int map_c = ((IntArray *) daGetByIndex(path_finder, 0)) -> length;
+
+        while(unit -> moves > 0)
+        {
+            // Get current cell value.
+            int value = getValue(path_finder, unit -> r, unit -> c);
+
+            // Neighbours values.
+            int r_directions[4] = {unit -> r + 1,    unit -> r - 1, unit -> r,       unit -> r};
+            int c_directions[4] = {unit -> c,        unit -> c,     unit -> c + 1,   unit -> c - 1};
+            int destinations[4] = {EDGE_CELL_BOTTOM, EDGE_CELL_TOP, EDGE_CELL_RIGHT, EDGE_CELL_LEFT};
+            int neighs[4];
+
+            for(int i = 0; i < 4; i++)
+            {
+                // Normilize.
+                if(r_directions[i] < 0) r_directions[i] += map_r;
+                if(r_directions[i] >= map_r) r_directions[i] %= map_r;
+                if(c_directions[i] < 0) c_directions[i] += map_c;
+                if(c_directions[i] >= map_c) c_directions[i] %= map_c;
+
+                // Set neigh value.
+                neighs[i] = getValue(path_finder, r_directions[i], c_directions[i]);
+            }
+
+            for(int i = 0; i < 4; i++)
+            {
+                // Find direction.
+                if(value > neighs[i])
+                {
+                    moveUnit(world, getMapCell(world -> map, unit -> r, unit -> c), destinations[i]);
+                    break;
+                }
+            }
+        }
+    }
     // Unit needs money.
-    if(unit -> owner -> gold <= BALANCE_UNIT_SALARY)
+    else if(unit -> owner -> gold <= BALANCE_UNIT_SALARY)
     {
         // No money, no honey.
         unit -> health -= ceil(BALANCE_UNIT_HEALTH_DELTA * unit_info -> max_health);

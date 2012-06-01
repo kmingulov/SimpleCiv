@@ -64,6 +64,8 @@ typedef struct Player
     IntArray * resources;
 
     FogOfWar * fog;
+
+    DynArray * path_finder;
 } Player;
 
 /*

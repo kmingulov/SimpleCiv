@@ -173,7 +173,7 @@ List * turning(World * world, View * view, Control * control)
     le = player -> units -> head;
     for(int i = 0; i < player -> units -> length; i++)
     {
-        developUnit(le -> data, world -> units_info);
+        developUnit(world, le -> data, world -> units_info);
         le = le -> next;
     }
     // Next player.

@@ -65,6 +65,8 @@ Player * createPlayer(World * world, int id, IntArray * available_units, IntArra
     // Create fog.
     player -> fog = createFog(world -> map -> max_r, world -> map -> max_c);
 
+    player -> path_finder = NULL;
+
     // Units and cities lists.
     player -> cities = listCreate();
     player -> units = listCreate();

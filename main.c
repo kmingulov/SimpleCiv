@@ -33,7 +33,7 @@ int main()
     // Creating log.
     FILE * log = startLog();
 
-    // Creating world and view and control.
+    // Creating world, view and control.
     World * world = createWorld(log);
     View * view = createView(world);
     Control * control = createControl();
