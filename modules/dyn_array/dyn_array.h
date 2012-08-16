@@ -23,7 +23,7 @@
 #define DYN_ARRAY_H
 
 #define DYN_ARRAY_INCREMENT    5
-#define DYN_ARRAY_POINTER_SIZE sizeof(int)
+#define DYN_ARRAY_POINTER_SIZE sizeof(void *)
 
 typedef struct DynArray
 {

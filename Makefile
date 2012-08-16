@@ -71,7 +71,7 @@ ifeq ($(win32), 1)
 	TARGET = -DWIN32
 else
 	CC = gcc
-	LFLIB = -lexpat -lncursesw -lm
+	LFLIB = -lexpat -lncurses -lm
 	BIN = simpleciv
 	TARGET =
 endif
